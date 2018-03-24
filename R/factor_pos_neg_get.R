@@ -8,7 +8,7 @@
 #' @export
 #'
 
-factor_post_neg_get <- function () {
+factor_pos_neg_get <- function () {
   factor_positive <- c("Too little", "A good thing",
                        "Right direction",
                        "Better")
