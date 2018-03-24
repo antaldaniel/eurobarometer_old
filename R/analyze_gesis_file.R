@@ -37,10 +37,11 @@
 #' @export
 #'
 
-#gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA4530_v2-1-0.sav"
-#see_log <- create_log <- TRUE
-#log_prefix <- log_id <-NA
-#my_treshold = futile.logger::INFO
+gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA4530_v2-1-0.sav"
+see_log <- create_log <- TRUE
+log_prefix <- log_id <-NA
+my_treshold = futile.logger::INFO
+trial <- analyze_gesis_file (gesis_file)
 analyze_gesis_file <- function ( gesis_file,
                                  see_log = TRUE,
                                  create_log = TRUE,
@@ -114,7 +115,7 @@ analyze_gesis_file <- function ( gesis_file,
         value_labels = vector (mode = "character", length = ncol(read_df)),
         questionnaire_item = vector (mode = "character", length = ncol(read_df)),
         spss_class = vector (mode = "character", length = ncol(read_df)),
-        suggeseted_class = vector (mode = "character", length = ncol(read_df)),
+        suggested_class = vector (mode = "character", length = ncol(read_df)),
          stringsAsFactors = FALSE
       )
 
@@ -327,13 +328,18 @@ analyze_gesis_file <- function ( gesis_file,
           if (see_log)    futile.logger::flog.error(unknow_naming_error_message)
           if (create_log) futile.logger::flog.error(unknow_naming_error_message,
                                                    name  ="error")
-          stop ( unknow_naming_error_message )
+          warning ( unknow_naming_error_message )
+          spss_metadata <- spss_metadata_exc
         } else {
           spss_metadata <- spss_metadata_exc
         }
       }
 
-      spss_metadata <- dplyr::select (spss_metadata, -n, -emergency_name)
+      spss_metadata <-spss_metadata_exc %>%
+        dplyr::select ( gesis_name, spss_name, suggested_name,
+        suggested_conversion, value_labels,
+        questionnaire_item, spss_class,
+        suggested_class)
 
     },
     error=function(cond) {
