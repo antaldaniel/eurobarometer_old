@@ -4,3 +4,4 @@
 ^not_included/$
 ^not_included$
 ^\.travis\.yml$
+^sr_logs$
