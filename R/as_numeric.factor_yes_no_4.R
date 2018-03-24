@@ -17,7 +17,7 @@ as_numeric.yes_no_4 <- function(x, type = NULL) {
   if (is.factor_yes_no_4 (x)) {
     return(x[[3]])
   } else {
-    stop("Not a factor_binary object.")
+    stop("Not a factor_yes_no_4 object.")
   }
 }
 
