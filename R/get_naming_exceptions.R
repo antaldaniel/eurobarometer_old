@@ -14,15 +14,20 @@ get_naming_exceptions <- function () {
               "TYPE OF COMMUNITY",
               "WEIGHT RESULT FROM TARGET (REDRESSMENT)",
               "WEIGHT RESULT FROM TARGET",
-              "WEIGHT EXTRAPOLATED POPULATION AGED 15+"
+              "W1 WEIGHT RESULT FROM TARGET",
+              "WEIGHT EXTRAPOLATED POPULATION AGED 15+",
+              "WEX WEIGHT EXTRA POPULATION 15+",
+              "WEIGHT EXTRA POPULATION 15+",
+              "NATION - ALL SAMPLES ISO 3166"
     ),
     new_name = c("household_composition_10m",
                  "household_composition_aged_10_14",
                  "household_composition_aged_15p",
                  "difficulties_bill",
                  "subjective_urbanization",
-                 "w1", "w1",
-                 "wex"),
+                 "w1", "w1","w1",
+                 "wex", "wex", "wex",
+                 "country_code_iso_3166"),
     stringsAsFactors = FALSE
   )
   return (naming_exceptions)
