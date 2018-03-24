@@ -2,8 +2,8 @@
 
 S3method(as_numeric,factor_3)
 S3method(as_numeric,factor_binary)
+S3method(as_numeric,factor_yes_no_4)
 S3method(as_numeric,labelled)
-S3method(as_numeric,yes_no_4)
 export(analyze_gesis_file)
 export(as_factor_3)
 export(as_factor_binary)

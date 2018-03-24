@@ -21,10 +21,10 @@ as_factor_yes_no_4 <- function(x) {
   chr  <- ifelse ( chr %in% no_1,   "no", chr )
   chr  <- ifelse ( chr %in% no_2,   "absolutely_not", chr )
   chr  <- ifelse ( chr %in% c("yes", "no",
-                            "absolutely_yes", "absolutely_no"),
+                            "absolutely_yes", "absolutely_not"),
                    as.character(chr), NA)
 
-  num  <- plyr::mapvalues (chr, from = c("absolutely_no",
+  num  <- plyr::mapvalues (chr, from = c("absolutely_not",
     "no", "yes", "absolutely_yes"),
                                  to = c(2,1,-1,-2))
   fct <- factor(chr, levels = c("absolutely_no",

@@ -12,7 +12,7 @@
 #' @export
 #'
 
-as_numeric.yes_no_4 <- function(x, type = NULL) {
+as_numeric.factor_yes_no_4 <- function(x, type = NULL) {
   if(!is.null(type)) type <- NULL
   if (is.factor_yes_no_4 (x)) {
     return(x[[3]])
