@@ -25,7 +25,7 @@
 #' @importFrom stringr str_split
 #' @importFrom utils write.csv
 #' @importFrom magrittr '%>%'
-#' @importFrom dplyr mutate add_count
+#' @importFrom dplyr mutate add_count distinct group_by select
 #' @examples
 #' \dontrun{
 #' ##use your own file path:
@@ -37,11 +37,11 @@
 #' @export
 #'
 
-gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA4530_v2-1-0.sav"
-see_log <- create_log <- TRUE
-log_prefix <- log_id <-NA
-my_treshold = futile.logger::INFO
-trial <- analyze_gesis_file (gesis_file)
+#gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA4530_v2-1-0.sav"
+#see_log <- create_log <- TRUE
+#log_prefix <- log_id <-NA
+#my_treshold = futile.logger::INFO
+#trial <- analyze_gesis_file (gesis_file)
 analyze_gesis_file <- function ( gesis_file,
                                  see_log = TRUE,
                                  create_log = TRUE,
@@ -50,8 +50,9 @@ analyze_gesis_file <- function ( gesis_file,
                                  my_treshold = futile.logger::INFO ) {
 
   df <- gesis_name <- n <- spss_name <- na_count <- . <- NULL
-  suggested_name <- suggested_conversion <- NULL
-  insert_file_name <- emergency_name <- NULL
+  suggested_name <- suggested_conversion <- suggested_class <- NULL
+  insert_file_name <- emergency_name <- value_labels <- NULL
+  questionnaire_item <- spss_class <- NULL
   treshold <- futile.logger::flog.threshold(my_treshold)
   directory_message <- NA
 
@@ -192,7 +193,7 @@ analyze_gesis_file <- function ( gesis_file,
           "Never|Frequently|Occasionally",
           "Never|Occasionally|Frequently"
         ),
-        yes = "as_time_frequency_",
+        yes = "as_time_frequency",
         no = spss_metadata$suggested_class
       )
       spss_metadata$suggested_class <- ifelse (
@@ -359,7 +360,28 @@ analyze_gesis_file <- function ( gesis_file,
                                  "\n with ", nrow(read_df),
                                  " observations in ",
                                  ncol(read_df), " variables.")
-      if (see_log) futile.logger::flog.info (finished_message)
+      summary_data <- spss_metadata %>%
+        select ( suggested_class ) %>%
+        add_count( suggested_class ) %>%
+        group_by ( suggested_class) %>%
+        distinct ( suggested_class, n ) %>%
+        as.data.frame(.)
+      summary_message <- paste0("\nSuggested conversion ", summary_data[1,1], ": ",
+                            summary_data[1,2], "\n")
+
+      for ( i in 2:nrow(summary_data)) {
+        summary_message <- paste0(summary_message,
+          "Suggested conversion ", summary_data[i,1], ": ",
+               summary_data[i,2], "\n")
+      }
+      summary_message <- paste0(summary_message,
+       "Factors need individual attention.\n",
+       "Numeric variables can be imported to R without any problem.")
+
+      if (see_log) futile.logger::flog.info (summary_message)
+      futile.logger::flog.info ( summary_message,
+                                 name="info")
+       if (see_log) futile.logger::flog.info (finished_message)
       futile.logger::flog.info ( finished_message,
                                  name="info")
     }
