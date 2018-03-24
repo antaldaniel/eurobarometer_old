@@ -13,7 +13,8 @@ is.factor_binary(x)
 Is the object of class factor_binary?
 }
 \examples{
-my_binary <- factor_binary(c("mentioned", "mentioned", "not mentioned", "dk"))
+my_binary <- as_factor_binary(c("mentioned", "mentioned",
+                                "not mentioned", "dk"))
 
 is.factor_binary ( my_binary)
 
