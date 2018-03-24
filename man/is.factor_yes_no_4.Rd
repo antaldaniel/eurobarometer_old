@@ -14,7 +14,7 @@ is.factor_yes_no_4(x)
 Is the object of class factor_yes_no_4?
 }
 \examples{
-my_categories <- factor_yes_no_4( c("Very good", "Rather Good",
+my_categories <- as_factor_yes_no_4( c("Very good", "Rather Good",
                   "Inap.", "Rather Bad", "DK", "Very bad"))
 
 is.factor_yes_no_4 (my_binary)
