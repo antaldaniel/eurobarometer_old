@@ -35,7 +35,12 @@
 #'                    my_treshold = futile.logger::INFO)
 #' }
 #' @export
+#'
 
+#gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA4530_v2-1-0.sav"
+#see_log <- create_log <- TRUE
+#log_prefix <- log_id <-NA
+#my_treshold = futile.logger::INFO
 analyze_gesis_file <- function ( gesis_file,
                                  see_log = TRUE,
                                  create_log = TRUE,
@@ -45,7 +50,7 @@ analyze_gesis_file <- function ( gesis_file,
 
   df <- gesis_name <- n <- spss_name <- na_count <- . <- NULL
   suggested_name <- suggested_conversion <- NULL
-  insert_file_name <- NULL
+  insert_file_name <- emergency_name <- NULL
   treshold <- futile.logger::flog.threshold(my_treshold)
   directory_message <- NA
 
@@ -205,9 +210,9 @@ analyze_gesis_file <- function ( gesis_file,
         yes = "as_factor_yes_no_4",
         no = spss_metadata$suggested_class
       )
+
       spss_metadata$suggested_class <- ifelse ( is.na(
-        spss_metadata$suggested_class
-      ),
+        spss_metadata$suggested_class),
         yes = spss_metadata$suggested_conversion,
         no = spss_metadata$suggested_class
       )
@@ -239,7 +244,7 @@ analyze_gesis_file <- function ( gesis_file,
 
       spss_metadata$suggested_name = gsub ( ":", "_", a)
 
-      naming_exc_message <- paste0("Reviewing exceptions with get_naming_exception()")
+      naming_exc_message <- paste0("Reviewing exceptions with get_naming_exceptions()")
       if (see_log)    futile.logger::flog.info( naming_exc_message )
       if (create_log) futile.logger::flog.info( naming_exc_message , name  ="info")
 
@@ -277,10 +282,12 @@ analyze_gesis_file <- function ( gesis_file,
         dplyr::add_count ( gesis_name )
 
       if ( any (spss_metadata$n > 1 ) ) {
-        split_message <- paste0("There is a split in the questionnaire with not unique names in the GESIS file.")
-        if (see_log)    futile.logger::flog.warn(split_message)
-        if (create_log) futile.logger::flog.warn(split_message,
-                                                 name  ="warning")
+        if ( "split" %in% spss_metadata$suggested_name) {
+          split_message <- paste0("There is a split in the questionnaire with not unique names in the GESIS file.")
+          if (see_log)    futile.logger::flog.warn(split_message)
+          if (create_log) futile.logger::flog.warn(split_message,
+                                                   name  ="warning")
+        }
 
         spss_metadata <- spss_metadata %>%
           dplyr::mutate ( na_count = ifelse ( n > 1,
@@ -303,26 +310,30 @@ analyze_gesis_file <- function ( gesis_file,
           dplyr::mutate ( na_count = ifelse(is.na(na_count),
                                      max(na_count, na.rm=TRUE),
                                      na_count)) %>%
+          dplyr::mutate ( emergency_name = paste0(suggested_name,"_",
+                                                  row.names(spss_metadata_exc))) %>%
           dplyr::mutate ( suggested_name = ifelse ( na_count < 12000,
-                                               paste0(suggested_name, "_split_b"),
+                                               paste0(suggested_name, row.names(.)),
                                                suggested_name )) %>%
           dplyr::select ( -na_count, -n) %>%
           dplyr::add_count ( suggested_name )
 
         if ( any (spss_metadata_exc$n > 1)) {
-          unknow_naming_error_message <- paste0("Unknown naming error in\n", gesis_file,
-                                                "\nNaming problem exported to naming_problem.csv.")
+          spss_metadata_exc <-  spss_metadata_exc %>%
+            dplyr::mutate ( suggested_name = ifelse ( n > 1,
+                                                      emergency_name,
+                                                      suggested_name ))
+          unknow_naming_error_message <- paste0("Not unqiue variable description in\n", gesis_file)
           if (see_log)    futile.logger::flog.error(unknow_naming_error_message)
           if (create_log) futile.logger::flog.error(unknow_naming_error_message,
                                                    name  ="error")
-          utils::write.csv(spss_metadata_exc, "naming_problem.csv")
           stop ( unknow_naming_error_message )
         } else {
           spss_metadata <- spss_metadata_exc
         }
       }
 
-      spss_metadata <- dplyr::select (spss_metadata, -n)
+      spss_metadata <- dplyr::select (spss_metadata, -n, -emergency_name)
 
     },
     error=function(cond) {
