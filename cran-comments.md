@@ -1,5 +1,6 @@
 ## Test environments
 * win-builder (release)
+* Ubuntu 14.04.5 LTS (release, on travis-ci.org)
 
 ## R CMD check results
 
