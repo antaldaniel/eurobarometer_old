@@ -17,6 +17,6 @@ Is the object of class factor_yes_no_4?
 my_categories <- as_factor_yes_no_4( c("Very good", "Rather Good",
                   "Inap.", "Rather Bad", "DK", "Very bad"))
 
-is.factor_yes_no_4 (my_binary)
+is.factor_yes_no_4 (my_categories)
 
 }
