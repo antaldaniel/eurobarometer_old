@@ -3,7 +3,7 @@
 
 ## R CMD check results
 
-1 error  | 0 warnings | 1 note
+0 error  | 0 warnings | 0 note
 
 * This is a new release.
 
