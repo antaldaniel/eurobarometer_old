@@ -1,0 +1,6 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^cran-comments\.md$
+^not_included/$
+^not_included$
+^\.travis\.yml$
