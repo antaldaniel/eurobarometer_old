@@ -5,3 +5,4 @@
 * 0.0.0.9001 Handles same naming exceptions, and avoids a faulty error message that caused R to crash.
 * 0.0.0.9002 Class and methods for handling 1 positive, 1 neutral, 1 negative levels. Adding unit tests. 
 * 0.0.0.9003 Class and methods for handling 4 non-negative categories.
+* 0.0.0.9004 Correctly convert haven labelled variables.
