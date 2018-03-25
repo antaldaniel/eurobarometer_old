@@ -11,7 +11,7 @@
 as_factor_yes_no_4 <- function(x) {
   x <- as.character (x)
   x <- tolower(x)
-  yes_no_4_values <- yes_4_get()
+  yes_no_4_values <- values_yes_no_4_get()
   yes_2 <- tolower(yes_no_4_values[[1]])
   yes_1 <- tolower(yes_no_4_values[[2]])
   no_1 <-  tolower(yes_no_4_values[[3]])

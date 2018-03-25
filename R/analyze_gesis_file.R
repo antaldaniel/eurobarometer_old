@@ -36,7 +36,6 @@
 #' }
 #' @export
 #'
-gesis_file <- ZA5929_file
 
 analyze_gesis_file <- function ( gesis_file,
                                  see_log = TRUE,
@@ -148,12 +147,21 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_for_against_2",
           "rescale_gender",
           "rescale_trust",
-          "rescale_yes_no_2"
+          "rescale_yes_no_2",
+          "rescale_doing_job_2",
+          "rescale_correct_wrong_answer_2"
         ),
         yes = "as_factor_binary",
         no = NA
       )
-
+      spss_metadata$suggested_class <- ifelse (
+        spss_metadata$suggested_conversion %in% c(
+          "keep_numeric_10",
+          "keep_numeric_5"
+        ),
+        yes = "keep_numeric",
+        no = NA
+      )
       spss_metadata$suggested_class <- ifelse (
         spss_metadata$suggested_conversion %in% c(
           "rescale_political_interest",
@@ -170,6 +178,7 @@ analyze_gesis_file <- function ( gesis_file,
       spss_metadata$suggested_class <- ifelse (
         spss_metadata$suggested_conversion %in% c(
           "rescale_yes_no_4",
+          "recale_good_bad_4",
           "rescale_satisfaction",
           "rescale_situation",
           "rescale_optimism_4",
@@ -190,7 +199,9 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_low_strong_3", #low medium strong
           "rescale_subjective_urbanization",
           "rescale_social_class_en",
-          "rescale_difficulty"
+          "rescale_difficulty",
+          "rescale_interested_3",
+          "rescale_strongly"
         ),
         yes = "as_factor_3",
         no = spss_metadata$suggested_class
@@ -211,7 +222,10 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_direction",
           "rescale_better_worse_3",
           "rescale_good_bad_3",
-          "rescale_amount_3"
+          "rescale_amount_3",
+          "rescale_impact_3",
+          "rescale_improved_3",
+          "rescale_effect_3"
         ),
         yes = "as_factor_pos_neg",
         no = spss_metadata$suggested_class

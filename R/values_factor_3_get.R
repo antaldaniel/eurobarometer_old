@@ -11,14 +11,17 @@ values_factor_3_get <- function () {
                   "Rural area or village",
                   "The working class of society",
                   "Almost never/never",
-                  "Never acceptable")
+                  "Never acceptable",
+                  "Not at all interested")
   factor_3_1 <- c("Medium",
                   "Yes, once or twice",
                   "occasionally",
                   "Small or medium-sized town",
                   "The middle class of society",
                   "From time to time",
-                  "Sometimes acceptable"
+                  "Sometimes acceptable",
+                  "Moderately interested",
+                  "Somewhat strongly"
                   )
   factor_3_2 <- c("Strong",
                   "Yes, on several occasions",
@@ -26,7 +29,8 @@ values_factor_3_get <- function () {
                   "Large town/city",
                   "The upper class of society",
                   "Most of the time",
-                  "Always acceptable")
+                  "Always acceptable",
+                  "Very interested")
 
   factor_3_list <- list ( factor_3_0, factor_3_1, factor_3_2)
   return(factor_3_list)
