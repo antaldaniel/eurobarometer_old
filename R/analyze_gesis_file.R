@@ -142,7 +142,8 @@ analyze_gesis_file <- function ( gesis_file,
                                                 character(1) )
       spss_metadata$suggested_class <- ifelse (
         spss_metadata$suggested_conversion %in% c(
-          "multiple_choice", "rescale_benefit_2",
+          "multiple_choice",
+          "rescale_benefit_2",
           "rescale_for_against_2",
           "rescale_gender",
           "rescale_trust",
@@ -189,6 +190,13 @@ analyze_gesis_file <- function ( gesis_file,
         yes = "as_factor_3",
         no = spss_metadata$suggested_class
       )
+      spss_metadata$suggested_class <- ifelse (
+        spss_metadata$suggested_conversion %in% c(
+          "rescale_time_frequency_use"
+        ),
+        yes = "rescale_time_frequency_use",
+        no = spss_metadata$suggested_class
+      )
 
       spss_metadata$suggested_class <- ifelse (
         spss_metadata$suggested_conversion %in% c(
@@ -213,7 +221,7 @@ analyze_gesis_file <- function ( gesis_file,
           "Never|Frequently|Occasionally",
           "Never|Occasionally|Frequently"
         ),
-        yes = "as_time_frequency",
+        yes = "as_factor_3",
         no = spss_metadata$suggested_class
       )
 
