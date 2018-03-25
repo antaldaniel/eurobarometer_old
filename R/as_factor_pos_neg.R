@@ -1,6 +1,7 @@
-#' Constructor for factor_yes_no_4
+#' Constructor for factor_pos_neg
 #'
-#' @param x An input vector to be converted to a four level yes-no variable
+#' @param x An input vector to be converted to a
+#' three level (positive, neutral, negative) variable class.
 #' @importFrom plyr mapvalues
 #' @examples
 #' as_factor_pos_neg( c("Better", "DK", "Worse",

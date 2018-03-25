@@ -2,15 +2,16 @@
 % Please edit documentation in R/as_factor_pos_neg.R
 \name{as_factor_pos_neg}
 \alias{as_factor_pos_neg}
-\title{Constructor for factor_yes_no_4}
+\title{Constructor for factor_pos_neg}
 \usage{
 as_factor_pos_neg(x)
 }
 \arguments{
-\item{x}{An input vector to be converted to a four level yes-no variable}
+\item{x}{An input vector to be converted to a
+three level (positive, neutral, negative) variable class.}
 }
 \description{
-Constructor for factor_yes_no_4
+Constructor for factor_pos_neg
 }
 \examples{
 as_factor_pos_neg( c("Better", "DK", "Worse",
