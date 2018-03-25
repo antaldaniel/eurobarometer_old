@@ -1,4 +1,4 @@
-library (surveyreader)
+library (eurobarometer)
 library(testthat)
 context("Wrapper for Eurobarometer marital status in English")
 

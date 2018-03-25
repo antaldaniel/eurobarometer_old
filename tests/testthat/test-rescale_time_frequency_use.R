@@ -1,4 +1,4 @@
-library (surveyreader)
+library (eurobarometer)
 library(testthat)
 context("Wrapper for time frequency of using things Eurobarometer questions.")
 

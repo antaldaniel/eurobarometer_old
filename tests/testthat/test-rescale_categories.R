@@ -1,4 +1,4 @@
-library (surveyreader)
+library (eurobarometer)
 library(testthat)
 context("Converting categorical values to numeric values.")
 

@@ -1,7 +1,9 @@
 library (surveyreader)
 library(testthat)
 context("Correct class conversion to positive neutral negative")
-
+x <- as_factor_pos_neg (c("Better", "DK", "Worse",
+                          "Same", "The Same",
+                          "Inap. not "))
 test_that("correct conversion takes place", {
   expect_equal(as_factor_pos_neg (c("Better", "DK", "Worse",
                                     "Same", "The Same",
