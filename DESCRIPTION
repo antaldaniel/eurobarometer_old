@@ -1,6 +1,6 @@
 Package: eurobarometer
 Title: Consistent Import of Eurobarometer Archive Files from GESIS
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: person("Daniel", "Antal", email = "daniel.antal@ceemid.eu", role = c("aut", "cre"))
 Description: Clean, rename, transform and integrate Eurobarometer and standardized survey conversions.
 Depends: R (>= 3.4.3)
