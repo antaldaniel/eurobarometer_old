@@ -79,7 +79,8 @@ get_answer_options <- function ( language = "en") {
 
       rescale_optimism_4 = c( "Very optimistic", "Fairly optimistic",
                               "Fairly pessimistic", "Very pessimistic"),
-
+      rescale_protects_4 = c( "Protects very well", "Protects fairly well",
+                              "Protects not very well", "Protects not at all"),
       rescale_much_little_3 = c("Enough", "Too little", "Too much"),
 
       rescale_political_interest = c("Not at all interested in politics",

@@ -160,7 +160,8 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_likely_4",
           "rescale_low_strong_4",
           "rescale_attachment",
-          "rescale_applies_4"
+          "rescale_applies_4",
+          "rescale_protects_4"
         ),
         yes = "as_factor_4",
         no = spss_metadata$suggested_class
