@@ -3,12 +3,12 @@
 #' Get the character strings that will be recoded as "yes" in
 #' four-level variables.
 #' @examples
-#' yes_no_4_get
+#' values_yes_no_4_get()
 #'
 #' @export
 #'
 
-yes_no_4_get <- function () {
+values_yes_no_4_get <- function () {
   yes_2_values <- c("Yes, definitely", "Very good",
                     "Very satisfied",
                     "Very optimistic", "Very positive",

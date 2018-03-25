@@ -3,9 +3,6 @@ library(testthat)
 context("Correct class conversion to positive neutral negative")
 
 
-as_factor_yes_no_4( c("Very good", "Rather Good",
-                      "Inap.", "Rather Bad", "DK",
-                      "Very bad"))
 test_that("correct conversion takes place", {
   expect_equal(as_factor_yes_no_4 (c("Very good", "Rather Good",
                                      "Inap.", "Rather Bad", "DK",
