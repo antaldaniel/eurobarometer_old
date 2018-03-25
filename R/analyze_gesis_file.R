@@ -223,6 +223,10 @@ analyze_gesis_file <- function ( gesis_file,
 
       a <- tolower(as.character(spss_metadata$gesis_name))
       a <- gsub ( "%", "pct", a)
+      a <- gsub ( "1st", "first", a)
+      a <- gsub ( "2nd", "second", a)
+      a <- gsub ( "3rd", "third", a)
+      a <- gsub ( "4th", "fourth", a)
       a <- gsub ( "(spont)", "_spont", a)
       a <- gsub ( "(sum)", "_sum", a)
       a <- gsub ( "(summarized)", "_sum", a)
@@ -334,7 +338,11 @@ analyze_gesis_file <- function ( gesis_file,
           warning ( unknow_naming_error_message )
           spss_metadata <- spss_metadata_exc
         } else {
-          spss_metadata <- spss_metadata_exc
+          spss_metadata <- spss_metadata %>%
+            dplyr::select ( gesis_name, spss_name, suggested_name,
+                            suggested_conversion, value_labels,
+                            questionnaire_item, spss_class,
+                            suggested_class)
         }
       }
 
@@ -357,7 +365,7 @@ analyze_gesis_file <- function ( gesis_file,
       futile.logger::flog.info(gesis_analysis_warning, name="info")
     },
     finally = {
-      finished_message <- paste0("Finished with the analysis of the file\n",
+      finished_message <- paste0("\nFinished with the analysis of the file\n",
                                  insert_file_name,
                                  "\n with ", nrow(read_df),
                                  " observations in ",
