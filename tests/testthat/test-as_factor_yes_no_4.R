@@ -1,4 +1,4 @@
-library (surveyreader)
+library (eurobarometer)
 library(testthat)
 context("Correct class conversion to positive neutral negative")
 
