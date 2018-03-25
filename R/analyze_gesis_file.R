@@ -289,8 +289,8 @@ analyze_gesis_file <- function ( gesis_file,
       spss_metadata <- spss_metadata %>%
         dplyr::add_count ( gesis_name )
 
-      if ( any (spss_metadata$n > 1 ) ) {
-        if ( "split" %in% spss_metadata$suggested_name) {
+      if ( any (spss_metadata$n > 1 ) ) {  #multiple names
+        if ( "split" %in% spss_metadata$suggested_name) { #if there is a split
           split_message <- paste0("There is a split in the questionnaire with not unique names in the GESIS file.")
           if (see_log)    futile.logger::flog.warn(split_message)
           if (create_log) futile.logger::flog.warn(split_message,
@@ -313,40 +313,36 @@ analyze_gesis_file <- function ( gesis_file,
             spss_metadata$na_count,
             count_answers, numeric(1))  ##to determine additional questionnaire sample size
 
-
+         #First try to identify small (tcc) sample
         spss_metadata_exc <-  spss_metadata_exc %>%
           dplyr::mutate ( na_count = ifelse(is.na(na_count),
                                      max(na_count, na.rm=TRUE),
                                      na_count)) %>%
           dplyr::mutate ( emergency_name = paste0(suggested_name,"_",
-                                                  row.names(spss_metadata_exc))) %>%
-          dplyr::mutate ( suggested_name = ifelse ( na_count < 12000,
-                                               paste0(suggested_name, row.names(.)),
-                                               suggested_name )) %>%
-          dplyr::select ( -na_count, -n) %>%
-          dplyr::add_count ( suggested_name )
+                                          spss_metadata_exc$spss_name)) %>%
+          dplyr::mutate ( suggested_name = ifelse ( na_count < 1200,
+                                               paste0(suggested_name, "_tcc"),
+                                               suggested_name)) %>%
+          dplyr::select(-n) %>%
+          dplyr::add_count(suggested_name)
 
-        if ( any (spss_metadata_exc$n > 1)) {
+        spss_metadata <- spss_metadata_exc #update spss_metadata for return
+
+        if ( any (spss_metadata_exc$n > 1)) { #Still multiple names
           spss_metadata_exc <-  spss_metadata_exc %>%
             dplyr::mutate ( suggested_name = ifelse ( n > 1,
-                                                      emergency_name,
-                                                      suggested_name ))
+                                                 yes = emergency_name,
+                                                 no  = suggested_name ))
           unknow_naming_error_message <- paste0("Not unqiue variable description in\n", gesis_file)
           if (see_log)    futile.logger::flog.error(unknow_naming_error_message)
           if (create_log) futile.logger::flog.error(unknow_naming_error_message,
                                                    name  ="error")
           warning ( unknow_naming_error_message )
-          spss_metadata <- spss_metadata_exc
-        } else {
-          spss_metadata <- spss_metadata %>%
-            dplyr::select ( gesis_name, spss_name, suggested_name,
-                            suggested_conversion, value_labels,
-                            questionnaire_item, spss_class,
-                            suggested_class)
-        }
-      }
+          spss_metadata <- spss_metadata_exc #update spss_metadata for return
+        } #end of 2nd try for double names
+      } #end of double names
 
-      spss_metadata <-spss_metadata_exc %>%
+      spss_metadata <- spss_metadata %>%
         dplyr::select ( gesis_name, spss_name, suggested_name,
         suggested_conversion, value_labels,
         questionnaire_item, spss_class,
