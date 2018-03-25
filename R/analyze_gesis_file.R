@@ -116,6 +116,8 @@ analyze_gesis_file <- function ( gesis_file,
          stringsAsFactors = FALSE
       )
 
+      return_metadata <- spss_metadata
+
       if (see_log)    futile.logger::flog.info("Getting SPSS labels")
       if (create_log) futile.logger::flog.info("Getting SPSS labels", name  ="info")
       spss_metadata$gesis_name <- sjlabelled::get_label (read_df)
@@ -286,35 +288,48 @@ analyze_gesis_file <- function ( gesis_file,
                                                 yes = "country_code_iso_3166",
                                                 no = suggested_name ))
 
-      spss_metadata <- spss_metadata %>%
-        dplyr::add_count ( gesis_name )
+      count_answers <- function(x) {
+        if (x == "") return ( as.numeric(NA) )
+        df_sub <- read_df[, which(names(read_df) == x) ]
+        as.numeric(sum (! is.na(df_sub )))
+      } #function to count missings
 
-      if ( any (spss_metadata$n > 1 ) ) {  #multiple names
+      spss_metadata <- spss_metadata %>%
+        dplyr::add_count ( gesis_name ) %>%
+        dplyr::mutate ( na_count = ifelse (
+          n > 1,
+          yes = spss_name,
+          no =  "" ))  #mark problematic rows
+
+      #Case 1 - no multiple names
+      #Case 2 - multiple names with small smaple (_tcc)
+      #Case 3 - multiple names for other reasons
+      naming_exc_2 <- paste0("Analyzing naming conflicts.")
+      if (see_log)    futile.logger::flog.info( naming_exc_2 )
+      if (create_log) futile.logger::flog.info( naming_exc_2, name  ="info")
+
+      if ( any (spss_metadata$n > 1 ) ) {  #Not Case 1
+        spss_metadata_exc <- spss_metadata #start of exception handling
+        if (see_log)    futile.logger::flog.info("Start of exception handling")
+
+        exc_message <- "There are not unique names in the GESIS file."
+        if (see_log)    futile.logger::flog.warn("There are not unique names in the GESIS file.")
+        if (create_log) futile.logger::flog.warn("There are not unique names in the GESIS file.",
+                                                 name  ="warning")
+
         if ( "split" %in% spss_metadata$suggested_name) { #if there is a split
-          split_message <- paste0("There is a split in the questionnaire with not unique names in the GESIS file.")
+          split_message <- "There is a split in the questionnaire."
           if (see_log)    futile.logger::flog.warn(split_message)
           if (create_log) futile.logger::flog.warn(split_message,
                                                    name  ="warning")
-        }
-
-        spss_metadata <- spss_metadata %>%
-          dplyr::mutate ( na_count = ifelse ( n > 1,
-                                       spss_name,
-                                       "" ))
-        count_answers <- function(x) {
-            if (x == "") return ( as.numeric(NA) )
-            df_sub <- read_df[, which(names(read_df) == x) ]
-            as.numeric(sum (! is.na(df_sub )))
-        }
-
-        spss_metadata_exc <- spss_metadata
+        } #end of split warning
 
         spss_metadata_exc$na_count <- vapply(
             spss_metadata$na_count,
             count_answers, numeric(1))  ##to determine additional questionnaire sample size
 
          #First try to identify small (tcc) sample
-        spss_metadata_exc <-  spss_metadata_exc %>%
+        spss_metadata_exc <- spss_metadata_exc %>%
           dplyr::mutate ( na_count = ifelse(is.na(na_count),
                                      max(na_count, na.rm=TRUE),
                                      na_count)) %>%
@@ -326,72 +341,96 @@ analyze_gesis_file <- function ( gesis_file,
           dplyr::select(-n) %>%
           dplyr::add_count(suggested_name)
 
-        spss_metadata <- spss_metadata_exc #update spss_metadata for return
+        if (see_log)    futile.logger::flog.info("Analyzed presence of small subsample")
 
-        if ( any (spss_metadata_exc$n > 1)) { #Still multiple names
-          spss_metadata_exc <-  spss_metadata_exc %>%
+        if ( any (spss_metadata_exc$n > 1)) {
+          #Start of case 3
+          exc2_message <- "The not unique names are likely not caused by
+                                 a small subsample."
+          if (see_log)    futile.logger::flog.warn(exc2_message)
+          if (create_log) futile.logger::flog.warn(exc2_message,
+                                                   name  ="warning")
+
+          spss_metadata_exc <- spss_metadata_exc %>%
             dplyr::mutate ( suggested_name = ifelse ( n > 1,
                                                  yes = emergency_name,
                                                  no  = suggested_name ))
-          unknow_naming_error_message <- paste0("Not unqiue variable description in\n", gesis_file)
-          if (see_log)    futile.logger::flog.error(unknow_naming_error_message)
-          if (create_log) futile.logger::flog.error(unknow_naming_error_message,
-                                                   name  ="error")
-          warning ( unknow_naming_error_message )
-          spss_metadata <- spss_metadata_exc #update spss_metadata for return
-        } #end of 2nd try for double names
-      } #end of double names
 
-      spss_metadata <- spss_metadata %>%
+          return_metadata <- spss_metadata_exc #update spss_metadata for return
+          #end of Case 3
+        } else {
+        small_sample_message <- paste0("Not unqiue variable, small sample in\n", gesis_file)
+        if (see_log)    futile.logger::flog.info(small_sample_message)
+        if (create_log) futile.logger::flog.info(small_sample_message,
+                                                 name = "info")
+        return_metadata <- spss_metadata_exc
+          } #end of Case 2
+      } else {   #end of Not Case 1
+
+      no_naming_error_message <- paste0("Not unqiue variable description in\n", gesis_file)
+      if (see_log)    futile.logger::flog.info(no_naming_error_message)
+      if (create_log) futile.logger::flog.info(no_naming_error_message,
+                                                name  ="info")
+      return_metadata <- spss_metadata
+      #End of Case 1
+      }
+
+
+      return_metadata <- return_metadata %>%
         dplyr::select ( gesis_name, spss_name, suggested_name,
         suggested_conversion, value_labels,
         questionnaire_item, spss_class,
         suggested_class)
 
-    },
-    error=function(cond) {
-      gesis_analysis_error <- paste0("Not successful -> analyze_gesis_file, ", cond)
-      warning(gesis_analysis_error )
-      futile.logger::flog.error(gesis_analysis_error, name="error")
-      futile.logger::flog.info(gesis_analysis_error, name="info")
-    },
-    warning=function(cond) {
-      gesis_analysis_warning <- paste0("Warning -> analyze_gesis_file, ", cond)
-      futile.logger::flog.warn(gesis_analysis_warning, name="warning")
-      futile.logger::flog.info(gesis_analysis_warning, name="info")
-    },
-    finally = {
-      finished_message <- paste0("\nFinished with the analysis of the file\n",
-                                 insert_file_name,
-                                 "\n with ", nrow(read_df),
-                                 " observations in ",
-                                 ncol(read_df), " variables.")
-      summary_data <- spss_metadata %>%
+      summary_data <- return_metadata %>%
         select ( suggested_class ) %>%
         add_count( suggested_class ) %>%
         group_by ( suggested_class) %>%
         distinct ( suggested_class, n ) %>%
         as.data.frame(.)
+
       summary_message <- paste0("\nSuggested conversion ", summary_data[1,1], ": ",
-                            summary_data[1,2], "\n")
+                                summary_data[1,2], "\n")
 
       for ( i in 2:nrow(summary_data)) {
         summary_message <- paste0(summary_message,
-          "Suggested conversion ", summary_data[i,1], ": ",
-               summary_data[i,2], "\n")
+                                  "Suggested conversion ", summary_data[i,1], ": ",
+                                  summary_data[i,2], "\n")
       }
       summary_message <- paste0(summary_message,
-       "Factors need individual attention.\n",
-       "Numeric variables can be imported to R without any problem.")
+                                "Factors need individual attention.\n",
+                                "Numeric variables can be imported to R without any problem.")
 
       if (see_log) futile.logger::flog.info (summary_message)
       futile.logger::flog.info ( summary_message,
                                  name="info")
-       if (see_log) futile.logger::flog.info (finished_message)
-      futile.logger::flog.info ( finished_message,
-                                 name="info")
+    },   #end of TryCatch
+    error=function(cond) {
+      if (see_log) futile.logger::flog.info ("Creating error message")
+      gesis_analysis_error <- paste0("Not successful -> analyze_gesis_file, ", cond)
+      #warning(gesis_analysis_error )
+      futile.logger::flog.error(gesis_analysis_error, name="error")
+      futile.logger::flog.info(gesis_analysis_error, name="info")
+    },
+    warning=function(cond) {
+      if (see_log) futile.logger::flog.info ("Creating warning message")
+      gesis_analysis_warning <- paste0("\nFinished with the analysis of the file\n
+                                       with warning\n", cond)
+
+      futile.logger::flog.warn(gesis_analysis_warning, name="warning")
+      futile.logger::flog.info(gesis_analysis_warning, name="info")
+    },
+    finally = {
+      finished_message <- paste0("\nFinished with the analysis of the file without warning\n",
+                                 insert_file_name,
+                                 "\n with ", nrow(read_df),
+                                 " observations in ",
+                                 ncol(read_df), " variables.")
+
     }
   )
-
-  return (spss_metadata)
+  if (see_log) futile.logger::flog.info (finished_message)
+  futile.logger::flog.info ( finished_message,
+                             name="info")
+  return (return_metadata)
 }
