@@ -158,7 +158,9 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_political_interest",
           "rescale_informed_4",
           "rescale_likely_4",
-          "rescale_low_strong_4"
+          "rescale_low_strong_4",
+          "rescale_attachment",
+          "rescale_applies_4"
         ),
         yes = "as_factor_4",
         no = spss_metadata$suggested_class
@@ -170,6 +172,7 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_situation",
           "rescale_optimism_4",
           "rescale_description",
+          "recale_description_alt",
           "rescale_attachment_4",
           "rescale_agreement_4",
           "rescale_effective_4",
