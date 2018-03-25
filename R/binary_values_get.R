@@ -13,11 +13,15 @@ binary_values_get <- function () {
                   "da", "agree", "for",
                   "tend to trust",
                   "woud benefit",
-                  "female")
+                  "female",
+                  "Doing a good job",
+                  "Correct answer")
   no_values <- c("nem", "no", "not mentioned",
                  "net", "disagree", "against",
                  "tend not to trust",
-                 "would not benefit", "male")
+                 "would not benefit", "male",
+                 "Not doing a good job",
+                 "Wrong answer")
   binary_list <- list ( yes_values,  no_values)
   return(binary_list)
 }
