@@ -3,11 +3,11 @@
 #' @param x An object to be checked if it is a 4-level (2 positive,
 #' 2 negative) categorical variable.
 #' @examples
-#' my_categories <- as_factor_yes_no_4( c("Very good", "Rather Good",
-#'                   "Inap.", "Rather Bad", "DK", "Very bad"))
+#' my_categories <- as_factor_pos_neg( c("Better", "DK", "Worse",
+#'                                "Same", "The Same","Inap. not "))
 #'
-#' is.factor_yes_no_4 (my_categories)
+#' is.factor_pos_neg (my_categories)
 #'
 #' @export
 #'
-is.factor_yes_no_4 <- function(x) inherits(x, "factor_yes_no_4")
+is.factor_pos_neg<- function(x) inherits(x, "factor_yes_no_4")
