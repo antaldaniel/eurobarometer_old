@@ -3,6 +3,7 @@
 #' @param x An input vector to be converted to a
 #' three positive level variable
 #' @importFrom plyr mapvalues
+#' @importFrom haven as_factor
 #' @examples
 #' as_factor_3( c("Rural area or village", "Small or medium-sized town",
 #'                   "Inap.", "Large town/city", "DK", "Large town/city"))
@@ -10,6 +11,9 @@
 #' @export
 
 as_factor_3 <- function(x) {
+  if ( "labelled" %in% class(x)) {
+    x <- haven::as_factor(x)
+  }
   x <- as.character (x)
   x <- tolower(x)
   factor_3_list <- values_factor_3_get()

@@ -2,6 +2,7 @@
 #'
 #' @param x An input vector to be converted to binary factor class.
 #' @importFrom plyr mapvalues
+#' @importFrom haven as_factor
 #' @examples
 #' as_factor_binary(c("mentioned", "mentioned",
 #'                    "not mentioned", "dk"))

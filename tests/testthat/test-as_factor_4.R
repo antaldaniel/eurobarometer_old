@@ -9,7 +9,13 @@ test_that("correct conversion takes place", {
   c( 0,1,2,3,NA )
   )
 })
-
+test_that("correct conversion takes place", {
+  expect_equal(as_factor_4(c("Not at all interested", "Very interested",
+                             "Fairly interested", "DK",
+                             "Not very interested"))[[3]],
+               c( 0,3,2,NA,1 )
+  )
+})
 test_that("correct conversion takes place", {
   expect_equal(as_factor_4(c("Not at all likely", "Very likely",
                              "Fairly likely", "DK",

@@ -3,6 +3,7 @@
 #' @param x An input vector to be converted to a
 #' four non-negative level variable
 #' @importFrom plyr mapvalues
+#' @importFrom haven as_factor
 #' @examples
 #' as_factor_4( c("Not at all", "Low",
 #'                "Medium", "Strong", "DK"))
@@ -10,6 +11,9 @@
 #' @export
 
 as_factor_4 <- function(x) {
+  if ( "labelled" %in% class(x)) {
+    x <- haven::as_factor(x)
+  }
   x <- as.character (x)
   x <- tolower(x)
   factor_4_list <- values_factor_4_get()
