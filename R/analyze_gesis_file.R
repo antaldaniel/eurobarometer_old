@@ -274,10 +274,10 @@ analyze_gesis_file <- function ( gesis_file,
                                          no = suggested_name )) %>%
         dplyr::mutate ( suggested_name = ifelse ( tolower(spss_name) == "w1",
                                            yes = "w1",
-                                           no = suggested_name ))
-        dplyr::mutate ( suggested_name = ifelse ( tolower(spss_name) == "w1_weight_result_from_target",
+                                           no = suggested_name )) %>%
+        dplyr::mutate ( suggested_name = ifelse ( tolower(suggested_name) == "w1_weight_result_from_target",
                                                 yes = "w1",
-                                                no = suggested_name ))
+                                                no = suggested_name )) %>%
         dplyr::mutate ( suggested_name = ifelse ( tolower(suggested_name) == "nation_all_samples_iso_3166",
                                                 yes = "country_code_iso_3166",
                                                 no = suggested_name ))

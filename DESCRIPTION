@@ -18,3 +18,4 @@ Imports: dplyr,
     stringr,
     sjlabelled
 RoxygenNote: 6.0.1
+Suggests: testthat
