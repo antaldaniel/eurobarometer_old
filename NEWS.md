@@ -1,4 +1,4 @@
-# eurobarometer 0.0.0.9001 - 0.0.0.9002
+# eurobarometer 0.0.0.9001 - 0.0.0.9004
 
 * Added a `NEWS.md` file to track changes to the package.
 * The package is detached from the more general surveyreader, and does not handle multi-language surveys. Currently it is aimed to correctly handle the Eurobarometer archives of GESIS.
