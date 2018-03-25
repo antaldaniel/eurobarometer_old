@@ -36,7 +36,7 @@
 #' }
 #' @export
 #'
-
+gesis_file <- ZA5929_file
 
 analyze_gesis_file <- function ( gesis_file,
                                  see_log = TRUE,
@@ -94,6 +94,7 @@ analyze_gesis_file <- function ( gesis_file,
           stop("Parameter gesis_file must be a pre-imported file or a full path.")
       } else  {
         read_df <- gesis_file
+        insert_file_name <- "analyzed data.frame"
         df_message <- paste0("Inputed a pre-existing data.frame with ",
                              ncol( read_df), " variables.")
           if (see_log)    futile.logger::flog.info(df_message)
@@ -378,7 +379,7 @@ analyze_gesis_file <- function ( gesis_file,
           return_metadata <- spss_metadata_exc #update spss_metadata for return
           #end of Case 3
         } else {
-        small_sample_message <- paste0("Not unqiue variable, small sample in\n", gesis_file)
+        small_sample_message <- paste0("Not unqiue variable, small sample.")
         if (see_log)    futile.logger::flog.info(small_sample_message)
         if (create_log) futile.logger::flog.info(small_sample_message,
                                                  name = "info")
@@ -386,7 +387,7 @@ analyze_gesis_file <- function ( gesis_file,
           } #end of Case 2
       } else {   #end of Not Case 1
 
-      no_naming_error_message <- paste0("Not unqiue variable description in\n", gesis_file)
+      no_naming_error_message <- paste0("Not unqiue variable description.")
       if (see_log)    futile.logger::flog.info(no_naming_error_message)
       if (create_log) futile.logger::flog.info(no_naming_error_message,
                                                 name  ="info")
@@ -408,6 +409,10 @@ analyze_gesis_file <- function ( gesis_file,
         distinct ( suggested_class, n ) %>%
         as.data.frame(.)
 
+      n_factors <- summary_data$n[which(summary_data$suggested_class == "factor")]
+      attention_message <- paste0(
+        (round(n_factors / nrow(return_metadata),2)*100), "% of the variables an be converted automatically."
+      )
       summary_message <- paste0("\nSuggested conversion ", summary_data[1,1], ": ",
                                 summary_data[1,2], "\n")
 
@@ -419,6 +424,10 @@ analyze_gesis_file <- function ( gesis_file,
       summary_message <- paste0(summary_message,
                                 "Factors need individual attention.\n",
                                 "Numeric variables can be imported to R without any problem.")
+
+      if (see_log) futile.logger::flog.info (attention_message)
+      futile.logger::flog.info ( attention_message,
+                                 name="info")
 
       if (see_log) futile.logger::flog.info (summary_message)
       futile.logger::flog.info ( summary_message,
