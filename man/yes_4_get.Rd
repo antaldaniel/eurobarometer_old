@@ -2,7 +2,7 @@
 % Please edit documentation in R/yes_4_get.R
 \name{yes_4_get}
 \alias{yes_4_get}
-\title{Get four-level yes values}
+\title{Get four-level yes-no values}
 \usage{
 yes_4_get()
 }
@@ -11,6 +11,6 @@ Get the character strings that will be recoded as "yes" in
 four-level variables.
 }
 \examples{
-yes_4_get
+yes_4_get()
 
 }

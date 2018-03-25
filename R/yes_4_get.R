@@ -1,9 +1,9 @@
-#' Get four-level yes values
+#' Get four-level yes-no values
 #'
 #' Get the character strings that will be recoded as "yes" in
 #' four-level variables.
 #' @examples
-#' yes_4_get
+#' yes_4_get()
 #'
 #' @export
 #'

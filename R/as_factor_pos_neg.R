@@ -12,7 +12,7 @@
 as_factor_pos_neg <- function(x) {
   x <- as.character (x)
   x <- tolower(x)
-  values_pos_neg <- values_pos_neg_get()
+  values_pos_neg <- values_factor_3_get()
   pos <- tolower(values_pos_neg[[1]])
   nul <- tolower(values_pos_neg[[2]])
   neg <-  tolower(values_pos_neg[[3]])

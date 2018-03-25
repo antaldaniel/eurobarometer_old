@@ -151,34 +151,56 @@ analyze_gesis_file <- function ( gesis_file,
         yes = "as_factor_binary",
         no = NA
       )
+
       spss_metadata$suggested_class <- ifelse (
         spss_metadata$suggested_conversion %in% c(
-          "rescale_time_frequency_3",
-          "rescale_subjective_urbanization",
-          "rescale_social_class_en",
-          "rescale_low_strong_3",
-          "rescale_difficulty",
-          "recale_acceptable_3"
-        ),
-        yes = "as_factor_3",
-        no = spss_metadata$suggested_class
-      )
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$suggested_conversion %in% c(
-          "rescale_political_interest"
+          "rescale_political_interest",
+          "rescale_informed_4",
+          "rescale_likely_4",
+          "rescale_low_strong_4"
         ),
         yes = "as_factor_4",
         no = spss_metadata$suggested_class
       )
       spss_metadata$suggested_class <- ifelse (
         spss_metadata$suggested_conversion %in% c(
+          "rescale_yes_no_4",
+          "rescale_satisfaction",
+          "rescale_situation",
+          "rescale_optimism_4",
+          "rescale_description",
+          "rescale_attachment_4",
+          "rescale_agreement_4",
+          "rescale_effective_4",
+          "rescale_image"
+        ),
+        yes = "as_factor_yes_no_4",
+        no = spss_metadata$suggested_class
+      )
+      spss_metadata$suggested_class <- ifelse (
+        spss_metadata$suggested_conversion %in% c(
+          "rescale_time_frequency_3",
+          "rescale_yes_no_3",
+          "rescale_low_strong_3", #low medium strong
+          "rescale_subjective_urbanization",
+          "rescale_social_class_en",
+          "rescale_difficulty"
+        ),
+        yes = "as_factor_3",
+        no = spss_metadata$suggested_class
+      )
+
+      spss_metadata$suggested_class <- ifelse (
+        spss_metadata$suggested_conversion %in% c(
           "rescale_much_little_3",
+          "rescale_amount_3",
           "rescale_goal_3",
           "rescale_direction",
           "rescale_better_worse_3",
+          "rescale_good_bad_3",
           "rescale_amount_3"
         ),
-        yes = "as_factor_3",
+        yes = "as_factor_pos_neg",
         no = spss_metadata$suggested_class
       )
 
@@ -194,22 +216,7 @@ analyze_gesis_file <- function ( gesis_file,
         yes = "as_time_frequency",
         no = spss_metadata$suggested_class
       )
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$suggested_conversion %in% c(
-          "rescale_yes_no_4",
-          "rescale_satisfaction",
-          "rescale_situation",
-          "rescale_optimism_4",
-          "rescale_likely_4",
-          "rescale_image",
-          "rescale_description",
-          "rescale_attachment_4",
-          "rescale_agreement_4",
-          "rescale_informed_4", "rescale_effective_4"
-        ),
-        yes = "as_factor_yes_no_4",
-        no = spss_metadata$suggested_class
-      )
+
 
       spss_metadata$suggested_class <- ifelse ( is.na(
         spss_metadata$suggested_class),

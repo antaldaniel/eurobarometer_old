@@ -1,4 +1,4 @@
-#' Get three level (positive, neutral, negative) categories
+#' Get four level (2 positive, 2 negative) categories
 #'
 #' @examples
 #' values_pos_neg_get()
@@ -6,7 +6,7 @@
 #' @export
 #'
 
-values_pos_neg_get <- function () {
+values_pos_neg_4_get <- function () {
   factor_positive <- c("Too little", "A good thing",
                        "Right direction",
                        "Better", "Too little",
