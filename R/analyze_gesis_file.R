@@ -37,11 +37,7 @@
 #' @export
 #'
 
-#gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA4530_v2-1-0.sav"
-#see_log <- create_log <- TRUE
-#log_prefix <- log_id <-NA
-#my_treshold = futile.logger::INFO
-#trial <- analyze_gesis_file (gesis_file)
+
 analyze_gesis_file <- function ( gesis_file,
                                  see_log = TRUE,
                                  create_log = TRUE,
@@ -279,6 +275,12 @@ analyze_gesis_file <- function ( gesis_file,
         dplyr::mutate ( suggested_name = ifelse ( tolower(spss_name) == "w1",
                                            yes = "w1",
                                            no = suggested_name ))
+        dplyr::mutate ( suggested_name = ifelse ( tolower(spss_name) == "w1_weight_result_from_target",
+                                                yes = "w1",
+                                                no = suggested_name ))
+        dplyr::mutate ( suggested_name = ifelse ( tolower(suggested_name) == "nation_all_samples_iso_3166",
+                                                yes = "country_code_iso_3166",
+                                                no = suggested_name ))
 
       spss_metadata <- spss_metadata %>%
         dplyr::add_count ( gesis_name )
