@@ -17,7 +17,8 @@ values_pos_neg_get <- function () {
                        "Very strongly",
                        "Positive effect",
                        "Higher", "Insufficient",
-                       "Too negatively")
+                       "Too negatively",
+                       "More important")
   factor_null     <- c("Enough", "Doing about the right amount",
                        "Neither good nor bad",
                        "Neither",
@@ -29,7 +30,9 @@ values_pos_neg_get <- function () {
                        "Stayed about the same",
                        "No effect",
                        "Equal", "Adequate/ about right",
-                       "Objectively")
+                       "Objectively",
+                       "No change / As it is now (SPONTANEOUS)",
+                       "No change / As it is now")
   factor_negative <- c("Too much", "Doing too much",
                        "A bad thing",
                        "Wrong direction",
@@ -40,7 +43,8 @@ values_pos_neg_get <- function () {
                        "Got worse",
                        "Not at all strongly",
                        "Negative effect",
-                       "Lower", "Excessive", "Too positively")
+                       "Lower", "Excessive", "Too positively",
+                       "Less important")
 
   factor_pos_neg_list <- list ( factor_positive,
                                 factor_null,

@@ -144,7 +144,8 @@ analyze_gesis_file <- function ( gesis_file,
         spss_metadata$suggested_conversion %in% c(
           "multiple_choice",
           "rescale_benefit_2",
-          "rescale_benefit_2_alt",
+          "rescale_benefit_2a",
+          "rescale_benefit_2b",
           "rescale_true_false",
           "rescale_true_false_2a", "rescale_true_false_2b",
           "rescale_true_false_2c", "rescale_true_false_2d",
@@ -176,7 +177,8 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_applies_4",
           "rescale_protects_4",
           'rescale_satisfactory_4',
-          "rescale_satisfied_4"
+          "rescale_satisfied_4",
+          "rescale_important_4"
         ),
         yes = "as_factor_4",
         no = spss_metadata$suggested_class
@@ -195,7 +197,8 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_effective_4",
           "rescale_image",
           "rescale_recognize_4",
-          "rescale_safe_4"
+          "rescale_safe_4",
+          "rescale_view_4"
         ),
         yes = "as_factor_yes_no_4",
         no = spss_metadata$suggested_class
@@ -247,7 +250,8 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_improved_3",
           "rescale_effect_3",
           "rescale_sufficient_3",
-          "rescale_objectively_3"
+          "rescale_objectively_3",
+          "rescale_important_3"
         ),
         yes = "as_factor_pos_neg",
         no = spss_metadata$suggested_class
@@ -447,7 +451,8 @@ analyze_gesis_file <- function ( gesis_file,
 
       n_factors <- summary_data$n[which(summary_data$suggested_class == "factor")]
       attention_message <- paste0(
-        (100-(round(n_factors / nrow(return_metadata),2)*100)), "% of the variables can be converted automatically."
+        (100-(round(n_factors / nrow(return_metadata),2)*100)), "% of the variables cannot be converted automatically.
+        These variables will be converted to factors."
       )
       summary_message <- paste0("\nSuggested conversion ", summary_data[1,1], ": ",
                                 summary_data[1,2], "\n")

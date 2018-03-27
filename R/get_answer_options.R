@@ -33,8 +33,10 @@ get_answer_options <- function ( language = "en") {
                                 "Not at all attached"),
       rescale_benefit_2 = c("Would benefit",
                             "Would not benefit"),
-      rescale_benefit_2 = c("has benefited",
+      rescale_benefit_2a = c("has benefited",
                             "has not benefited"),
+      rescale_benefit_2b = c("benefited",
+                             "not benefited"),
       rescale_better_worse_3 = c("Better",
                                  "Same",
                                  "Worse"),
@@ -98,6 +100,13 @@ get_answer_options <- function ( language = "en") {
       rescale_improved_3 = c("Improved",
                            "Got worse",
                            "Stayed about the same"),
+      rescale_important_3 = c("  More important",
+                              "Less important",
+                              "No change / As it is now (SPONTANEOUS)"),
+      rescale_important_4 = c( "Very important", "Fairly important",
+                               "Not very important",
+                               "Not at all important"),
+
       rescale_informed_4 = c( "Very well informed", "Fairly well informed",
                               "Not very informed", "Not at all informed"),
       rescale_interested_3 = c( "Very interested", "Moderately interested",
@@ -173,6 +182,10 @@ get_answer_options <- function ( language = "en") {
                            "No"),
       rescale_yes_no_4 = c("Yes, to some extent", "Yes, definitely",
                            "No, definitely not", "No, not really"),
+      rescale_view_4 <- c("Somewhat positive view",
+                          "Very negative view",
+                          "Somewhat negative view",
+                          "Very positive view"),
       stringsAsFactors = FALSE
     )
   }

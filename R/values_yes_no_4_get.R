@@ -15,7 +15,8 @@ values_yes_no_4_get <- function () {
                     "Strongly in favour", "Very effective",
                     "Totally agree",
                     "Very easy",
-                    "Very safe")
+                    "Very safe",
+                    "Very positive view")
   yes_1_values <- c("Yes, to some extent", "Rather good",
                     "Fairly satisfied",
                      "Fairly optimistic",
@@ -23,7 +24,8 @@ values_yes_no_4_get <- function () {
                     "Fairly effective",
                     "Tend to agree",
                     "Quite easy",
-                    "Fairly safe")
+                    "Fairly safe",
+                    "Somewhat positive view")
   no_1_values <- c("No, not really", "Rather bad",
                    "Not very satisfied",
                     "Fairly pessimistic",
@@ -31,14 +33,16 @@ values_yes_no_4_get <- function () {
                    "Not very effective",
                    "Tend to disagree",
                    "Quite difficult",
-                   "A bit unsafe")
+                   "A bit unsafe",
+                   "Somewhat negative view")
   no_2_values <- c("No, definitely not", "Very bad",
                    "Not at all satisfied",
                     "Very pessimistic", "Very negative",
                    "Strongly opposed", "Not at all effective",
                    "Totally disagree",
                    "Very difficult",
-                   "Very unsafe")
+                   "Very unsafe",
+                   "Very negative view")
   yes_4_list <- list ( yes_2_values, yes_1_values,
                        no_1_values,   no_2_values)
   return(yes_4_list)
