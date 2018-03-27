@@ -109,7 +109,8 @@ get_answer_options <- function ( language = "en") {
       rescale_low_strong_3 = c("Low", "Medium", "Strong"),
       rescale_strongly_3 = c("Not at all strongly", "Somewhat strongly", "Very strongly"),
       rescale_low_strong_4 = c("Not at all", "Low", "Medium", "Strong"),
-
+      rescale_objectively_3 <- c("Too positively",
+                                "Objectively", "Too negatively"),
       rescale_optimism_4 = c( "Very optimistic", "Fairly optimistic",
                               "Fairly pessimistic", "Very pessimistic"),
       rescale_protects_4 = c( "Protects very well", "Protects fairly well",

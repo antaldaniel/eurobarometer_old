@@ -7,3 +7,4 @@
 * 0.0.0.9003 Class and methods for handling 4 non-negative categories.
 * 0.0.0.9004 Correctly convert haven labelled variables.
 * 0.0.0.9005 % of variables that can be automatically converted added to summary. Added a few typical answer options.
+* 0.0.0.9006 A few new typical questions recognized.

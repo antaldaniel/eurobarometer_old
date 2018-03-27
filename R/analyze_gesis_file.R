@@ -246,7 +246,8 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_impact_3",
           "rescale_improved_3",
           "rescale_effect_3",
-          "rescale_sufficient_3"
+          "rescale_sufficient_3",
+          "rescale_objectively_3"
         ),
         yes = "as_factor_pos_neg",
         no = spss_metadata$suggested_class
@@ -446,7 +447,7 @@ analyze_gesis_file <- function ( gesis_file,
 
       n_factors <- summary_data$n[which(summary_data$suggested_class == "factor")]
       attention_message <- paste0(
-        (round(n_factors / nrow(return_metadata),2)*100), "% of the variables an be converted automatically."
+        (100-(round(n_factors / nrow(return_metadata),2)*100)), "% of the variables can be converted automatically."
       )
       summary_message <- paste0("\nSuggested conversion ", summary_data[1,1], ": ",
                                 summary_data[1,2], "\n")
