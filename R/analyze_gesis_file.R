@@ -144,8 +144,12 @@ analyze_gesis_file <- function ( gesis_file,
         spss_metadata$suggested_conversion %in% c(
           "multiple_choice",
           "rescale_benefit_2",
+          "rescale_benefit_2_alt",
+          "rescale_true_false",
+          "rescale_true_false_2a", "rescale_true_false_2b",
+          "rescale_true_false_2c", "rescale_true_false_2d",
           "rescale_for_against_2",
-          "rescale_gender",
+          "rescale_gender", "rescale_gender_alt",
           "rescale_trust",
           "rescale_yes_no_2",
           "rescale_doing_job_2",
@@ -170,7 +174,9 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_low_strong_4",
           "rescale_attachment",
           "rescale_applies_4",
-          "rescale_protects_4"
+          "rescale_protects_4",
+          'rescale_satisfactory_4',
+          "rescale_satisfied_4"
         ),
         yes = "as_factor_4",
         no = spss_metadata$suggested_class
@@ -187,7 +193,9 @@ analyze_gesis_file <- function ( gesis_file,
           "rescale_attachment_4",
           "rescale_agreement_4",
           "rescale_effective_4",
-          "rescale_image"
+          "rescale_image",
+          "rescale_recognize_4",
+          "rescale_safe_4"
         ),
         yes = "as_factor_yes_no_4",
         no = spss_metadata$suggested_class
@@ -214,18 +222,31 @@ analyze_gesis_file <- function ( gesis_file,
         no = spss_metadata$suggested_class
       )
 
+      keep_numeric_vars <- c("duration_of_interview_minutes",
+                             "level_in_society_self_placement",
+                             "n_of_persons_present_during_interview")
+
+      spss_metadata$suggested_class <- ifelse (
+        spss_metadata$suggested_name %in% keep_numeric_vars,
+        yes = "keep_numeric",
+        no = spss_metadata$suggested_class
+      )
+
       spss_metadata$suggested_class <- ifelse (
         spss_metadata$suggested_conversion %in% c(
           "rescale_much_little_3",
+          "rescale_much_little_3_alt",
           "rescale_amount_3",
           "rescale_goal_3",
-          "rescale_direction",
+          "rescale_direction_3",
+          "rescale_direction_3_alt",
           "rescale_better_worse_3",
           "rescale_good_bad_3",
           "rescale_amount_3",
           "rescale_impact_3",
           "rescale_improved_3",
-          "rescale_effect_3"
+          "rescale_effect_3",
+          "rescale_sufficient_3"
         ),
         yes = "as_factor_pos_neg",
         no = spss_metadata$suggested_class

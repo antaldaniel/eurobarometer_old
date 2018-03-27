@@ -13,32 +13,44 @@ values_factor_4_get <- function () {
                   "Not at all interested",
                   "Not at all interested in politics",
                   "Not at all attached",
+                  "Not at all satisfied",
+                  "Not at all satisfactory",
                   "Protects not at all",
-                  "It applies very well")
+                  "It applies very well",
+                  "Not recognised")
   factor_4_1 <- c("Low",
                   "Not very informed",
                   "Not very likely",
                   "Not very interested",
                   "Slightly interested in politics",
                   "Not very attached",
+                  "Not very satisfied",
+                  "Not very satisfactory",
                   "Protects not very well",
-                  "It applies fairly well")
+                  "It applies fairly well",
+                  "Recognised to some extent")
   factor_4_2 <- c("Medium",
                   "Fairly well informed",
                   "Fairly likely",
                   "Fairly interested",
                   "Moderately interested in politics",
                   "Fairly attached",
+                  "Fairly satisfactory",
+                  "Fairly satisfied",
                   "Protects fairly well",
-                  "It does not apply very well")
+                  "It does not apply very well",
+                  "Largely recognised")
   factor_4_3 <- c("Strong",
                   "Very well informed",
                   "Very likely",
                   "Very interested",
                   "Strongly interested in politics",
                   "Very attached",
+                  "Very satisfied",
+                  "Very satisfactory",
                   "Protects very well",
-                  "It does not apply at all")
+                  "It does not apply at all",
+                  "Completely recognised")
 
   factor_4_list <- list ( factor_4_0, factor_4_1,
                           factor_4_2, factor_4_3)
