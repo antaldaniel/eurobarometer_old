@@ -36,7 +36,7 @@
 #' }
 #' @export
 #'
-
+gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA6863_v1-0-0.sav"
 analyze_gesis_file <- function ( gesis_file,
                                  see_log = TRUE,
                                  create_log = TRUE,
@@ -45,7 +45,7 @@ analyze_gesis_file <- function ( gesis_file,
                                  my_treshold = futile.logger::INFO ) {
 
   df <- gesis_name <- n <- spss_name <- na_count <- . <- NULL
-  suggested_name <- suggested_conversion <- suggested_class <- NULL
+  suggested_name <- suggested_conversion <- suggested_conversion  <- NULL
   insert_file_name <- emergency_name <- value_labels <- NULL
   questionnaire_item <- spss_class <- NULL
   treshold <- futile.logger::flog.threshold(my_treshold)
@@ -84,12 +84,29 @@ analyze_gesis_file <- function ( gesis_file,
 
       if ( "character" %in% class(gesis_file) ) {
         insert_file_name <- gesis_file
-        read_df <- haven::read_spss(gesis_file)
-        read_message <- paste0("Reading ", gesis_file)
-        if (see_log)    futile.logger::flog.info(read_message)
-        if (create_log) futile.logger::flog.info(read_message,
-                                                 name  ="info")
-      } else if ( ! "data.frame"  %in% class(gesis_file)) {
+        tryCatch({
+          read_df <- haven::read_spss(gesis_file)
+          },
+          error = function(cond) {
+              if (see_log)    futile.logger::flog.error(cond)
+              if (create_log) futile.logger::flog.error(cond,
+                                                        name  ="error")
+              stop("Failed to read in the file.")
+            },
+          warning = function(cond) {
+            if (see_log)    futile.logger::flog.info(cond)
+            if (create_log) futile.logger::flog.info(cond,
+                                                     name  ="info")
+          },
+          finally = {
+            read_message <- paste0("Reading in", gesis_file, "\nwith ",
+                                   nrow(read_df), " observations.in ",
+                                   ncol(read_df), " columns.\n")
+            if (see_log)    futile.logger::flog.info(read_message)
+            if (create_log) futile.logger::flog.info(read_message,
+                                                     name  ="info")
+          }
+          )} else if ( ! "data.frame"  %in% class(gesis_file)) {
           stop("Parameter gesis_file must be a pre-imported file or a full path.")
       } else  {
         read_df <- gesis_file
@@ -108,12 +125,11 @@ analyze_gesis_file <- function ( gesis_file,
         gesis_name = vector (mode = "character", length = ncol(read_df)),
         spss_name = vector (mode = "character", length = ncol(read_df)),
         suggested_name = vector (mode = "character", length = ncol(read_df)),
+        spss_class = vector (mode = "character", length = ncol(read_df)),
         suggested_conversion = vector (mode = "character", length = ncol(read_df)),
         value_labels = vector (mode = "character", length = ncol(read_df)),
         questionnaire_item = vector (mode = "character", length = ncol(read_df)),
-        spss_class = vector (mode = "character", length = ncol(read_df)),
-        suggested_class = vector (mode = "character", length = ncol(read_df)),
-         stringsAsFactors = FALSE
+        stringsAsFactors = FALSE
       )
 
       return_metadata <- spss_metadata
@@ -140,141 +156,18 @@ analyze_gesis_file <- function ( gesis_file,
       spss_metadata$suggested_conversion <- vapply ( read_df,
                                                 class_conversion_suggest,
                                                 character(1) )
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$suggested_conversion %in% c(
-          "multiple_choice",
-          "rescale_benefit_2",
-          "rescale_benefit_2a",
-          "rescale_benefit_2b",
-          "rescale_true_false",
-          "rescale_true_false_2a", "rescale_true_false_2b",
-          "rescale_true_false_2c", "rescale_true_false_2d",
-          "rescale_for_against_2",
-          "rescale_gender", "rescale_gender_alt",
-          "rescale_trust",
-          "rescale_yes_no_2",
-          "rescale_doing_job_2",
-          "rescale_correct_wrong_answer_2"
-        ),
-        yes = "as_factor_binary",
-        no = NA
-      )
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$suggested_conversion %in% c(
-          "keep_numeric_10",
-          "keep_numeric_5"
-        ),
-        yes = "keep_numeric",
-        no = NA
-      )
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$suggested_conversion %in% c(
-          "rescale_political_interest",
-          "rescale_informed_4",
-          "rescale_likely_4",
-          "rescale_low_strong_4",
-          "rescale_attachment",
-          "rescale_applies_4",
-          "rescale_protects_4",
-          'rescale_satisfactory_4',
-          "rescale_satisfied_4",
-          "rescale_important_4"
-        ),
-        yes = "as_factor_4",
-        no = spss_metadata$suggested_class
-      )
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$suggested_conversion %in% c(
-          "rescale_yes_no_4",
-          "recale_good_bad_4",
-          "rescale_satisfaction",
-          "rescale_situation",
-          "rescale_optimism_4",
-          "rescale_description",
-          "recale_description_alt",
-          "rescale_attachment_4",
-          "rescale_agreement_4",
-          "rescale_effective_4",
-          "rescale_image",
-          "rescale_recognize_4",
-          "rescale_safe_4",
-          "rescale_view_4"
-        ),
-        yes = "as_factor_yes_no_4",
-        no = spss_metadata$suggested_class
-      )
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$suggested_conversion %in% c(
-          "rescale_time_frequency_3",
-          "rescale_yes_no_3",
-          "rescale_low_strong_3", #low medium strong
-          "rescale_subjective_urbanization",
-          "rescale_social_class_en",
-          "rescale_difficulty",
-          "rescale_interested_3",
-          "rescale_strongly"
-        ),
-        yes = "as_factor_3",
-        no = spss_metadata$suggested_class
-      )
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$suggested_conversion %in% c(
-          "rescale_time_frequency_use"
-        ),
-        yes = "rescale_time_frequency_use",
-        no = spss_metadata$suggested_class
-      )
 
-      keep_numeric_vars <- c("duration_of_interview_minutes",
-                             "level_in_society_self_placement",
-                             "n_of_persons_present_during_interview")
 
-      spss_metadata$suggested_class <- ifelse (
+      spss_metadata$suggested_conversion  <- ifelse (
         spss_metadata$suggested_name %in% keep_numeric_vars,
         yes = "keep_numeric",
-        no = spss_metadata$suggested_class
+        no = spss_metadata$suggested_conversion
       )
 
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$suggested_conversion %in% c(
-          "rescale_much_little_3",
-          "rescale_much_little_3_alt",
-          "rescale_amount_3",
-          "rescale_goal_3",
-          "rescale_direction_3",
-          "rescale_direction_3_alt",
-          "rescale_better_worse_3",
-          "rescale_good_bad_3",
-          "rescale_amount_3",
-          "rescale_impact_3",
-          "rescale_improved_3",
-          "rescale_effect_3",
-          "rescale_sufficient_3",
-          "rescale_objectively_3",
-          "rescale_important_3"
-        ),
-        yes = "as_factor_pos_neg",
-        no = spss_metadata$suggested_class
-      )
-
-      spss_metadata$suggested_class <- ifelse (
-        spss_metadata$value_labels %in% c(
-          "Frequently|Occasionally|Never",
-          "Frequently|Never|Occasionally",
-          "Occasionally|Never|Frequently",
-          "Occasionally|Frequently|Never",
-          "Never|Frequently|Occasionally",
-          "Never|Occasionally|Frequently"
-        ),
-        yes = "as_factor_3",
-        no = spss_metadata$suggested_class
-      )
-
-
-      spss_metadata$suggested_class <- ifelse ( is.na(
-        spss_metadata$suggested_class),
+      spss_metadata$suggested_conversion  <- ifelse ( is.na(
+        spss_metadata$suggested_conversion ),
         yes = spss_metadata$suggested_conversion,
-        no = spss_metadata$suggested_class
+        no = spss_metadata$suggested_conversion
       )
 
 
@@ -305,6 +198,7 @@ analyze_gesis_file <- function ( gesis_file,
       a <- gsub ( "\\&", "", a)
       a <- gsub ( "___", "_", a)
       a <- gsub ( "__", "_", a)
+      a <- gsub ( "_-_", "_", a)
 
       spss_metadata$suggested_name = gsub ( ":", "_", a)
 
@@ -323,10 +217,12 @@ analyze_gesis_file <- function ( gesis_file,
       spss_metadata <- spss_metadata %>%
         dplyr::mutate ( suggested_name = ifelse (
           spss_name == "split",
-          yes = "split", no = suggested_name)) %>%
+          yes = "split",
+          no = suggested_name)) %>%
         dplyr::mutate ( suggested_name = ifelse (
           spss_name == "uniqid",
-          yes = "uniqid", no = suggested_name)) %>%
+          yes = "uniqid",
+          no = suggested_name)) %>%
         dplyr::mutate ( suggested_name = ifelse (
           suggested_conversion == "multiple_choice",
           yes = paste0("mc_", suggested_name ),
@@ -346,7 +242,27 @@ analyze_gesis_file <- function ( gesis_file,
                                                 no = suggested_name )) %>%
         dplyr::mutate ( suggested_name = ifelse ( tolower(suggested_name) == "nation_all_samples_iso_3166",
                                                 yes = "country_code_iso_3166",
-                                                no = suggested_name ))
+                                                no = suggested_name )) %>%
+        dplyr::mutate ( suggested_name = ifelse ( grepl( "date_of_interview", tolower(suggested_name)),
+                                                         yes = "date_of_interview",
+                                                         no = suggested_name ))
+
+      spss_metadata <- spss_metadata %>%
+        dplyr::mutate (suggested_conversion  = ifelse ( stringr::str_sub(spss_metadata$suggested_name,1,7) == "region_",
+                                                    yes = "european_regions",
+                                                    no = suggested_conversion )) %>%
+        dplyr::mutate (suggested_conversion  = ifelse ( stringr::str_sub(spss_metadata$suggested_name,1,18) == "size_of_community_",
+                                                  yes = "size_of_community",
+                                                  no = suggested_conversion )) %>%
+        dplyr::mutate ( suggested_name = ifelse ( grepl("left-right_placement", spss_metadata$suggested_name ),
+                                                  yes = "left_right_placement",
+                                                  no = suggested_name)) %>%
+        dplyr::mutate ( suggested_conversion  = ifelse ( suggested_name == "left_right_placement",
+                                                   yes = "keep_numeric",
+                                                   no = suggested_conversion )) %>%
+        dplyr::mutate (suggested_conversion  = ifelse ( spss_metadata$suggested_name == "date_of_interview",
+                                                        yes = "rescale_date_interview",
+                                                        no = suggested_conversion ))
 
       count_answers <- function(x) {
         if (x == "") return ( as.numeric(NA) )
@@ -435,22 +351,27 @@ analyze_gesis_file <- function ( gesis_file,
       #End of Case 1
       }
 
+      if (! date_of_interview %in% return_metadata$suggested_name) {
+        if (see_log) futile.logger::flog.warn ("Missing date of interview")
+        futile.logger::flog.warn ( "Missing date of interview",
+                                   name="warning")
+      }
 
       return_metadata <- return_metadata %>%
-        dplyr::select ( gesis_name, spss_name, suggested_name,
-        suggested_conversion, value_labels,
-        questionnaire_item, spss_class,
-        suggested_class)
+        dplyr::select ( gesis_name,
+                        spss_name, suggested_name,
+                        suggested_conversion, value_labels,
+                        questionnaire_item, spss_class)
 
       summary_data <- return_metadata %>%
-        select ( suggested_class ) %>%
-        add_count( suggested_class ) %>%
-        group_by ( suggested_class) %>%
-        distinct ( suggested_class, n ) %>%
+        select ( suggested_conversion  ) %>%
+        add_count( suggested_conversion  ) %>%
+        group_by ( suggested_conversion ) %>%
+        distinct ( suggested_conversion , n ) %>%
         as.data.frame(.)
 
-      n_factors <- summary_data$n[which(summary_data$suggested_class == "factor")]
-      attention_message <- paste0(
+      n_factors <- summary_data$n[which(summary_data$suggested_conversion  == "factor")]
+      conversion_rate_message <- paste0("\n"
         (100-(round(n_factors / nrow(return_metadata),2)*100)), "% of the variables cannot be converted automatically.
         These variables will be converted to factors."
       )
@@ -466,13 +387,15 @@ analyze_gesis_file <- function ( gesis_file,
                                 "Factors need individual attention.\n",
                                 "Numeric variables can be imported to R without any problem.")
 
-      if (see_log) futile.logger::flog.info (attention_message)
-      futile.logger::flog.info ( attention_message,
-                                 name="info")
-
       if (see_log) futile.logger::flog.info (summary_message)
       futile.logger::flog.info ( summary_message,
                                  name="info")
+
+      if (see_log) futile.logger::flog.info (conversion_rate_message)
+      futile.logger::flog.info ( conversion_rate_message,
+                                 name="info")
+
+
     },   #end of TryCatch
     error=function(cond) {
       if (see_log) futile.logger::flog.info ("Creating error message")
@@ -480,6 +403,16 @@ analyze_gesis_file <- function ( gesis_file,
       #warning(gesis_analysis_error )
       futile.logger::flog.error(gesis_analysis_error, name="error")
       futile.logger::flog.info(gesis_analysis_error, name="info")
+      return(return_metadata <- data.frame (
+        gesis_name = "failed to read",
+        spss_name = "failed to read",
+        suggested_name = NA,
+        spss_class = NA,
+        suggested_conversion = NA,
+        value_labels = NA,
+        questionnaire_item = NA,
+        stringsAsFactors = FALSE
+      ))
     },
     warning=function(cond) {
       if (see_log) futile.logger::flog.info ("Creating warning message")
@@ -488,6 +421,7 @@ analyze_gesis_file <- function ( gesis_file,
 
       futile.logger::flog.warn(gesis_analysis_warning, name="warning")
       futile.logger::flog.info(gesis_analysis_warning, name="info")
+      return (return_metadata)
     },
     finally = {
       finished_message <- paste0("\nFinished with the analysis of the file without warning\n",
@@ -495,6 +429,7 @@ analyze_gesis_file <- function ( gesis_file,
                                  "\n with ", nrow(read_df),
                                  " observations in ",
                                  ncol(read_df), " variables.")
+      return (return_metadata)
 
     }
   )
