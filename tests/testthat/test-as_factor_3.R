@@ -10,7 +10,7 @@ test_that("correct conversion takes place", {
   )
 })
 
-test_that("class factor_pos_neg is recognized", {
+test_that("class factor_3 is recognized", {
   expect_equal(is.factor_3(
     as_factor_3( c("Rural area or village", "Small or medium-sized town",
                    "Inap.", "Large town/city", "DK", "Large town/city"))),
