@@ -5,3 +5,4 @@
 ^not_included$
 ^\.travis\.yml$
 ^sr_logs$
+^data-raw$
