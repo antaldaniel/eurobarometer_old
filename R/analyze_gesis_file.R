@@ -5,6 +5,11 @@
 #' in some geographical units, such as the Turkish community of Cyprus.
 #' In these cases, GESIS may or may not give unique variable names. Some
 #' futher problems may arrise, currently the code detects this problem.
+#'
+#' Runing the analyitcs function is very resource intensive. For this reason
+#' the end result is always saved to the \code{tempdir()} which is deleted
+#' automatically at the end of each session.  You can retrieve the metadata
+#' from here, should you need it during an interactive session.
 #' @param gesis_file The full path to the GESIS SPSS file or a data.frame
 #' read by haven consisting the contents of the file.
 #' @param see_log  \code{TRUE} which will print messages to the screen.
@@ -53,7 +58,7 @@ analyze_gesis_file <- function ( gesis_file,
   directory_message <- NA
 
   if (create_log == TRUE) {
-    directory_mssage <- NA
+    directory_message <- NA
     if (! file.exists("sr_logs")) {
       dir.create(file.path(paste0(getwd(), "/sr_logs")))
       directory_message <- paste("Created:\n", getwd(), "/sr_logs")
@@ -149,7 +154,7 @@ analyze_gesis_file <- function ( gesis_file,
 
       if (see_log)    futile.logger::flog.info("Getting unique labels")
       if (create_log) futile.logger::flog.info("Getting unique labels", name  ="info")
-      spss_metadata$value_labels <- vapply ( read_df, unique_value_labels, character(1) )
+      spss_metadata$value_labels <- vapply ( read_df, eurobarometer::unique_value_labels, character(1) )
 
       if (see_log)    futile.logger::flog.info("Suggesting conversions.")
       if (create_log) futile.logger::flog.info("Suggesting conversions.",
@@ -256,7 +261,9 @@ analyze_gesis_file <- function ( gesis_file,
                                                   yes = "size_of_community",
                                                   no = suggested_conversion )) %>%
         dplyr::mutate ( suggested_name = ifelse ( grepl("left-right_placement", spss_metadata$suggested_name ),
-                                                  yes = "left_right_placement",
+                                                  yes = gsub("left-right_placement",
+                                                             "left_right_placement",
+                                                             spss_metadata$suggested_name ),
                                                   no = suggested_name)) %>%
         dplyr::mutate ( suggested_conversion  = ifelse ( suggested_name == "left_right_placement",
                                                    yes = "keep_numeric",
@@ -396,6 +403,12 @@ analyze_gesis_file <- function ( gesis_file,
       futile.logger::flog.info ( conversion_rate_message,
                                  name="info")
 
+      metadata_name <- gsub(".sav", "_metadata.rds", gesis_name)
+      temporary_file_name <- paste0(tempdir(),  "\\", metadata_name)
+      if (see_log) futile.logger::flog.info (paste("Saved metadata to ", temporary_file_name))
+      futile.logger::flog.info ( paste("Saved metadata to ", temporary_file_name),
+                                 name="info")
+      saveRDS(return_metadata, temporary_file_name)
 
     },   #end of TryCatch
     error=function(cond) {

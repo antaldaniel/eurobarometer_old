@@ -2,23 +2,54 @@
 % Please edit documentation in R/gesis_file_read.R
 \name{gesis_file_read}
 \alias{gesis_file_read}
-\title{Import a GESIS SPSS file}
+\title{Read an convert a GESIS file}
 \usage{
-gesis_file_read(path, new_names = NULL, create_metadata_file = TRUE)
+gesis_file_read(zacat_id = "ZA4744", data_dir = "data-raw/",
+  metadata_dir = NULL, new_names = NULL, conversion = "numeric",
+  save_file = TRUE, see_log = TRUE, create_log = TRUE, log_prefix = NA,
+  log_id = NA, my_treshold = futile.logger::INFO)
 }
 \arguments{
-\item{path}{The path to the GESIS SPSS file.}
+\item{zacat_id}{\code{"ZA4744"}}
 
-\item{new_names}{Defaults to \code{NULL}.}
+\item{data_dir}{\code{"data-raw/"}}
 
-\item{create_metadata_file}{If \code{TRUE} it will create
-an .rds file with the metadata of the GESIS file.}
+\item{metadata_dir}{\code{NULL}}
+
+\item{new_names}{\code{NULL}}
+
+\item{conversion}{\code{"numeric"}}
+
+\item{save_file}{\code{TRUE}}
+
+\item{see_log}{\code{TRUE} which will print messages to the screen.}
+
+\item{create_log}{It will create log files in the sr_logs director.}
+
+\item{log_prefix}{Defaults to \code{NA}, in which case a
+new one will be assigned to the logs (if they are requested.) The
+log_prefix can be directly assigned.}
+
+\item{log_id}{Defaults to \code{NA}, in which case a
+new one will be assigned to the logs (if they are requested.) The
+log_prefix can be directly assigned.}
+
+\item{my_treshold}{Can be \code{futile.logger::WARN},
+\code{futile.logger::INFO}, \code{futile.logger::ERROR}.Defaults to
+\code{futile.logger::INFO}.}
 }
 \description{
-Import a GESIS SPSS file
+Runing the analyitcs function is very resource intensive. For this reason
+the end result is always saved to the \code{tempdir()} which is deleted
+automatically at the end of each session.  You can retrieve the metadata
+from here, should you need it during an interactive session.
 }
 \examples{
 \dontrun{
-ZA5929 <- gesis_file_read("data-raw/ZA5929_v3-0-0.sav")
+##use your own file path:
+analyse_gesis_file( path = " ... your own file path ... ",
+                   see_log = TRUE,
+                   create_log = TRUE,
+                   my_treshold = futile.logger::INFO)
 }
 }

@@ -34,6 +34,12 @@ in some geographical units, such as the Turkish community of Cyprus.
 In these cases, GESIS may or may not give unique variable names. Some
 futher problems may arrise, currently the code detects this problem.
 }
+\details{
+Runing the analyitcs function is very resource intensive. For this reason
+the end result is always saved to the \code{tempdir()} which is deleted
+automatically at the end of each session.  You can retrieve the metadata
+from here, should you need it during an interactive session.
+}
 \examples{
 \dontrun{
 ##use your own file path:

@@ -18,13 +18,12 @@ as_factor_binary <- function(x) {
   if ( class(x)[1] == "character" ) {
     x <- as.character (x)
   }
-
   x <- tolower(x)
   yes_values <- tolower(values_factor_binary$positive_values)
   no_values  <- tolower(values_factor_binary$negative_values)
   unique_binary_values <- unique(x)
   yes_value <- yes_values[ which(yes_values %in% unique_binary_values)]
-  no_value  <-  no_values[ which( no_values %in% unique_binary_values)]
+  no_value  <- no_values[ which( no_values %in% unique_binary_values)]
 
   if (length(yes_value) == 0 ) { stop("Yes value was not found in binary factor.")}
   if (length(no_value ) == 0 ) { stop("No value was not found in binary factor.")}
