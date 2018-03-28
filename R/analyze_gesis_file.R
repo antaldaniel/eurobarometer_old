@@ -37,7 +37,6 @@
 #' @export
 #'
 
-#gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA6863_v1-0-0.sav"
 analyze_gesis_file <- function ( gesis_file,
                                  see_log = TRUE,
                                  create_log = TRUE,
@@ -161,7 +160,7 @@ analyze_gesis_file <- function ( gesis_file,
 
 
       spss_metadata$suggested_conversion  <- ifelse (
-        spss_metadata$suggested_name %in% keep_numeric_vars,
+        spss_metadata$suggested_name %in% eurobarometer:::keep_numeric_vars,
         yes = "keep_numeric",
         no = spss_metadata$suggested_conversion
       )
@@ -353,7 +352,7 @@ analyze_gesis_file <- function ( gesis_file,
       #End of Case 1
       }
 
-      if (! date_of_interview %in% return_metadata$suggested_name) {
+      if (! "date_of_interview" %in% return_metadata$suggested_name) {
         if (see_log) futile.logger::flog.warn ("Missing date of interview")
         futile.logger::flog.warn ( "Missing date of interview",
                                    name="warning")
@@ -373,9 +372,9 @@ analyze_gesis_file <- function ( gesis_file,
         as.data.frame(.)
 
       n_factors <- summary_data$n[which(summary_data$suggested_conversion  == "factor")]
-      conversion_rate_message <- paste0("\n"
-        (100-(round(n_factors / nrow(return_metadata),2)*100)), "% of the variables cannot be converted automatically.
-        These variables will be converted to factors."
+      conversion_rate_message <- paste0("\n",
+        (100-(round(n_factors / nrow(return_metadata),2)*100)), "% of the variables are detected and can be converted automatically.\n",
+        (round(n_factors / nrow(return_metadata),2)*100), "% of the variables will be converted to factors."
       )
       summary_message <- paste0("\nSuggested conversion ", summary_data[1,1], ": ",
                                 summary_data[1,2], "\n")

@@ -21,7 +21,7 @@ values_factor_5 <- readxl::read_excel(path = "data-raw/Vocabulary.xlsx",
 keep_numeric_vars <- readxl::read_excel(path = "data-raw/Vocabulary.xlsx",
                                         sheet = "keep_numeric_names" )
 
-keep_numeric_vars <- unlist ( keep_numeric_vars )
+keep_numeric_vars <- as.character(unlist ( keep_numeric_vars ))
 
 devtools::use_data(values_factor_binary,
                    values_factor_3,
