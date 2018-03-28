@@ -6,7 +6,7 @@
 #' @importFrom haven as_factor
 #' @examples
 #' as_factor_5( c("Much lower", "Somewhat lower",
-#' 	"More or less the same", 	"Somewhat higher", "Much higher")
+#' 	"More or less the same", 	"Somewhat higher", "Much higher"))
 #'
 #' @export
 
