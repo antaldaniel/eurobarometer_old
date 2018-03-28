@@ -101,8 +101,8 @@ analyze_gesis_file <- function ( gesis_file,
                                                      name  ="info")
           },
           finally = {
-            read_message <- paste0("Reading in", gesis_file, "\nwith ",
-                                   nrow(read_df), " observations.in ",
+            read_message <- paste0("Reading in\n", gesis_file, "\nwith ",
+                                   nrow(read_df), " observations in ",
                                    ncol(read_df), " columns.\n")
             if (see_log)    futile.logger::flog.info(read_message)
             if (create_log) futile.logger::flog.info(read_message,
