@@ -9,7 +9,7 @@ test_that("correct conversion takes place", {
   )
 })
 
-test_that("class factor_pos_neg is recognized", {
+test_that("class factor_5 is recognized", {
   expect_equal(is.factor_5(
     as_factor_5( c("DK", "Much lower", "Somewhat lower",
                    "More or less the same",
