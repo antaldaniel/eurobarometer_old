@@ -22,7 +22,6 @@ values_pos_neg_get <- function () {
   factor_null     <- c("Enough", "Doing about the right amount",
                        "Neither good nor bad",
                        "Neither",
-                       "Neither the one nor the other (SPONTANEOUS)",
                        "Neither the one nor the other",
                        "Same", "The same",
                        "About the right amount",
@@ -31,7 +30,6 @@ values_pos_neg_get <- function () {
                        "No effect",
                        "Equal", "Adequate/ about right",
                        "Objectively",
-                       "No change / As it is now (SPONTANEOUS)",
                        "No change / As it is now")
   factor_negative <- c("Too much", "Doing too much",
                        "A bad thing",
@@ -51,3 +49,7 @@ values_pos_neg_get <- function () {
                                 factor_negative)
   return(factor_pos_neg_list)
 }
+
+pos_neg <- data.frame ( factor_positive,
+                        factor_null,
+                        factor_negative)

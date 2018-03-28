@@ -20,9 +20,8 @@ as_factor_binary <- function(x) {
   }
 
   x <- tolower(x)
-  binary_values <- binary_values_get()
-  yes_values <- binary_values[[1]]
-  no_values  <- binary_values[[2]]
+  yes_values <- values_factor_binary$positive_values
+  no_values  <- values_factor_binary$negative_values
   unique_binary_values <- unique(x)
   yes_value <- yes_values[ which(yes_values %in% unique_binary_values)]
   no_value  <-  no_values[ which( no_values %in% unique_binary_values)]

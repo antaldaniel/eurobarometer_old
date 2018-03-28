@@ -20,8 +20,7 @@ values_factor_3_get <- function () {
                   "The middle class of society",
                   "From time to time",
                   "Sometimes acceptable",
-                  "Moderately interested",
-                  "Somewhat strongly"
+                  "Moderately interested"
                   )
   factor_3_2 <- c("Strong",
                   "Yes, on several occasions",
@@ -35,3 +34,6 @@ values_factor_3_get <- function () {
   factor_3_list <- list ( factor_3_0, factor_3_1, factor_3_2)
   return(factor_3_list)
 }
+
+write.csv ( data.frame ( factor_3_0, factor_3_1, factor_3_2),
+            "factor_3.csv")
