@@ -17,7 +17,7 @@ as_numeric.factor_4 <- function(x, type = NULL) {
   if (is.factor_4 (x)) {
     return(x[[3]])
   } else {
-    stop("Not a factor_yes_no_4 object.")
+    stop("Not a factor_4 object.")
   }
 }
 
