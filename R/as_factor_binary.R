@@ -11,7 +11,6 @@
 #'
 #' @export
 
-x <- c("yes", "no", "DK", "Inap.")
 as_factor_binary <- function(x) {
   if ( "labelled" %in% class(x)) {
     x <- as.character(haven::as_factor(x))
