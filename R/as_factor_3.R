@@ -14,6 +14,9 @@ as_factor_3 <- function(x) {
   if ( "labelled" %in% class(x)) {
     x <- haven::as_factor(x)
   }
+  if ( "numeric" %in% class(x)) {
+    stop("A numeric variable cannot be converted to factor_3 class")
+  }
   x <- as.character (x)
   x <- tolower(x)
   factor_3_0 <- tolower(values_factor_3$factor_3_0)
@@ -33,7 +36,9 @@ as_factor_3 <- function(x) {
   chr_1 <- unique_values [ which(unique_values %in% factor_3_1)]
   chr_2 <- unique_values [ which(unique_values %in% factor_3_2)]
   chr   <- plyr::mapvalues (num, from = c(0,1,2),
-                                 to = c(chr_0,chr_1,chr_2))
+                                 to = c(chr_0,
+                                        chr_1,
+                                        chr_2))
   fct <- factor(chr, levels = c(chr_0,chr_1,chr_2))
   num <- as.numeric(num)
 
