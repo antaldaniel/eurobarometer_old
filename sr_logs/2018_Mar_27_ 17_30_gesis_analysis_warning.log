@@ -1,0 +1,7 @@
+WARN [2018-03-27 17:30:46] There are not unique names in the GESIS file.
+WARN [2018-03-27 17:30:46] The not unique names are likely not caused by
+                                 a small subsample.
+WARN [2018-03-27 17:31:31] There are not unique names in the GESIS file.
+WARN [2018-03-27 17:31:31] There is a split in the questionnaire.
+WARN [2018-03-27 17:31:31] The not unique names are likely not caused by
+                                 a small subsample.

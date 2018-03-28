@@ -1,0 +1,36 @@
+INFO [2018-03-27 17:36:27] Reading C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA5928_v3-0-0.sav
+INFO [2018-03-27 17:36:27] Analyzing the GESIS file.
+INFO [2018-03-27 17:36:27] Getting SPSS labels
+INFO [2018-03-27 17:36:28] Getting SPSS names
+INFO [2018-03-27 17:36:28] Getting SPSS classes
+INFO [2018-03-27 17:36:28] Getting unique labels
+INFO [2018-03-27 17:36:45] Suggesting conversions.
+INFO [2018-03-27 17:37:03] Creating the suggested variables names.
+INFO [2018-03-27 17:37:03] Reviewing exceptions with get_naming_exceptions()
+INFO [2018-03-27 17:37:03] Analyzing naming conflicts.
+INFO [2018-03-27 17:37:05] 33% of the variables an be converted automatically.
+INFO [2018-03-27 17:37:05] 
+Suggested conversion factor: 204
+Suggested conversion character: 6
+Suggested conversion numeric: 41
+Suggested conversion multiple_choice: 234
+Suggested conversion as_factor_yes_no_4: 53
+Suggested conversion as_factor_3: 9
+Suggested conversion as_factor_4: 1
+Suggested conversion as_factor_pos_neg: 22
+Suggested conversion rescale_benefit_2: 2
+Suggested conversion rescale_trust: 9
+Suggested conversion rescale_image_5: 1
+Suggested conversion rescale_description_alt: 6
+Suggested conversion rescale_yes_no_2: 3
+Suggested conversion rescale_for_against_2: 4
+Suggested conversion rescale_for_against_4: 2
+Suggested conversion : 2
+Suggested conversion rescale_alphanumeric: 8
+Suggested conversion rescale_time_frequency_use: 3
+Factors need individual attention.
+Numeric variables can be imported to R without any problem.
+INFO [2018-03-27 17:37:05] 
+Finished with the analysis of the file without warning
+C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA5928_v3-0-0.sav
+ with 32689 observations in 610 variables.

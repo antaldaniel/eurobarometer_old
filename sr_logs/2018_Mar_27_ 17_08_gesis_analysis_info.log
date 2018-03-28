@@ -1,0 +1,60 @@
+INFO [2018-03-27 17:08:04] Reading C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA6596_v2-0-0.sav
+INFO [2018-03-27 17:08:04] Analyzing the GESIS file.
+INFO [2018-03-27 17:08:04] Getting SPSS labels
+INFO [2018-03-27 17:08:04] Getting SPSS names
+INFO [2018-03-27 17:08:04] Getting SPSS classes
+INFO [2018-03-27 17:08:04] Getting unique labels
+INFO [2018-03-27 17:08:17] Suggesting conversions.
+INFO [2018-03-27 17:08:31] Creating the suggested variables names.
+INFO [2018-03-27 17:08:31] Reviewing exceptions with get_naming_exceptions()
+INFO [2018-03-27 17:08:31] Analyzing naming conflicts.
+INFO [2018-03-27 17:08:31] 38% of the variables an be converted automatically.
+INFO [2018-03-27 17:08:31] 
+Suggested conversion factor: 178
+Suggested conversion character: 3
+Suggested conversion numeric: 34
+Suggested conversion as_factor_binary: 201
+Suggested conversion as_factor_4: 2
+Suggested conversion rescale_image_5: 1
+Suggested conversion as_factor_yes_no_4: 15
+Suggested conversion as_factor_pos_neg: 17
+Suggested conversion as_factor_3: 4
+Suggested conversion rescale_alphanumeric: 8
+Suggested conversion rescale_time_frequency_use: 7
+Factors need individual attention.
+Numeric variables can be imported to R without any problem.
+INFO [2018-03-27 17:08:31] 
+Finished with the analysis of the file without warning
+C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA6596_v2-0-0.sav
+ with 28150 observations in 470 variables.
+INFO [2018-03-27 17:08:37] Reading C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA6643_v3-1-0.sav
+INFO [2018-03-27 17:08:37] Analyzing the GESIS file.
+INFO [2018-03-27 17:08:37] Getting SPSS labels
+INFO [2018-03-27 17:08:37] Getting SPSS names
+INFO [2018-03-27 17:08:37] Getting SPSS classes
+INFO [2018-03-27 17:08:37] Getting unique labels
+INFO [2018-03-27 17:08:59] Suggesting conversions.
+INFO [2018-03-27 17:09:23] Creating the suggested variables names.
+INFO [2018-03-27 17:09:23] Reviewing exceptions with get_naming_exceptions()
+INFO [2018-03-27 17:09:23] Analyzing naming conflicts.
+INFO [2018-03-27 17:09:25] 26% of the variables an be converted automatically.
+INFO [2018-03-27 17:09:25] 
+Suggested conversion factor: 193
+Suggested conversion character: 3
+Suggested conversion numeric: 38
+Suggested conversion as_factor_binary: 343
+Suggested conversion as_factor_yes_no_4: 76
+Suggested conversion rescale_time_frequency_use: 18
+Suggested conversion as_factor_4: 4
+Suggested conversion as_factor_pos_neg: 35
+Suggested conversion rescale_image_5: 1
+Suggested conversion rescale_for_against_4: 4
+Suggested conversion as_factor_3: 9
+Suggested conversion rescale_poor_high_4: 1
+Suggested conversion rescale_alphanumeric: 8
+Factors need individual attention.
+Numeric variables can be imported to R without any problem.
+INFO [2018-03-27 17:09:25] 
+Finished with the analysis of the file without warning
+C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA6643_v3-1-0.sav
+ with 32833 observations in 733 variables.

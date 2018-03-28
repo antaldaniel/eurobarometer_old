@@ -1,0 +1,7 @@
+INFO [2018-03-27 17:37:28] Reading C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA6925_v1-0-0.sav
+INFO [2018-03-27 17:37:28] Analyzing the GESIS file.
+INFO [2018-03-27 17:37:28] Getting SPSS labels
+INFO [2018-03-27 17:37:28] Getting SPSS names
+INFO [2018-03-27 17:37:28] Getting SPSS classes
+INFO [2018-03-27 17:37:28] Getting unique labels
+INFO [2018-03-27 17:37:53] Suggesting conversions.

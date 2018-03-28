@@ -16,10 +16,9 @@ as_factor_3 <- function(x) {
   }
   x <- as.character (x)
   x <- tolower(x)
-  factor_3_list <- values_factor_3_get()
-  factor_3_0 <- tolower(factor_3_list[[1]])
-  factor_3_1 <- tolower(factor_3_list[[2]])
-  factor_3_2 <- tolower(factor_3_list[[3]])
+  factor_3_0 <- tolower(values_factor_3$factor_3_0)
+  factor_3_1 <- tolower(values_factor_3$factor_3_1)
+  factor_3_2 <- tolower(values_factor_3$factor_3_2)
 
   num  <- ifelse ( x   %in% factor_3_0, "0", x )
   num  <- ifelse ( num %in% factor_3_1, "1", num )
