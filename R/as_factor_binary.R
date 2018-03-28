@@ -11,6 +11,7 @@
 #'
 #' @export
 
+x <- c("yes", "no", "DK", "Inap.")
 as_factor_binary <- function(x) {
   if ( "labelled" %in% class(x)) {
     x <- as.character(haven::as_factor(x))
@@ -26,6 +27,8 @@ as_factor_binary <- function(x) {
   yes_value <- yes_values[ which(yes_values %in% unique_binary_values)]
   no_value  <-  no_values[ which( no_values %in% unique_binary_values)]
 
+  if (length(yes_value) == 0 ) { stop("Yes value was not found in binary factor.")}
+  if (length(no_value ) == 0 ) { stop("No value was not found in binary factor.")}
   num  <- ifelse ( x %in% yes_value, "1", x )
   num  <- ifelse ( num %in% no_value, "0", num)
   num  <- ifelse ( num %in% c("1", "0"), as.character(num), NA)
