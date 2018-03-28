@@ -36,7 +36,8 @@
 #' }
 #' @export
 #'
-gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA6863_v1-0-0.sav"
+
+#gesis_file <- "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA6863_v1-0-0.sav"
 analyze_gesis_file <- function ( gesis_file,
                                  see_log = TRUE,
                                  create_log = TRUE,
@@ -48,6 +49,7 @@ analyze_gesis_file <- function ( gesis_file,
   suggested_name <- suggested_conversion <- suggested_conversion  <- NULL
   insert_file_name <- emergency_name <- value_labels <- NULL
   questionnaire_item <- spss_class <- NULL
+  date_of_interview <- NULL
   treshold <- futile.logger::flog.threshold(my_treshold)
   directory_message <- NA
 
