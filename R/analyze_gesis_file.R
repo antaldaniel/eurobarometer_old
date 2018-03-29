@@ -27,9 +27,10 @@
 #' @importFrom futile.logger flog.info flog.warn flog.error WARN INFO
 #' @importFrom futile.logger appender.file
 #' @importFrom haven read_spss as_factor
-#' @importFrom stringr str_split
+#' @importFrom stringr str_split str_trim
 #' @importFrom utils write.csv
 #' @importFrom magrittr '%>%'
+#' @importFrom stringi stri_trans_general
 #' @importFrom dplyr mutate add_count distinct group_by select
 #' @examples
 #' \dontrun{
@@ -184,6 +185,9 @@ analyze_gesis_file <- function ( gesis_file,
 
       a <- tolower(as.character(spss_metadata$gesis_name))
       a <- gsub ( "%", "pct", a)
+      a <- gsub ( "15\\+", "15p", a)
+      a <- gsub ( "<10", "10m", a)
+      a <- gsub ("\\.\\.\\.", "", a)
       a <- gsub ( "1st", "first", a)
       a <- gsub ( "2nd", "second", a)
       a <- gsub ( "3rd", "third", a)
@@ -204,9 +208,23 @@ analyze_gesis_file <- function ( gesis_file,
       a <- gsub ( "\\&", "", a)
       a <- gsub ( "___", "_", a)
       a <- gsub ( "__", "_", a)
+      a <- gsub ( "__", "_", a)
       a <- gsub ( "_-_", "_", a)
-
-      spss_metadata$suggested_name = gsub ( ":", "_", a)
+      a <- gsub ( "\\.", "_", a)
+      a <- gsub ( ":", "_", a)
+      a <- gsub ( "__", "_", a)
+      a <- gsub ( "\u2026", "", a)
+      a <- gsub ( "\\.", "", a)
+      a <- gsub ( "\\.", "", a)
+      a <- gsub ( "\\.", "", a)
+      a <- gsub ( "_10mm", "_10m", a)
+      a <- ifelse ( stringr::str_sub(a, 1,1) == "_",
+                    stringr::str_sub(a, 2,-1),
+                    a)
+      a <- ifelse ( stringr::str_sub(a, -1,-1) == "_",
+                    stringr::str_sub(a, 1,-2),
+                    a)
+      spss_metadata$suggested_name = stringr::str_trim(a, side = "both")
 
       naming_exc_message <- paste0("Reviewing exceptions with get_naming_exceptions()")
       if (see_log)    futile.logger::flog.info( naming_exc_message )
@@ -233,6 +251,10 @@ analyze_gesis_file <- function ( gesis_file,
           suggested_conversion == "multiple_choice",
           yes = paste0("mc_", suggested_name ),
           no = suggested_name)) %>%
+        dplyr::mutate ( suggested_name = ifelse (
+          grepl( "mc_nationality", suggested_name ),
+                        yes = gsub("mc_"),
+                        no = suggested_name)) %>%
         dplyr::mutate ( suggested_name = gsub("_10p-scale", "", suggested_name)) %>%
         dplyr::mutate ( suggested_name = gsub("aged_<10", "aged_10m", suggested_name )) %>%
         dplyr::mutate ( suggested_name = gsub("_aged_15_", "aged_15p", suggested_name )) %>%
@@ -260,17 +282,13 @@ analyze_gesis_file <- function ( gesis_file,
         dplyr::mutate (suggested_conversion  = ifelse ( stringr::str_sub(spss_metadata$suggested_name,1,18) == "size_of_community_",
                                                   yes = "size_of_community",
                                                   no = suggested_conversion )) %>%
-        dplyr::mutate ( suggested_name = ifelse ( grepl("left-right_placement", spss_metadata$suggested_name ),
-                                                  yes = gsub("left-right_placement",
-                                                             "left_right_placement",
-                                                             spss_metadata$suggested_name ),
-                                                  no = suggested_name)) %>%
         dplyr::mutate ( suggested_conversion  = ifelse ( suggested_name == "left_right_placement",
                                                    yes = "keep_numeric",
                                                    no = suggested_conversion )) %>%
         dplyr::mutate (suggested_conversion  = ifelse ( spss_metadata$suggested_name == "date_of_interview",
                                                         yes = "rescale_date_interview",
-                                                        no = suggested_conversion ))
+                                                        no = suggested_conversion )) %>%
+        dplyr::mutate ( suggested_name = stringi::stri_trans_general(suggested_name, "latin-ascii"))
 
       count_answers <- function(x) {
         if (x == "") return ( as.numeric(NA) )
