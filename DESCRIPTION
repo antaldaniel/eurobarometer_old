@@ -17,6 +17,7 @@ Imports: dplyr,
     lubridate,
     stringr,
     sjlabelled,
-    labelled
+    labelled,
+    stringi
 RoxygenNote: 6.0.1
 Suggests: testthat
