@@ -1,6 +1,6 @@
 #' Type conversion on a labelled data frame
 #'
-#' @param df A labelled data.frame
+#' @param df A labelled data.frame to be converted to numeric
 #' @param metadata the metadata
 #' @param conversion_type Defaults to  \code{"factor_binary"}
 #' @param see_log  \code{TRUE} which will print messages to the screen.
@@ -41,7 +41,7 @@ convert_to_numeric <- function ( df, metadata,
                                   log_prefix = NA,
                                   log_id = NA,
                                   my_treshold = futile.logger::INFO) {
- spss_class <- suggested_name <- suggested_conversion <- .NULL
+ spss_class <- suggested_name <- suggested_conversion <- . <- NULL
    ##Setup log file creation
   if (create_log == TRUE) {
     directory_mssage <- NA

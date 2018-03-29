@@ -9,7 +9,7 @@ convert_to_numeric(df, metadata, conversion_type = "factor_binary",
   my_treshold = futile.logger::INFO)
 }
 \arguments{
-\item{df}{A labelled data.frame}
+\item{df}{A labelled data.frame to be converted to numeric}
 
 \item{metadata}{the metadata}
 
