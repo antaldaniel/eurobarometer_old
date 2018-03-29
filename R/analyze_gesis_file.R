@@ -261,6 +261,7 @@ analyze_gesis_file <- function ( gesis_file,
         dplyr::mutate ( suggested_name = gsub("aged_<10", "aged_10m", suggested_name )) %>%
         dplyr::mutate ( suggested_name = gsub("_aged_15_", "aged_15p", suggested_name )) %>%
         dplyr::mutate ( suggested_name = gsub("aged_10-14", "aged_10_14", suggested_name )) %>%
+        dplyr::mutate ( suggested_name = gsub("di_rection_", "direction_", suggested_name))
         dplyr::mutate ( suggested_name = ifelse( spss_name == "wex",
                                          yes = "wex",
                                          no = suggested_name )) %>%
