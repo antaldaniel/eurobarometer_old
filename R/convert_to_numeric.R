@@ -87,6 +87,11 @@ convert_to_numeric <- function ( df, metadata,
           df[[i]], levels = "labels"))
         tmp <- as_numeric(tmp)
       }
+      if ( conversion_type == "multiple_choice") {
+        tmp <- as_factor_binary(x  = labelled::to_character(
+          df[[i]], levels = "labels"))
+        tmp <- as_numeric(tmp)
+      }
       if ( conversion_type == "factor_3") {
         tmp <- as_factor_3(x  = labelled::to_character(
           df[[i]], levels = "labels"))
