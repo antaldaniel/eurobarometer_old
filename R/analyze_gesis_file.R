@@ -250,11 +250,13 @@ analyze_gesis_file <- function ( gesis_file,
         dplyr::mutate ( suggested_name = ifelse (
           suggested_conversion == "multiple_choice",
           yes = paste0("mc_", suggested_name ),
-          no = suggested_name)) %>%
-        dplyr::mutate ( suggested_name = ifelse (
-          grepl( "mc_nationality", suggested_name ),
-                        yes = gsub("mc_"),
-                        no = suggested_name)) %>%
+          no = suggested_name))
+
+      spss_metadata <- spss_metadata %>%
+          dplyr::mutate ( suggested_name = ifelse (
+          stringr::str_sub( suggested_name, 1,14) == "mc_nationality",
+                        yes = gsub("mc_", "", suggested_name),
+                        no = suggested_name))       %>%
         dplyr::mutate ( suggested_name = gsub("_10p-scale", "", suggested_name)) %>%
         dplyr::mutate ( suggested_name = gsub("aged_<10", "aged_10m", suggested_name )) %>%
         dplyr::mutate ( suggested_name = gsub("_aged_15_", "aged_15p", suggested_name )) %>%
