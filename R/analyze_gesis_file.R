@@ -185,6 +185,7 @@ analyze_gesis_file <- function ( gesis_file,
 
       a <- tolower(as.character(spss_metadata$gesis_name))
       a <- gsub ( "%", "pct", a)
+      a <- gsub ( "12\\+", "12p", a )
       a <- gsub ( "15\\+", "15p", a)
       a <- gsub ( "<10", "10m", a)
       a <- gsub ("\\.\\.\\.", "", a)
@@ -218,12 +219,15 @@ analyze_gesis_file <- function ( gesis_file,
       a <- gsub ( "\\.", "", a)
       a <- gsub ( "\\.", "", a)
       a <- gsub ( "_10mm", "_10m", a)
+      a <- gsub ( "__", "_", a)
       a <- ifelse ( stringr::str_sub(a, 1,1) == "_",
                     stringr::str_sub(a, 2,-1),
                     a)
       a <- ifelse ( stringr::str_sub(a, -1,-1) == "_",
                     stringr::str_sub(a, 1,-2),
                     a)
+      a <- gsub ( "__", "_", a)
+
       spss_metadata$suggested_name = stringr::str_trim(a, side = "both")
 
       naming_exc_message <- paste0("Reviewing exceptions with get_naming_exceptions()")
@@ -262,7 +266,9 @@ analyze_gesis_file <- function ( gesis_file,
         dplyr::mutate ( suggested_name = gsub("_aged_15_", "aged_15p", suggested_name )) %>%
         dplyr::mutate ( suggested_name = gsub("aged_10-14", "aged_10_14", suggested_name )) %>%
         dplyr::mutate ( suggested_name = gsub("di_rection_", "direction_", suggested_name))
-        dplyr::mutate ( suggested_name = ifelse( spss_name == "wex",
+
+      spss_metadata <- spss_metadata %>%
+       dplyr::mutate ( suggested_name = ifelse( spss_name == "wex",
                                          yes = "wex",
                                          no = suggested_name )) %>%
         dplyr::mutate ( suggested_name = ifelse ( tolower(spss_name) == "w1",
@@ -291,6 +297,10 @@ analyze_gesis_file <- function ( gesis_file,
         dplyr::mutate (suggested_conversion  = ifelse ( spss_metadata$suggested_name == "date_of_interview",
                                                         yes = "rescale_date_interview",
                                                         no = suggested_conversion )) %>%
+        dplyr::mutate ( suggested_name = ifelse ( stringr::str_sub(gesis_name, 1,7) ==
+                                                     "SPLIT (",
+                                                   yes = "split",
+                                                   no = suggested_name)) %>%
         dplyr::mutate ( suggested_name = stringi::stri_trans_general(suggested_name, "latin-ascii"))
 
       count_answers <- function(x) {
@@ -425,6 +435,7 @@ analyze_gesis_file <- function ( gesis_file,
                                  name="info")
 
       metadata_name <- gsub(".sav", "_metadata.rds", gesis_name)
+      if ( length(metadata_name) == 0) metadata_name <- "last_data_frame_metadata.rds"
       temporary_file_name <- paste0(tempdir(),  "\\", metadata_name)
       if (see_log) futile.logger::flog.info (paste("Saved metadata to ", temporary_file_name))
       futile.logger::flog.info ( paste("Saved metadata to ", temporary_file_name),
