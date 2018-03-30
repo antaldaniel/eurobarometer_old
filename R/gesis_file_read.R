@@ -28,6 +28,7 @@
 #' @importFrom stringr str_split
 #' @importFrom utils write.csv
 #' @importFrom magrittr '%>%'
+#' @importFrom stringr str_sub
 #' @importFrom dplyr mutate mutate_if mutate_at filter select
 #' @examples
 #' \dontrun{
@@ -51,22 +52,23 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
                               log_id = NA,
                               my_treshold = futile.logger::INFO) {
 
-  ##exception handling----
+  ##Reading the data file----
   if  ( is.null(data_dir )) data_dir <- tempdir()
   data_dir_files  <- dir ( data_dir )
   data_dir_files <- data_dir_files[grepl(".sav", data_dir_files)]
   selected_file <- which (grepl(zacat_id, data_dir_files))
+  if ( length(selected_file) == 0 ) stop("No such file in the data directory.")
+  if ( length(selected_file) >  1 ) stop("Multiple files are matched by " ,
+                                         zacat_id, "\nPlease use a unique identifier.")
+  selected_file <- paste0(data_dir, data_dir_files [selected_file])
 
+  #Searching for metadata file----
   if  ( is.null(metadata_dir ) ) metadata_dir <- tempdir()
   metadata_dir_files <- dir ( metadata_dir)
   metadata_dir_files <- metadata_dir_files[grepl("_metadata.rds",
                                          metadata_dir_files)]
   selected_metadata_file <- which (grepl(zacat_id, metadata_dir_files))
 
-  if ( length(selected_file) == 0 ) stop("No such file in the data directory.")
-  if ( length(selected_file) >  1 ) stop("Multiple files are matched by " ,
-                              zacat_id, "\nPlease use a unique identifier.")
-  selected_file <- paste0(data_dir, data_dir_files [selected_file])
 
   if ( length(selected_metadata_file ) == 0) {
     metadata <- NULL
@@ -200,7 +202,22 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
 
  names(read_df) <- metadata$suggested_name
 
- conversion_types <- c("factor_binary", "factor_3", "factor_4", "factor_5",
+ if ( "country_code_iso_3166" %in% names (read_df)) {
+   read_df <- read_df %>%
+     dplyr::mutate (country_code = as.factor(
+       stringr::str_sub(
+         read_df$country_code_iso_3166, 1,2 )
+     ) )
+ } else {
+   country_code_msg <- "Country code is not found or recognized in the data frame."
+   if (see_log)    futile.logger::flog.warn(country_code_msg)
+   if (create_log) futile.logger::flog.warn(country_code_msg,
+                                            name  ="warning")
+
+ }
+
+ conversion_types <- c("factor_binary", "multiple_choice",
+                       "factor_3", "factor_4", "factor_5",
                        "factor_pos_neg", "factor_yes_no_4",
                        "keep_numeric", "rescale_date_interview")
 
