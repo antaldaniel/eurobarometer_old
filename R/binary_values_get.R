@@ -6,8 +6,8 @@
 #' binary_values_get()
 #'
 #' @export
-#'
+
 
 binary_values_get <- function () {
-    return(values_factor_binary)
+    return("problem")
 }

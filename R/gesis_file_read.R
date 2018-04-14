@@ -223,7 +223,8 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
 
  for (i in 1:length(conversion_types)) {
    tryCatch(
-     {read_df <- convert_to_numeric( df = read_df,
+     {
+       read_df <- convert_to_numeric( df = read_df,
                                      metadata = metadata,
                                      conversion_type = conversion_types[i],
                                      see_log = see_log,

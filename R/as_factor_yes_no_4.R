@@ -2,6 +2,7 @@
 #'
 #' @param x An input vector to be converted to a four level yes-no variable
 #' @importFrom plyr mapvalues
+#' @importFrom utils data
 #' @examples
 #' as_factor_yes_no_4( c("Very good", "Rather Good",
 #'                   "Inap.", "Rather Bad", "DK", "Very bad"))
@@ -11,14 +12,12 @@
 as_factor_yes_no_4 <- function(x) {
   x <- as.character (x)
   x <- tolower(x)
-  yes_2 <- tolower(values_factor_yes_no_4$yes_2_value)
-  yes_1 <- tolower(values_factor_yes_no_4$yes_1_value)
-  no_1 <-  tolower(values_factor_yes_no_4$no_1_value)
-  no_2 <-  tolower(values_factor_yes_no_4$no_2_value)
-  chr  <- ifelse ( x   %in% yes_2, "absolutely_yes", x )
-  chr  <- ifelse ( chr %in% yes_1, "yes", chr )
-  chr  <- ifelse ( chr %in% no_1,   "no", chr )
-  chr  <- ifelse ( chr %in% no_2,   "absolutely_not", chr )
+  voc <- eurobarometer::vocabulary
+  voc <- lapply (voc, tolower)
+  chr  <- ifelse ( x   %in% voc$pos_2, "absolutely_yes", x )
+  chr  <- ifelse ( chr %in% voc$pos_1, "yes", chr )
+  chr  <- ifelse ( chr %in% voc$neg_1,   "no", chr )
+  chr  <- ifelse ( chr %in% voc$neg_2,   "absolutely_not", chr )
   chr  <- ifelse ( chr %in% c("yes", "no",
                             "absolutely_yes", "absolutely_not"),
                    as.character(chr), NA)

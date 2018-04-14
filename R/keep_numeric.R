@@ -28,8 +28,11 @@ keep_numeric <- function ( column,
                            max_value = NULL,
                            min_value = NULL,
                            more_label = NULL,
-                           less_value = NULL,
+                           less_label = NULL,
                            comma = FALSE) {
+  ##temporary
+  more_value <- 0
+  less_value <- 0
   if(!is.null(max_value)) {
     if ( class(max_value) != "numeric" ) {
       stop("The max_value must be a number.")
@@ -42,8 +45,8 @@ keep_numeric <- function ( column,
     }
   }
 
-  if(!is.null(less_value)) {
-    if ( class(less_value) != "numeric" ) {
+  if(!is.null(less_label)) {
+    if ( class(less_label) != "numeric" ) {
       stop("The max_value must be a number.")
     }
   }
@@ -70,8 +73,8 @@ keep_numeric <- function ( column,
   }
 
   if(!is.null(more_label)) {
-    more_labels <- c("or more", "and more", "vagy több",
-                     "ennél több")
+    more_labels <- c("or more", "and more", "vagy t\u00F6bb",
+                     "enn\u00E9l t\u00F6bb")
     column <- ifelse(column %in% na_labels, more_value, column)
   }
 

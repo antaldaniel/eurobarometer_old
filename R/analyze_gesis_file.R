@@ -166,7 +166,7 @@ analyze_gesis_file <- function ( gesis_file,
 
 
       spss_metadata$suggested_conversion  <- ifelse (
-        spss_metadata$suggested_name %in% eurobarometer:::keep_numeric_vars,
+        spss_metadata$suggested_name %in% keep_numeric_vars,
         yes = "keep_numeric",
         no = spss_metadata$suggested_conversion
       )

@@ -4,10 +4,10 @@
 \alias{vocabulary_items_get}
 \title{Get the recoding vocabulary}
 \usage{
-vocabulary_items_get(context = NULL)
+vocabulary_items_get(context_var = NULL)
 }
 \arguments{
-\item{context}{Filtering for the vocabulary of a class only, such as the
+\item{context_var}{Filtering for the vocabulary of a class only, such as the
 vocabulary of only 3-level \code{factor_3} variables. Defaults to \code{NULL}.}
 }
 \description{

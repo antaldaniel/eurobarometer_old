@@ -32,3 +32,6 @@ devtools::use_data(values_factor_binary,
                    keep_numeric_vars,
                    internal = TRUE,
                    overwrite = TRUE)
+
+#for checking
+#load("R/sysdata.rda")
