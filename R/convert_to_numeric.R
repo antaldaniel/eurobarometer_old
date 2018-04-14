@@ -44,7 +44,7 @@ convert_to_numeric <- function ( df, metadata,
  spss_class <- suggested_name <- suggested_conversion <- . <- NULL
    ##Setup log file creation
   if (create_log == TRUE) {
-    directory_mssage <- NA
+    directory_message <- NA
     if (! file.exists("sr_logs")) {
       dir.create(file.path(paste0(getwd(), "/sr_logs")))
       directory_message <- paste("Created:\n", getwd(), "/sr_logs")
@@ -63,6 +63,7 @@ convert_to_numeric <- function ( df, metadata,
       futile.logger::appender.file(paste0(log_prefix,log_id, "warning.log")), name="warning")
     error <- futile.logger::flog.appender(
       futile.logger::appender.file(paste0(log_prefix,log_id, "error.log")), name="error")
+
     if (!is.na(directory_message)) {
       futile.logger::flog.info ( directory_message,
                                  name="info")
