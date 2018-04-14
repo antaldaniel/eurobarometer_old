@@ -1,0 +1,15 @@
+#' Vocabulary for categorical variables
+#'
+#' The vocabulary file for re-ordering or converting categorical answers
+#' to numeric codes.
+#' \describe{
+#'   \item{name}{A unique name to a questionnaire item type }
+#'   \item{context}{Type of categorical variable)}
+#'   \item{neg_2}{Emphasized negative value -2 }
+#'   \item{neg_1}{Negative value -1}
+#'   \item{neutral}{Neutral value 0}
+#'   \item{pos_1}{Positive value +1}
+#'   \item{pos_2}{Positive value +2}
+#'   \item{pos_3}{Positive value +3}
+#' }
+"vocabulary"
