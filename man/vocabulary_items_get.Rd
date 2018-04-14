@@ -4,7 +4,11 @@
 \alias{vocabulary_items_get}
 \title{Get the recoding vocabulary}
 \usage{
-vocabulary_items_get(type = NULL)
+vocabulary_items_get(context = NULL)
+}
+\arguments{
+\item{context}{Filtering for the vocabulary of a class only, such as the
+vocabulary of only 3-level \code{factor_3} variables. Defaults to \code{NULL}.}
 }
 \description{
 Get the vocabulary used for re-coding or reordering
