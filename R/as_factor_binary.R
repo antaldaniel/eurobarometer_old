@@ -19,8 +19,10 @@ as_factor_binary <- function(x) {
     x <- as.character (x)
   }
   x <- tolower(x)
-  yes_values <- tolower(values_factor_binary$positive_values)
-  no_values  <- tolower(values_factor_binary$negative_values)
+  voc <- vocabulary_items_get( context_var = "factor_binary")
+  voc <- lapply(voc, tolower)
+  yes_values <- tolower(voc$pos_1)
+  no_values  <- tolower(voc$neg_1)
   unique_binary_values <- unique(x)
   yes_value <- yes_values[ which(yes_values %in% unique_binary_values)]
   no_value  <- no_values[ which( no_values %in% unique_binary_values)]
