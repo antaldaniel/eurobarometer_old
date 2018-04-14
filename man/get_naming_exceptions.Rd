@@ -10,5 +10,5 @@ get_naming_exceptions()
 These names are not changed automatically with regex rules.
 }
 \examples{
-get_naming_exceptions
+get_naming_exceptions()
 }
