@@ -8,6 +8,8 @@
 #' starting with a label \code{Inap.}.
 #' @param max_value Optional maximum value, anything reaching this level will be replaced with \code{NA}.
 #' @param min_value Optional maximum value, anything reaching this level will be replaced with \code{NA}.
+#' @param more_label Optional label for text "more" or similar.
+#' @param less_label Optional label for text "less" or similar.
 #' @param comma If decimals are written with commas, such as 10,7 instead of 10.7
 #' Defaults to \code{FALSE}.
 #' @importFrom haven as_factor
@@ -25,6 +27,8 @@ keep_numeric <- function ( column,
                            na_labels = NULL,
                            max_value = NULL,
                            min_value = NULL,
+                           more_label = NULL,
+                           less_value = NULL,
                            comma = FALSE) {
   if(!is.null(max_value)) {
     if ( class(max_value) != "numeric" ) {
@@ -35,6 +39,18 @@ keep_numeric <- function ( column,
   if(!is.null(min_value)) {
     if (class(min_value) != "numeric" ) {
     stop("The min_value must be a number.")
+    }
+  }
+
+  if(!is.null(less_value)) {
+    if ( class(less_value) != "numeric" ) {
+      stop("The max_value must be a number.")
+    }
+  }
+
+  if(!is.null(more_value)) {
+    if (class(more_value) != "numeric" ) {
+      stop("The more_value must be a number.")
     }
   }
 
@@ -51,6 +67,12 @@ keep_numeric <- function ( column,
       column <- ifelse(grepl("Inap.", column), NA, column)
     }
     column <- ifelse(column %in% na_labels, NA, column)
+  }
+
+  if(!is.null(more_label)) {
+    more_labels <- c("or more", "and more", "vagy több",
+                     "ennél több")
+    column <- ifelse(column %in% na_labels, more_value, column)
   }
 
   if ( comma == TRUE )   {

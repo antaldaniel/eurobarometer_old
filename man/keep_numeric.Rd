@@ -5,7 +5,7 @@
 \title{Keep numeric elements in a string}
 \usage{
 keep_numeric(column, na_labels = NULL, max_value = NULL, min_value = NULL,
-  comma = FALSE)
+  more_label = NULL, less_value = NULL, comma = FALSE)
 }
 \arguments{
 \item{column}{column from a survey data frame where numbers are included with
@@ -20,8 +20,12 @@ starting with a label \code{Inap.}.}
 
 \item{min_value}{Optional maximum value, anything reaching this level will be replaced with \code{NA}.}
 
+\item{more_label}{Optional label for text "more" or similar.}
+
 \item{comma}{If decimals are written with commas, such as 10,7 instead of 10.7
 Defaults to \code{FALSE}.}
+
+\item{less_label}{Optional label for text "less" or similar.}
 }
 \description{
 Keep numeric elements in a string
