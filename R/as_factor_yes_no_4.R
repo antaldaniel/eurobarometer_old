@@ -10,10 +10,14 @@
 #' @export
 
 as_factor_yes_no_4 <- function(x) {
+  if ( "labelled" %in% class(x)) {
+    x <- haven::as_factor(x)
+  }
   x <- as.character (x)
   x <- tolower(x)
-  voc <- eurobarometer::vocabulary
+  voc <- vocabulary_items_get ( context_var = "yes_no_4")
   voc <- lapply (voc, tolower)
+
   chr  <- ifelse ( x   %in% voc$pos_2, "absolutely_yes", x )
   chr  <- ifelse ( chr %in% voc$pos_1, "yes", chr )
   chr  <- ifelse ( chr %in% voc$neg_1,   "no", chr )
