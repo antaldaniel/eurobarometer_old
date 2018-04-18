@@ -27,6 +27,9 @@ as_factor_binary <- function(x) {
   if (sum(c("false (correct)", "true", "dk") %in% unique_binary_values) == 3) {
     yes_value <- "false (correct)"
     no_value <- "true"
+  } else if (sum(c("true (correct)", "false", "dk") %in% unique_binary_values) == 3) {
+    yes_value <- "true (correct)"
+    no_value <- "false"
   } else {
     yes_value <- yes_values[ which(yes_values %in% unique_binary_values)]
     no_value  <- no_values[ which( no_values %in% unique_binary_values)]
