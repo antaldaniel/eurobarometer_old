@@ -91,47 +91,160 @@ convert_to_numeric <- function ( df, metadata,
  convert_keep_numeric <- which (metadata$suggested_conversion == "keep_numeric")
  convert_rescale_date <- which (metadata$suggested_conversion == "rescale_date_interview")
 
+
  factor_3_message <- paste0("Converting ", length(convert_factor_3), " three level factors to numeric,\n",
                             paste(names (df)[convert_factor_3], collapse = ", ") )
  futile.logger::flog.info (factor_3_message, name="info")
  futile.logger::flog.info (factor_3_message )
- for (i in convert_factor_3) return_df[[i]] <- as_numeric(as_factor_3(df[[i]]))
+ for (i in convert_factor_3) {
+   tryCatch({
+     return_df[[i]] <- as_numeric(as_factor_3(df[[i]]))
+   },
+  error = function(cond) {
+       error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                   names(df)[i], "\n", cond)
+       if (see_log)    futile.logger::flog.error(error_chr_convert)
+       if (create_log) futile.logger::flog.error(error_chr_convert,
+                                                 name  ="error")
+       return_df[[i]] <- as.character(df[[i]])
+  },
+  warning = function(cond){
+       warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+       if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+       if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                                 name  ="warn")
+  },
+  finally = {})
+ }
+
 
  factor_4_message <- paste0("Converting ", length(convert_factor_4), " three level factors to numeric,\n",
                             paste(names (df)[convert_factor_4], collapse = ", ") )
  futile.logger::flog.info (factor_4_message, name="info")
  futile.logger::flog.info (factor_4_message )
-
- for (i in convert_factor_4) return_df[[i]] <- as_numeric(as_factor_4(df[[i]]))
+ for (i in convert_factor_4) {
+   tryCatch({
+     return_df[[i]] <- as_numeric(as_factor_4(df[[i]]))
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
 
  factor_5_message <- paste0("Converting ", length(convert_factor_5), " three level factors to numeric,\n",
                             paste(names (df)[convert_factor_5], collapse = ", ") )
  futile.logger::flog.info (factor_5_message, name="info")
  futile.logger::flog.info (factor_5_message )
- for (i in convert_factor_5) return_df[[i]] <- as_numeric(as_factor_5(df[[i]]))
+ for (i in convert_factor_5) {
+   tryCatch({
+     return_df[[i]] <- as_numeric(as_factor_5(df[[i]]))
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
 
  factor_binary_message <- paste0("Converting ", length(convert_factor_binary),
                             " binary factors to numeric:\n",
                             paste(names (df)[convert_factor_binary], collapse = ", ") )
  futile.logger::flog.info ( factor_binary_message, name="info")
  futile.logger::flog.info ( factor_binary_message )
- for (i in convert_factor_binary) return_df[[i]] <- as_numeric(as_factor_binary(df[[i]]))
-
+ for (i in convert_factor_binary) {
+   tryCatch({
+     return_df[[i]] <- as_numeric(as_factor_binary(df[[i]]))
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
  factor_mc_message <- paste0("Converting ", length(convert_multiple_choice),
                                  " binary multiple_choice variables to numeric:\n",
                                  paste(names (df)[convert_multiple_choice],
                                        collapse = ", ") )
  futile.logger::flog.info ( factor_mc_message, name="info")
  futile.logger::flog.info ( factor_mc_message )
- for (i in convert_multiple_choice) return_df[[i]] <- as_numeric(as_factor_binary(df[[i]]))
-
+ for (i in convert_multiple_choice) {
+   tryCatch({
+     return_df[[i]] <- as_numeric(as_factor_binary(df[[i]]))
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
  factor_pos_neg_msg <- paste0("Converting ", length(convert_pos_neg),
                              " three-level (negative, neutral, positive) factors:\n",
                              paste(names (df)[convert_pos_neg],
                                    collapse = ", ") )
  futile.logger::flog.info ( factor_pos_neg_msg, name="info")
  futile.logger::flog.info ( factor_pos_neg_msg )
- for (i in convert_pos_neg) return_df[[i]] <- as_numeric(as_factor_pos_neg(df[[i]]))
+ for (i in convert_pos_neg) {
+   tryCatch({
+     return_df[[i]] <- as_numeric(as_factor_pos_neg(df[[i]]))
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
 
  factor_yes_no_4_msg <- paste0("Converting ", length(convert_yes_no_4),
                               " four-level (2 negative, 2 positive) factors:\n",
@@ -139,7 +252,26 @@ convert_to_numeric <- function ( df, metadata,
                                     collapse = ", ") )
  futile.logger::flog.info ( factor_yes_no_4_msg, name="info")
  futile.logger::flog.info ( factor_yes_no_4_msg)
- for (i in convert_yes_no_4) return_df[[i]] <- as_numeric(as_factor_yes_no_4(df[[i]]))
+ for (i in convert_yes_no_4) {
+   tryCatch({
+     return_df[[i]] <- as_numeric(as_factor_yes_no_4(df[[i]]))
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
 
  convert_keep_numeric_msg <- paste0("Converting ", length(convert_keep_numeric),
                             " numeric variables with words or units:\n",
@@ -147,7 +279,26 @@ convert_to_numeric <- function ( df, metadata,
                                   collapse = ", ") )
  futile.logger::flog.info ( convert_keep_numeric_msg, name="info")
  futile.logger::flog.info ( convert_keep_numeric_msg  )
- for (i in convert_keep_numeric) return_df[[i]] <- keep_numeric(df[[i]])
+ for (i in convert_keep_numeric) {
+   tryCatch({
+     return_df[[i]] <- keep_numeric(df[[i]])
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
 
 
  convert_date_msg <- paste0("Converting ", length(convert_rescale_date),
@@ -156,7 +307,26 @@ convert_to_numeric <- function ( df, metadata,
                                      collapse = ", ") )
  futile.logger::flog.info ( convert_date_msg , name="info")
  futile.logger::flog.info ( convert_date_msg )
- for (i in convert_rescale_date) return_df[[i]] <- rescale_date_interview(df[[i]])
+ for (i in convert_rescale_date) {
+   tryCatch({
+     return_df[[i]] <-  rescale_date_interview(df[[i]])
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
 
  numeric_vars_msg <- paste0("Removing labels from ", length(numeric_vars),
                             " numeric variables:\n",
@@ -164,16 +334,53 @@ convert_to_numeric <- function ( df, metadata,
                                   collapse = ", ") )
  futile.logger::flog.info ( numeric_vars_msg  , name="info")
  futile.logger::flog.info ( numeric_vars_msg  )
- for (i in numeric_vars) return_df[[i]] <- as.numeric(labelled::to_character(df[[i]]))
+ for (i in numeric_vars) {
+   tryCatch({
+     return_df[[i]] <-  as.numeric(labelled::to_character(df[[i]]))
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
 
  chr_vars_msg <- paste0("Removing labels from ", length(chr_vars),
-                            " numeric variables:\n",
+                            " character variables:\n",
                             paste(names (df)[chr_vars],
                                   collapse = ", ") )
  futile.logger::flog.info ( chr_vars_msg, name="info")
  futile.logger::flog.info ( chr_vars_msg )
- for (i in chr_vars) return_df[[i]] <- as.factor(labelled::to_character(df[[i]]))
-
+ for (i in chr_vars) {
+   tryCatch({
+     return_df[[i]] <-  as.factor(labelled::to_character(df[[i]]))
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
 
 return(return_df)
 }
