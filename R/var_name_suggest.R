@@ -11,6 +11,8 @@
 var_name_suggest <- function ( x ) {
 
   x <- tolower(as.character(x))
+  x <- ifelse (stringr::word ( x, 1,1) %in% c("wex", "wextra"),
+          "wex", x)
   x <- gsub ( "%", "pct", x)
   x <- gsub ( "12\\+", "12p", x )
   x <- gsub ( "15\\+", "15p", x)
