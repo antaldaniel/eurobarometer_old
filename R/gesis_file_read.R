@@ -156,8 +156,7 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
     })
     }
 
-
-  ###Analyze the  metadata file----
+ ###Analyze the  metadata file----
  if ( is.null(metadata) ) {
    tryCatch({
      metadata_read_message <- "Trying to analyze the file.\nThis may take a few minutes."
@@ -165,7 +164,7 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
      if (create_log) futile.logger::flog.info(metadata_read_message,
                                               name  ="info")
      metadata <- analyze_gesis_file(
-        analyze_file = read_df ,
+        analyze_file = read_df,
         see_log = see_log,
         create_log = create_log,
         log_prefix = log_prefix,
