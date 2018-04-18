@@ -24,8 +24,25 @@ as_factor_binary <- function(x) {
   yes_values <- tolower(voc$pos_1)
   no_values  <- tolower(voc$neg_1)
   unique_binary_values <- unique(x)
-  yes_value <- yes_values[ which(yes_values %in% unique_binary_values)]
-  no_value  <- no_values[ which( no_values %in% unique_binary_values)]
+  if (sum(c("false (correct)", "true", "dk") %in% unique_binary_values) == 3) {
+    yes_value <- "false (correct)"
+    no_value <- "true"
+  } else {
+    yes_value <- yes_values[ which(yes_values %in% unique_binary_values)]
+    no_value  <- no_values[ which( no_values %in% unique_binary_values)]
+
+  }
+   if ( length (no_value)>1 ) {
+    if (length(unique(no_value)) == 1 ) {
+      no_value = unique(no_value) }
+    else ( stop ( "Not a unique no value."))
+  }
+
+  if ( length (yes_value)>1 ) {
+    if (length(unique(yes_value)) == 1 ) {
+      no_value = unique(yes_value) }
+    else ( stop ( "Not a unique yes value."))
+  }
 
   if (length(yes_value) == 0 ) { stop("Yes value was not found in binary factor.")}
   if (length(no_value ) == 0 ) { stop("No value was not found in binary factor.")}
