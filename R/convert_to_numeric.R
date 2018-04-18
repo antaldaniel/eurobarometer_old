@@ -80,7 +80,7 @@ convert_to_numeric <- function ( df, metadata,
                                                             "factor_yes_no_4", "multiple_choice", "keep_numeric",
                                                             "rescale_date_interview", "numeric"))
 
- paste(names (df)[convert_factor_3], collapse = ", ")
+ #paste(names (df)[convert_factor_3], collapse = ", ")
  convert_factor_3 <-  which (metadata$suggested_conversion == "factor_3")
  convert_factor_4 <-  which (metadata$suggested_conversion == "factor_4")
  convert_factor_5 <-  which (metadata$suggested_conversion == "factor_5")
