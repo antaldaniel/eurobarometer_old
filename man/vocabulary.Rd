@@ -4,7 +4,7 @@
 \name{vocabulary}
 \alias{vocabulary}
 \title{Vocabulary for categorical variables}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 110 rows and 8 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 125 rows and 8 columns.}
 \usage{
 vocabulary
 }
