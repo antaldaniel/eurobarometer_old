@@ -17,20 +17,27 @@ as_factor_yes_no_4 <- function(x) {
   x <- tolower(x)
   voc <- vocabulary_items_get ( context_var = "yes_no_4")
   voc <- lapply (voc, tolower)
+  unique_values <- unique(x)
 
-  chr  <- ifelse ( x   %in% voc$pos_2, "absolutely_yes", x )
-  chr  <- ifelse ( chr %in% voc$pos_1, "yes", chr )
-  chr  <- ifelse ( chr %in% voc$neg_1,   "no", chr )
-  chr  <- ifelse ( chr %in% voc$neg_2,   "absolutely_not", chr )
-  chr  <- ifelse ( chr %in% c("yes", "no",
-                            "absolutely_yes", "absolutely_not"),
-                   as.character(chr), NA)
+  num  <- ifelse ( x   %in% voc$pos_2, 2, x )
+  num  <- ifelse ( num %in% voc$pos_1, 1, num )
+  num  <- ifelse ( num %in% voc$neg_1, -1, num )
+  num  <- ifelse ( num %in% voc$neg_2, -2, num )
+  num  <- ifelse ( num %in% c(2,1,-1,-2),
+                   as.character(num), NA)
+  chr <- num
 
-  num  <- plyr::mapvalues (chr, from = c("absolutely_not",
-    "no", "yes", "absolutely_yes"),
-                                 to = c(2,1,-1,-2))
-  fct <- factor(chr, levels = c("absolutely_no",
-                                "no", "yes", "absolutely_yes"))
+  chr_1 <- unique_values [ which(unique_values %in% voc$neg_2) ]
+  chr_2 <- unique_values [ which(unique_values %in% voc$neg_1) ]
+  chr_3 <- unique_values [ which(unique_values %in% voc$pos_1) ]
+  chr_4 <- unique_values [ which(unique_values %in% voc$pos_2) ]
+
+  chr[which ( num == -2)] <- chr_1
+  chr[which ( num == -1)] <- chr_2
+  chr[which ( num ==  1)] <- chr_3
+  chr[which ( num ==  2)] <- chr_4
+
+  fct <- factor(chr, levels = c(chr_1,chr_2,chr_3,chr_4))
   num <- as.numeric(num)
 
   value = list(x, fct, num)
