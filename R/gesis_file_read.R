@@ -203,27 +203,26 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
 
  names(read_df) <- metadata$suggested_name
 
- if ( "country_code_iso_3166" %in% names (read_df)) {
-   read_df <- read_df %>%
-     dplyr::mutate (country_code = as.factor(
-       stringr::str_sub(
-         read_df$country_code_iso_3166, 1,2 )
-     ) )
+ ##Conversions---
+ return_df <- convert_to_numeric(df = read_df, metadata = metadata)
+
+ ##Adding country code---
+ if ( "country_code_iso_3166" %in% names (return_df)) {
+   tmp <- stringr::str_sub(
+       return_df$country_code_iso_3166, 1,2 )
+   tmp <- as.factor(tmp)
+   return_df$country_code <- tmp
  } else {
    country_code_msg <- "Country code is not found or recognized in the data frame."
    if (see_log)    futile.logger::flog.warn(country_code_msg)
    if (create_log) futile.logger::flog.warn(country_code_msg,
                                             name  ="warning")
-
  }
-
- ##Conversions---
- return_df <- convert_to_numeric(df = read_df, metadata = metadata )
 
  if ( save_file ) {
     rds_file <- gsub(".sav", ".rds" , selected_file)
     metadata_file <- gsub( ".rds", "_metadata.rds", rds_file)
-    saveRDS(read_df, rds_file)
+    saveRDS(return_df, rds_file)
     saveRDS(metadata, metadata_file)
     save_msg <- paste0("Saved data as\n", rds_file, "\n... and metadata as\n",
                        metadata_file)
