@@ -84,9 +84,7 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
                                                name  ="info")
       metadata <- readRDS(selected_metadata_file)
     }
-
   }
-
 
   ##Setup log file creation---
 
