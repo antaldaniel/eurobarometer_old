@@ -72,6 +72,7 @@ convert_to_numeric <- function ( df, metadata,
 
  return_df <- matrix ( data = NA, nrow = nrow(df), ncol = ncol(df))
  return_df <- as.data.frame(return_df)
+ return_df[] <- lapply(return_df, as.character)
  names (return_df) <- names (df)
 
  numeric_vars <- which (metadata$suggested_conversion == "numeric")
@@ -300,7 +301,6 @@ convert_to_numeric <- function ( df, metadata,
    finally = {})
  }
 
-
  convert_date_msg <- paste0("Converting ", length(convert_rescale_date),
                                " three-level (negative, neutral, positive) factors:\n",
                                paste(names (df)[convert_rescale_date],
@@ -381,6 +381,7 @@ convert_to_numeric <- function ( df, metadata,
    },
    finally = {})
  }
+
 
 return(return_df)
 }
