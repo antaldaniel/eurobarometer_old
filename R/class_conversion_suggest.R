@@ -8,6 +8,7 @@
 #' }
 #' @export
 
+#x <- read_df[[773]]
 class_conversion_suggest <- function (x) {
 
   if (class(x) %in% c("numeric", "integer")) return("numeric")
@@ -22,9 +23,9 @@ class_conversion_suggest <- function (x) {
     unique_values <- ifelse (grepl("inap", tolower(unique_values)), NA,  unique_values)
     unique_values <- unique(unique_values[!is.na(unique_values)])
 
-    if ( length ( unique_values) == 2) {
+    if ( length (unique_values) == 2) {
       if ( sum(unique_values == c("not mentioned", "dk"))==2 ) return(as.character("indicator"))
-      if ( sum(unique_values == c("dk", "not mentioned"))==2) return(as.character("indicator"))
+      if ( sum(unique_values == c("dk", "not mentioned"))==2 ) return(as.character("indicator"))
     }
 
     unique_values <- unique_values[which(unique_values != "dk")]
@@ -45,55 +46,63 @@ class_conversion_suggest <- function (x) {
         else { return(as.character("indicator"))  }
       }
 
+   ##Detect binary factors
+    voc <- vocabulary_items_get ( context_var = "factor_binary" )
+
      if ( sum( unique_values %in%
-               tolower(values_factor_binary$positive_values)) == 1 ) {
+               tolower(voc$pos_1)) == 1 ) {
        if ( sum( unique_values %in%
-                 tolower(values_factor_binary$negative_values)) == 1 ) {
-         return(as.character("factor_binary"))
-       }
+                 tolower(voc$neg_1)) == 1 ) {
+         return(as.character("factor_binary")) }
      }
     }
+
     ## Three unique values values
     if ( length (unique_values) == 3 ) {
-     for ( i in 1:nrow(values_factor_3)) {
-       a <- sum ( unique_values %in% tolower(values_factor_3$factor_3_0[i]))
-       b <- sum ( unique_values %in% tolower(values_factor_3$factor_3_1[i]))
-       c <- sum ( unique_values %in% tolower(values_factor_3$factor_3_2[i]))
-    if ( (a+b+c) == 3 ) return(as.character("factor_3"))
-        }
-        for ( i in 1:nrow(values_factor_pos_neg))  {
-          a <- sum ( unique_values %in% tolower(values_factor_pos_neg$factor_positive[i]))
-          b <- sum ( unique_values %in% tolower(values_factor_pos_neg$factor_null[i]))
-          c <- sum ( unique_values %in% tolower(values_factor_pos_neg$factor_negative[i]))
-          if ( (a+b+c) == 3 ) return(as.character("factor_pos_neg"))
-        }
+      voc <- vocabulary_items_get ( context_var = "factor_3" )
+     for ( i in 1:nrow(voc)) {
+       a <- sum ( unique_values %in% tolower(voc$pos_1[i]))
+       b <- sum ( unique_values %in% tolower(voc$pos_2[i]))
+       c <- sum ( unique_values %in% tolower(voc$neutral[i]))
+       if ( (a+b+c) == 3 ) return(as.character("factor_3"))
+       }
+      voc <- vocabulary_items_get ( context_var = "factor_pos_neg" )
+      for ( i in 1:nrow(voc))  {
+        a <- sum ( unique_values %in% tolower(voc$pos_1[i]))
+        b <- sum ( unique_values %in% tolower(voc$neutral[i]))
+        c <- sum ( unique_values %in% tolower(voc$neg_1[i]))
+        if ( (a+b+c) == 3 ) return(as.character("factor_pos_neg"))
+      }
     }
       ## Four unique values values
       if ( length (unique_values) == 4 ) {
-        for ( i in 1:nrow(values_factor_4)) {
-          a <- sum ( unique_values %in% tolower(values_factor_4$factor_4_0[i]))
-          b <- sum ( unique_values %in% tolower(values_factor_4$factor_4_1[i]))
-          c <- sum ( unique_values %in% tolower(values_factor_4$factor_4_2[i]))
-          d <- sum ( unique_values %in% tolower(values_factor_4$factor_4_3[i]))
+        voc <- vocabulary_items_get ( context_var = "factor_4" )
+        for ( i in 1:nrow(voc)) {
+          a <- sum ( unique_values %in% tolower(voc$neutral[i]))
+          b <- sum ( unique_values %in% tolower(voc$pos_1[i]))
+          c <- sum ( unique_values %in% tolower(voc$pos_2[i]))
+          d <- sum ( unique_values %in% tolower(voc$pos_3[i]))
           if ( (a+b+c+d) == 4 ) return(as.character("factor_4"))
         }
-          for ( i in 1:nrow(values_factor_yes_no_4))  {
-            a <- sum ( unique_values %in% tolower(values_factor_yes_no_4$yes_2_value[i]))
-            b <- sum ( unique_values %in% tolower(values_factor_yes_no_4$yes_1_value[i]))
-            c <- sum ( unique_values %in% tolower(values_factor_yes_no_4$no_1_value[i]))
-            d <- sum ( unique_values %in% tolower(values_factor_yes_no_4$no_2_value[i]))
+        voc <- vocabulary_items_get ( context_var = "yes_no_4" )
+          for ( i in 1:nrow(voc))  {
+            a <- sum ( unique_values %in% tolower(voc$pos_2[i]))
+            b <- sum ( unique_values %in% tolower(voc$pos_1[i]))
+            c <- sum ( unique_values %in% tolower(voc$neg_1[i]))
+            d <- sum ( unique_values %in% tolower(voc$neg_2[i]))
             if ( (a+b+c+d) == 4 ) return(as.character("factor_yes_no_4"))
           }
         }
 
         ## Five unique values values
         if ( length (unique_values) == 5 ) {
-          for ( i in 1:nrow(values_factor_5)) {
-            a <- sum ( unique_values %in% tolower(values_factor_5$factor_5_0[i]))
-            b <- sum ( unique_values %in% tolower(values_factor_5$factor_5_1[i]))
-            c <- sum ( unique_values %in% tolower(values_factor_5$factor_5_2[i]))
-            d <- sum ( unique_values %in% tolower(values_factor_5$factor_5_3[i]))
-            e <- sum ( unique_values %in% tolower(values_factor_5$factor_5_4[i]))
+          voc <- vocabulary_items_get ( context_var = "factor_5" )
+          for ( i in 1:nrow(voc)) {
+            a <- sum ( unique_values %in% tolower(voc$neg_2[i]))
+            b <- sum ( unique_values %in% tolower(voc$neg_1[i]))
+            c <- sum ( unique_values %in% tolower(voc$neutral[i]))
+            d <- sum ( unique_values %in% tolower(voc$pos_1[i]))
+            e <- sum ( unique_values %in% tolower(voc$pos_2[i]))
             if ( (a+b+c+d+e) == 5 ) return(as.character("factor_5"))
           }
         }
