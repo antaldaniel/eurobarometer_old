@@ -4,11 +4,11 @@
 \alias{analyze_gesis_file}
 \title{Analyze a GESIS file}
 \usage{
-analyze_gesis_file(gesis_file, see_log = TRUE, create_log = TRUE,
+analyze_gesis_file(analyze_file, see_log = TRUE, create_log = TRUE,
   log_prefix = NA, log_id = NA, my_treshold = futile.logger::INFO)
 }
 \arguments{
-\item{gesis_file}{The full path to the GESIS SPSS file or a data.frame
+\item{analyze_file}{The full path to the GESIS SPSS file or a data.frame
 read by haven consisting the contents of the file.}
 
 \item{see_log}{\code{TRUE} which will print messages to the screen.}

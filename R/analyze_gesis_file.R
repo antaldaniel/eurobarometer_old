@@ -10,7 +10,7 @@
 #' the end result is always saved to the \code{tempdir()} which is deleted
 #' automatically at the end of each session.  You can retrieve the metadata
 #' from here, should you need it during an interactive session.
-#' @param gesis_file The full path to the GESIS SPSS file or a data.frame
+#' @param analyze_file The full path to the GESIS SPSS file or a data.frame
 #' read by haven consisting the contents of the file.
 #' @param see_log  \code{TRUE} which will print messages to the screen.
 #' @param create_log  It will create log files in the sr_logs director.
