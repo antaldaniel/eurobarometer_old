@@ -168,6 +168,21 @@ analyze_gesis_file <- function ( analyze_file,
   if (create_log) futile.logger::flog.info("Getting SPSS classes", name  ="info")
   spss_metadata$spss_class <- vapply(read_df, class, character(1))
 
+  if (see_log)    futile.logger::flog.info("Identifying questionnaire IDs in the long GESIS label")
+  if (create_log) futile.logger::flog.info("Identifying questionnaire IDs in the long GESIS label", name  ="info")
+  spss_metadata$questionnaire_item <- vapply(spss_metadata$gesis_name,
+                                             questionnaire_item_identify,
+                                             character(1))
+
+  spss_metadata$suggested_name <- ifelse (
+    stringr::word(tolower(spss_metadata$gesis_name),
+                           1,1, " ") == spss_metadata$questionnaire_item,
+           yes = stringr::word(tolower(spss_metadata$gesis_name), 2,-1, " "),
+            no = tolower(spss_metadata$gesis_name))
+  spss_metadata$suggested_name <- ifelse ( is.na(spss_metadata$suggested_name),
+           yes = tolower(spss_metadata$gesis_name),
+           no = spss_metadata$suggested_name )
+
   if (see_log)    futile.logger::flog.info("Getting unique labels")
   if (create_log) futile.logger::flog.info("Getting unique labels", name  ="info")
   spss_metadata$value_labels <- vapply ( read_df,
@@ -204,7 +219,7 @@ analyze_gesis_file <- function ( analyze_file,
   if (create_log) futile.logger::flog.info(suggest_message,
                                            name  ="info")
 
-  spss_metadata$suggested_name <- vapply ( spss_metadata$gesis_name,
+  spss_metadata$suggested_name <- vapply ( spss_metadata$suggested_name,
                                            var_name_suggest,
                                            character(1) )
 
