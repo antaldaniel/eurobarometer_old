@@ -2,7 +2,6 @@
 #'
 #' @param df A labelled data.frame to be converted to numeric
 #' @param metadata the metadata
-#' @param conversion_type Defaults to  \code{"factor_binary"}
 #' @param see_log  \code{TRUE} which will print messages to the screen.
 #' @param create_log  It will create log files in the sr_logs director.
 #' @param my_treshold  Can be \code{futile.logger::WARN},
@@ -35,7 +34,6 @@
 
 
 convert_to_numeric <- function ( df, metadata,
-                                  conversion_type = "factor_binary",
                                   see_log = TRUE,
                                   create_log = TRUE,
                                   log_prefix = NA,
@@ -72,83 +70,110 @@ convert_to_numeric <- function ( df, metadata,
 
   }
 
-  factor_conversion <- metadata %>%
-    dplyr::filter ( suggested_conversion == conversion_type) %>%
-    dplyr::filter ( spss_class == "labelled") %>%
-    dplyr::select ( suggested_name ) %>% unlist (.) %>%
-    as.character(.)
+ return_df <- matrix ( data = NA, nrow = nrow(df), ncol = ncol(df))
+ return_df <- as.data.frame(return_df)
+ names (return_df) <- names (df)
 
-  conversion_vars <- which (names (df) %in%  factor_conversion)
-  if ( length(conversion_vars) == 0) stop("No conversion")
-  for ( i in conversion_vars ) {
-    tryCatch({
-      if ( all(is.na(df[,i]))) next
-      if ( conversion_type == "factor_binary") {
-        tmp <- as_factor_binary(x  = labelled::to_character(
-          df[[i]], levels = "labels"))
-        tmp <- as_numeric(tmp)
-      }
-      if ( conversion_type == "multiple_choice") {
-        tmp <- as_factor_binary(x  = labelled::to_character(
-          df[[i]], levels = "labels"))
-        tmp <- as_numeric(tmp)
-      }
-      if ( conversion_type == "factor_3") {
-        tmp <- as_factor_3(x  = labelled::to_character(
-          df[[i]], levels = "labels"))
-        tmp <- as_numeric(tmp)
-        }
-      if ( conversion_type == "factor_4") {
-        tmp <- as_factor_4(x  = labelled::to_character(
-          df[[i]], levels = "labels"))
-        tmp <- as_numeric(tmp)
-      }
-      if ( conversion_type == "factor_5") {
-        tmp <- as_factor_5(x  = labelled::to_character(
-          df[[i]], levels = "labels"))
-        tmp <- as_numeric(tmp)
-      }
-      if ( conversion_type == "factor_pos_neg") {
-        tmp <- as_factor_pos_neg(x  = labelled::to_character(
-          df[[i]], levels = "labels"))
-        tmp <- as_numeric(tmp)
-      }
-      if ( conversion_type == "factor_yes_no_4") {
-        tmp <- as_factor_yes_no_4(x  = labelled::to_character(
-          df[[i]], levels = "labels"))
-        tmp <- as_numeric(tmp)
-      }
+ numeric_vars <- which (metadata$suggested_conversion == "numeric")
+ chr_vars <- which ( ! metadata$suggested_conversion %in% c("factor_3",
+                                                            "factor_4", "factor_5", "factor_binary", "factor_pos_neg",
+                                                            "factor_yes_no_4", "multiple_choice", "keep_numeric",
+                                                            "rescale_date_interview", "numeric"))
 
-      if ( conversion_type == "keep_numeric") {
-        tmp <- keep_numeric(column  = labelled::to_character(
-          df[[i]], levels = "labels"))
-      }
-      if ( conversion_type == "rescale_date_interview") {
-        tmp <- rescale_date_interview(column  = labelled::to_character(
-          df[[i]], levels = "labels"))
-      }
-    },
-    error = function(cond) {
-      error_message <- paste0(i, cond)
-      if (see_log)    futile.logger::flog.error(error_message)
-      if (create_log) futile.logger::flog.error(error_message,
-                                                name  ="error")
-    },
-    warning = function(cond){
-      warning_message <- paste0(i, cond)
-      if (see_log)    futile.logger::flog.error(warning_message)
-      if (create_log) futile.logger::flog.error(warning_message,
-                                                name  ="error")
-    },
-    finally = {
-      df[,i] <- tmp
-    })
-  }
+ paste(names (df)[convert_factor_3], collapse = ", ")
+ convert_factor_3 <-  which (metadata$suggested_conversion == "factor_3")
+ convert_factor_4 <-  which (metadata$suggested_conversion == "factor_4")
+ convert_factor_5 <-  which (metadata$suggested_conversion == "factor_5")
+ convert_factor_binary <-  which (metadata$suggested_conversion == "factor_binary")
+ convert_pos_neg <-  which (metadata$suggested_conversion == "factor_pos_neg")
+ convert_yes_no_4 <-  which (metadata$suggested_conversion == "factor_yes_no_4")
+ convert_multiple_choice <-  which (metadata$suggested_conversion == "multiple_choice")
+ convert_keep_numeric <- which (metadata$suggested_conversion == "keep_numeric")
+ convert_rescale_date <- which (metadata$suggested_conversion == "rescale_date_interview")
 
-  msg <-  paste0("\nThe ", conversion_type, " ->  numeric variable conversions took place\n",
-                 paste ( factor_conversion, collapse = "\n") )
-  if (see_log)    futile.logger::flog.info(msg)
-  if (create_log) futile.logger::flog.info(msg,
-                                           name  ="info")
-  return(df)
+ factor_3_message <- paste0("Converting ", length(convert_factor_3), " three level factors to numeric,\n",
+                            paste(names (df)[convert_factor_3], collapse = ", ") )
+ futile.logger::flog.info (factor_3_message, name="info")
+ futile.logger::flog.info (factor_3_message )
+ for (i in convert_factor_3) return_df[[i]] <- as_numeric(as_factor_3(df[[i]]))
+
+ factor_4_message <- paste0("Converting ", length(convert_factor_4), " three level factors to numeric,\n",
+                            paste(names (df)[convert_factor_4], collapse = ", ") )
+ futile.logger::flog.info (factor_4_message, name="info")
+ futile.logger::flog.info (factor_4_message )
+
+ for (i in convert_factor_4) return_df[[i]] <- as_numeric(as_factor_4(df[[i]]))
+
+ factor_5_message <- paste0("Converting ", length(convert_factor_5), " three level factors to numeric,\n",
+                            paste(names (df)[convert_factor_5], collapse = ", ") )
+ futile.logger::flog.info (factor_5_message, name="info")
+ futile.logger::flog.info (factor_5_message )
+ for (i in convert_factor_5) return_df[[i]] <- as_numeric(as_factor_5(df[[i]]))
+
+ factor_binary_message <- paste0("Converting ", length(convert_factor_binary),
+                            " binary factors to numeric:\n",
+                            paste(names (df)[convert_factor_binary], collapse = ", ") )
+ futile.logger::flog.info ( factor_binary_message, name="info")
+ futile.logger::flog.info ( factor_binary_message )
+ for (i in convert_factor_binary) return_df[[i]] <- as_numeric(as_factor_binary(df[[i]]))
+
+ factor_mc_message <- paste0("Converting ", length(convert_multiple_choice),
+                                 " binary multiple_choice variables to numeric:\n",
+                                 paste(names (df)[convert_multiple_choice],
+                                       collapse = ", ") )
+ futile.logger::flog.info ( factor_mc_message, name="info")
+ futile.logger::flog.info ( factor_mc_message )
+ for (i in convert_multiple_choice) return_df[[i]] <- as_numeric(as_factor_binary(df[[i]]))
+
+ factor_pos_neg_msg <- paste0("Converting ", length(convert_pos_neg),
+                             " three-level (negative, neutral, positive) factors:\n",
+                             paste(names (df)[convert_pos_neg],
+                                   collapse = ", ") )
+ futile.logger::flog.info ( factor_pos_neg_msg, name="info")
+ futile.logger::flog.info ( factor_pos_neg_msg )
+ for (i in convert_pos_neg) return_df[[i]] <- as_numeric(as_factor_pos_neg(df[[i]]))
+
+ factor_yes_no_4_msg <- paste0("Converting ", length(convert_yes_no_4),
+                              " four-level (2 negative, 2 positive) factors:\n",
+                              paste(names (df)[convert_yes_no_4],
+                                    collapse = ", ") )
+ futile.logger::flog.info ( factor_yes_no_4_msg, name="info")
+ futile.logger::flog.info ( factor_yes_no_4_msg)
+ for (i in convert_yes_no_4) return_df[[i]] <- as_numeric(as_factor_yes_no_4(df[[i]]))
+
+ convert_keep_numeric_msg <- paste0("Converting ", length(convert_keep_numeric),
+                            " numeric variables with words or units:\n",
+                            paste(names (df)[convert_keep_numeric],
+                                  collapse = ", ") )
+ futile.logger::flog.info ( convert_keep_numeric_msg, name="info")
+ futile.logger::flog.info ( convert_keep_numeric_msg  )
+ for (i in convert_keep_numeric) return_df[[i]] <- keep_numeric(df[[i]])
+
+
+ convert_date_msg <- paste0("Converting ", length(convert_rescale_date),
+                               " three-level (negative, neutral, positive) factors:\n",
+                               paste(names (df)[convert_rescale_date],
+                                     collapse = ", ") )
+ futile.logger::flog.info ( convert_date_msg , name="info")
+ futile.logger::flog.info ( convert_date_msg )
+ for (i in convert_rescale_date) return_df[[i]] <- rescale_date_interview(df[[i]])
+
+ numeric_vars_msg <- paste0("Removing labels from ", length(numeric_vars),
+                            " numeric variables:\n",
+                            paste(names (df)[numeric_vars],
+                                  collapse = ", ") )
+ futile.logger::flog.info ( numeric_vars_msg  , name="info")
+ futile.logger::flog.info ( numeric_vars_msg  )
+ for (i in numeric_vars) return_df[[i]] <- as.numeric(labelled::to_character(df[[i]]))
+
+ chr_vars_msg <- paste0("Removing labels from ", length(chr_vars),
+                            " numeric variables:\n",
+                            paste(names (df)[chr_vars],
+                                  collapse = ", ") )
+ futile.logger::flog.info ( chr_vars_msg, name="info")
+ futile.logger::flog.info ( chr_vars_msg )
+ for (i in chr_vars) return_df[[i]] <- as.factor(labelled::to_character(df[[i]]))
+
+
+return(return_df)
 }
