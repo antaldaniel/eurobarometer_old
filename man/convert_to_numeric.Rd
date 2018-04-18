@@ -4,16 +4,13 @@
 \alias{convert_to_numeric}
 \title{Type conversion on a labelled data frame}
 \usage{
-convert_to_numeric(df, metadata, conversion_type = "factor_binary",
-  see_log = TRUE, create_log = TRUE, log_prefix = NA, log_id = NA,
-  my_treshold = futile.logger::INFO)
+convert_to_numeric(df, metadata, see_log = TRUE, create_log = TRUE,
+  log_prefix = NA, log_id = NA, my_treshold = futile.logger::INFO)
 }
 \arguments{
 \item{df}{A labelled data.frame to be converted to numeric}
 
 \item{metadata}{the metadata}
-
-\item{conversion_type}{Defaults to  \code{"factor_binary"}}
 
 \item{see_log}{\code{TRUE} which will print messages to the screen.}
 
