@@ -153,9 +153,9 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
       if (create_log) futile.logger::flog.info(read_message,
                                                name  ="info")
       saveRDS( read_df, paste0(tempdir(), "\\", lab_file_name))
+    })
     }
-    )
-    }
+
 
   ###Analyze the  metadata file----
  if ( is.null(metadata) ) {
@@ -164,12 +164,13 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
      if (see_log)    futile.logger::flog.info(metadata_read_message)
      if (create_log) futile.logger::flog.info(metadata_read_message,
                                               name  ="info")
-     metadata <- analyze_gesis_file( selected_file ,
-                    see_log = see_log,
-                    create_log = create_log,
-                    log_prefix = log_prefix,
-                    log_id = log_id,
-                    my_treshold = my_treshold )
+     metadata <- analyze_gesis_file(
+        analyze_file = read_df ,
+        see_log = see_log,
+        create_log = create_log,
+        log_prefix = log_prefix,
+        log_id = log_id,
+        my_treshold = my_treshold )
 
      if ( all(metadata$gesis_name == "")) { stop("Wrong analysis.")}
    },
