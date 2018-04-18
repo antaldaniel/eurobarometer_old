@@ -34,10 +34,13 @@ as_factor_3 <- function(x) {
   chr_0 <- unique_values [ which(unique_values %in% voc$neutral) ]
   chr_1 <- unique_values [ which(unique_values %in% voc$pos_1  ) ]
   chr_2 <- unique_values [ which(unique_values %in% voc$pos_2  ) ]
-  chr   <- plyr::mapvalues (num, from = c(0,1,2),
-                                 to = c(chr_0,
-                                        chr_1,
-                                        chr_2))
+
+  chr <- num
+
+  chr[which ( num == 0)] <- chr_0
+  chr[which ( num == 1)] <- chr_1
+  chr[which ( num == 2)] <- chr_2
+
   fct <- factor(chr, levels = c(chr_0,chr_1,chr_2))
   num <- as.numeric(num)
 
