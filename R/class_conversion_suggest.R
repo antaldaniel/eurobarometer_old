@@ -8,7 +8,6 @@
 #' }
 #' @export
 
-#x <- read_df[[773]]
 class_conversion_suggest <- function (x) {
 
   if (class(x) %in% c("numeric", "integer")) return("numeric")
