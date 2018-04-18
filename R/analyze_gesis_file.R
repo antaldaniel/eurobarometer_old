@@ -230,6 +230,10 @@ analyze_gesis_file <- function ( analyze_file,
       spss_name == "wex",
       yes = "wex",
       no = suggested_name )) %>%
+    dplyr::mutate ( suggested_name = ifelse(
+      spss_name == "wextra",
+      yes = "wex",
+      no = suggested_name )) %>%
     dplyr::mutate ( suggested_name = ifelse (
       tolower(spss_name) == "w1",
       yes = "w1",
