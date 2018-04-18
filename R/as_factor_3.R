@@ -22,6 +22,7 @@ as_factor_3 <- function(x) {
 
   voc <- vocabulary_items_get ( context_var = "factor_3")
   voc <- lapply (voc, tolower)
+  unique_values <- unique(x)
 
   num  <- ifelse ( x   %in% voc$neutral, "0", x )
   num  <- ifelse ( num %in% voc$pos_1,   "1", num )
@@ -29,7 +30,6 @@ as_factor_3 <- function(x) {
   num  <- ifelse ( num %in% c("0", "1", "2"),
                    as.character(num), NA)
   num <- as.numeric(num)
-  unique_values <- unique(x)
 
   chr_0 <- unique_values [ which(unique_values %in% voc$neutral) ]
   chr_1 <- unique_values [ which(unique_values %in% voc$pos_1  ) ]
