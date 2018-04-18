@@ -30,6 +30,7 @@
 #' @importFrom magrittr '%>%'
 #' @importFrom stringr str_sub
 #' @importFrom dplyr mutate mutate_if mutate_at filter select
+#' @importFrom labelled remove_labels
 #' @examples
 #' \dontrun{
 #' ##use your own file path:
@@ -87,7 +88,7 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
   }
 
 
-  ##Setup log file creation ---
+  ##Setup log file creation---
 
     if (create_log == TRUE) {
     directory_message <- NA
@@ -117,7 +118,7 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
 
   }
 
-  ##Try to read in the file
+  ##Try to read in the file----
   lab_file_name <- gsub(".sav", ".lab",
                         gsub(data_dir, "", selected_file ))
 
@@ -158,6 +159,7 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
     )
     }
 
+  ###Analyze the  metadata file----
  if ( is.null(metadata) ) {
    tryCatch({
      metadata_read_message <- "Trying to analyze the file.\nThis may take a few minutes."
@@ -196,6 +198,7 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
    )}
 
 
+ ###New names----
  if ( !is.null(new_names)) {
   warning("Optional names are not yet functional")
  }
@@ -216,54 +219,15 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
 
  }
 
- conversion_types <- c("factor_binary", "multiple_choice",
-                       "factor_3", "factor_4", "factor_5",
-                       "factor_pos_neg", "factor_yes_no_4",
-                       "keep_numeric", "rescale_date_interview")
+ ##Conversions---
+ return_df <- convert_to_numeric(df = read_df, metadata = metadata )
 
- for (i in 1:length(conversion_types)) {
-   tryCatch(
-     {
-       read_df <- convert_to_numeric( df = read_df,
-                                     metadata = metadata,
-                                     conversion_type = conversion_types[i],
-                                     see_log = see_log,
-                                     create_log = create_log,
-                                     log_prefix = log_prefix,
-                                     log_id = log_id,
-                                     my_treshold = my_treshold)
-     },
-     error = function(cond) {
-       error_message <- paste0(i, cond)
-       if (see_log)    futile.logger::flog.error(error_message)
-       if (create_log) futile.logger::flog.error(error_message,
-                                                 name  ="error")
-     },
-     warning = function(cond){
-       warning_message <- paste0(i, cond)
-       if (see_log)    futile.logger::flog.error(warning_message)
-       if (create_log) futile.logger::flog.error(warning_message,
-                                                 name  ="error")
-     },
-     finally = {
-       info_msg <- paste0(conversion_types[i], " finished.\n")
-       if (see_log)    futile.logger::flog.info(info_msg)
-       if (create_log) futile.logger::flog.info(info_msg,
-                                                 name  ="info")
-     }
-    )
-
-   }
-  read_df <- read_df %>%
-    dplyr::mutate_if ( haven::is.labelled, haven::as_factor) %>%
-    dplyr::mutate_all ( haven::zap_labels)
-
-  if ( save_file ) {
+ if ( save_file ) {
     rds_file <- gsub(".sav", ".rds" , selected_file)
     metadata_file <- gsub( ".rds", "_metadata.rds", rds_file)
     saveRDS(read_df, rds_file)
     saveRDS(metadata, metadata_file)
-    save_msg <- paste0("Saved as\n", rds_file, "\nand\n",
+    save_msg <- paste0("Saved data as\n", rds_file, "\n... and metadata as\n",
                        metadata_file)
     if (see_log)    futile.logger::flog.info(save_msg)
     if (create_log) futile.logger::flog.info(save_msg,
