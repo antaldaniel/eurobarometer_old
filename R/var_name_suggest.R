@@ -47,6 +47,8 @@ var_name_suggest <- function ( x ) {
   x <- gsub ( "\\.", "", x)
   x <- gsub ( "_10mm", "_10m", x)
   x <- gsub ( "__", "_", x)
+  x <- gsub ( "cy-tcc", "cy_tcc", x)
+
   x <- ifelse ( stringr::str_sub(x, 1,1) == "_",
                 stringr::str_sub(x, 2,-1),
                 x)
