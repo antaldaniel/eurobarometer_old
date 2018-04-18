@@ -179,9 +179,17 @@ analyze_gesis_file <- function ( analyze_file,
                            1,1, " ") == spss_metadata$questionnaire_item,
            yes = stringr::word(tolower(spss_metadata$gesis_name), 2,-1, " "),
             no = tolower(spss_metadata$gesis_name))
+
+  spss_metadata$suggested_name <- ifelse ( spss_metadata$questionnaire_item == "w1",
+                                           yes = "w1",
+                                           no = spss_metadata$suggested_name )
+
   spss_metadata$suggested_name <- ifelse ( is.na(spss_metadata$suggested_name),
            yes = tolower(spss_metadata$gesis_name),
            no = spss_metadata$suggested_name )
+
+
+
 
   if (see_log)    futile.logger::flog.info("Getting unique labels")
   if (create_log) futile.logger::flog.info("Getting unique labels", name  ="info")
