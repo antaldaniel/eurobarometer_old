@@ -12,3 +12,4 @@
 * 0.0.0.9008 Much improved type detection and error handling 
 * 0.0.0.9009 Improved name suggestion, better conversions. 
 * 0.0.1.0001 Now uses a single vocabulary file. 
+* 0.0.1.0004 Adds frequency factors gesis_metadata_get(). Many new exceptions are handled.
