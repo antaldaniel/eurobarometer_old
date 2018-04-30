@@ -219,7 +219,10 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
  names(read_df) <- metadata$suggested_name
 
  ##Conversions---
- return_df <- convert_to_numeric(df = read_df, metadata = metadata)
+ if ( conversion == "numeric") {
+   return_df <- convert_to_numeric(df = read_df, metadata = metadata)
+ }
+
 
  ##Adding country code---
  if ( "country_code_iso_3166" %in% names (return_df)) {
@@ -246,6 +249,6 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
                                              name  ="info")
 
   }
-  return(read_df)
+  return(return_df)
 }
 
