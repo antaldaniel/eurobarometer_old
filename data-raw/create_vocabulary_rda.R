@@ -40,11 +40,18 @@ values_factor_5 <- readxl::read_excel(path = "data-raw/Vocabulary.xlsx",
   mutate ( context = "factor_5") %>%
   gather ( names, values, !! 2:(ncol(.)-1))
 
-vocabulary <- rbind ( values_factor_binary , values_factor_pos_neg,
+values_frequency_factor <- readxl::read_excel(path = "data-raw/Vocabulary.xlsx",
+                                              sheet = "factor_frequency" ) %>%
+  mutate ( context = "factor_frequency") %>%
+  gather ( names, values, !! 2:(ncol(.)-1))
+
+vocabulary <- rbind ( values_factor_binary, values_factor_pos_neg,
                values_factor_yes_no_4, values_factor_3,
-               values_factor_4, values_factor_5) %>%
+               values_factor_4, values_factor_5,
+               values_frequency_factor) %>%
   mutate ( names = forcats::fct_relevel(names, c(
-    "neg_2", "neg_1", "neutral", "pos_1", "pos_2")))
+    "neg_2", "neg_1", "neutral", "pos_1", "pos_2", "pos_3",
+    "36",  "12", "3", "0")))
 
 vocabulary <- vocabulary %>%
   spread ( names, values )
