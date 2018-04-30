@@ -53,25 +53,33 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
                               log_id = NA,
                               my_treshold = futile.logger::INFO) {
 
-  ##Reading the data file----
-  if  ( is.null(data_dir )) data_dir <- tempdir()
-  data_dir_files  <- dir ( data_dir )
+  ##Determing the data file name----
+  if  ( is.null(data_dir )) {
+    data_dir <- tempdir()
+    }
+  data_dir_files <- dir ( data_dir )
   data_dir_files <- data_dir_files[grepl(".sav", data_dir_files)]
-  selected_file <- which (grepl(zacat_id, data_dir_files))
+  selected_file  <- which (grepl(zacat_id, data_dir_files))
   if ( length(selected_file) == 0 ) stop("No such file in the data directory.")
   if ( length(selected_file) >  1 ) stop("Multiple files are matched by " ,
                                          zacat_id, "\nPlease use a unique identifier.")
   selected_file <- paste0(data_dir, data_dir_files [selected_file])
 
+
+
   #Searching for metadata file----
-  if  ( is.null(metadata_dir ) ) metadata_dir <- tempdir()
+  if  ( is.null(metadata_dir)) {
+    metadata_dir <- tempdir()
+  }
   metadata_dir_files <- dir ( metadata_dir)
   metadata_dir_files <- metadata_dir_files[grepl("_metadata.rds",
                                          metadata_dir_files)]
   selected_metadata_file <- which (grepl(zacat_id, metadata_dir_files))
 
 
-  if ( length(selected_metadata_file ) == 0) {
+
+  ##Trying to read in the metadata file -----
+  if ( length(selected_metadata_file) == 0) {
     metadata <- NULL
   } else {
     if ( length(selected_metadata_file) >  1 ) stop("Multiple files are matched by " ,
@@ -83,11 +91,18 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
       if (create_log) futile.logger::flog.info("Reading metadata data from temp directory",
                                                name  ="info")
       metadata <- readRDS(selected_metadata_file)
+
+      if ( is.null(metadata)) {
+        null_metadata_file_msg <- "The metadata file is empty or could not be read."
+        if (see_log)    futile.logger::flog.info(null_metadata_file_msg)
+        if (create_log) futile.logger::flog.info(null_metadata_file_msg,
+                                                 name  ="error")
+      }
+      }
     }
   }
 
   ##Setup log file creation---
-
     if (create_log == TRUE) {
     directory_message <- NA
     if (! file.exists("sr_logs")) {
@@ -164,7 +179,7 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
      if (create_log) futile.logger::flog.info(metadata_read_message,
                                               name  ="info")
      metadata <- analyze_gesis_file(
-        analyze_file = read_df,
+        gesis_file = read_df,
         see_log = see_log,
         create_log = create_log,
         log_prefix = log_prefix,
@@ -193,7 +208,8 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
                              gsub(data_dir, "", selected_file))
      saveRDS( metadata, paste0(tempdir(), "\\", metadata_backup ))
    }
-   )}
+   ) #end of tryCatch
+  } #end of is.null(metadata)
 
 
  ###New names----
