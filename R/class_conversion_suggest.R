@@ -10,14 +10,16 @@
 
 class_conversion_suggest <- function (x) {
 
-  if (class(x) %in% c("numeric", "integer")) return("numeric")
-  if (class(x) %in% c("character")) return("character")
-  if (class(x) %in% c("logical")) return("logical")
-  if (class(x) %in% c("labelled")) {
+  if ("numeric" %in% class(x) ||
+      "integer" %in% class(x))   return("numeric")
+  if ("factor" %in% class(x))    return("factor")
+  if ("logical" %in% class(x))   return("logical")
+  if ("character" %in% class(x)) return("character")
+
+  if ("labelled" %in% class(x)) {
 
     x <- as.character(haven::as_factor(x))
     unique_values <- tolower(as.character(x))
-
     unique_values <- unique (unique_values)[ ! unique(x) %in% c(NA, "dk", "refusal")]
     unique_values <- ifelse (grepl("inap", tolower(unique_values)), NA,  unique_values)
     unique_values <- unique(unique_values[!is.na(unique_values)])
@@ -76,6 +78,7 @@ class_conversion_suggest <- function (x) {
       ## Four unique values values
       if ( length (unique_values) == 4 ) {
         voc <- vocabulary_items_get ( context_var = "factor_4" )
+        unique_values %in% voc
         for ( i in 1:nrow(voc)) {
           a <- sum ( unique_values %in% tolower(voc$neutral[i]))
           b <- sum ( unique_values %in% tolower(voc$pos_1[i]))
