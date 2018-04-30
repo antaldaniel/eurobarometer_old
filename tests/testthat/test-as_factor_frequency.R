@@ -10,3 +10,11 @@ test_that("correct conversion takes place", {
   c( 3,36,6,12,NA )
   )
 })
+
+test_that("correct conversion takes place", {
+  expect_equal(as_numeric(
+    as_factor_frequency( x  = c("Less often", "Several times a month",
+     "Every 2-3 months", "Once a month", "DK"))),
+               c( 3,36,6,12,NA )
+  )
+})
