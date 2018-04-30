@@ -85,6 +85,7 @@ convert_to_numeric <- function ( df, metadata,
  convert_factor_3 <-  which (metadata$suggested_conversion == "factor_3")
  convert_factor_4 <-  which (metadata$suggested_conversion == "factor_4")
  convert_factor_5 <-  which (metadata$suggested_conversion == "factor_5")
+ convert_factor_frequency <-  which (metadata$suggested_conversion == "factor_frequency")
  convert_factor_binary <-  which (metadata$suggested_conversion == "factor_binary")
  convert_pos_neg <-  which (metadata$suggested_conversion == "factor_pos_neg")
  convert_yes_no_4 <-  which (metadata$suggested_conversion == "factor_yes_no_4")
@@ -151,6 +152,31 @@ convert_to_numeric <- function ( df, metadata,
  for (i in convert_factor_5) {
    tryCatch({
      return_df[[i]] <- as_numeric(as_factor_5(df[[i]]))
+   },
+   error = function(cond) {
+     error_chr_convert <- paste0(i, "/", ncol(df), " ",
+                                 names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.error(error_chr_convert)
+     if (create_log) futile.logger::flog.error(error_chr_convert,
+                                               name  ="error")
+     return_df[[i]] <- as.character(df[[i]])
+   },
+   warning = function(cond){
+     warning_chr_convert <- paste0(i, "/", ncol(df), " ", names(df)[i], "\n", cond)
+     if (see_log)    futile.logger::flog.warn(warning_chr_convert)
+     if (create_log) futile.logger::flog.warn(warning_chr_convert,
+                                              name  ="warn")
+   },
+   finally = {})
+ }
+
+ factor_frequency_message <- paste0("Converting ", length(convert_factor_frequency), " quasi-numeric frequency factors to numeric,\n",
+                                    paste(names (df)[convert_factor_frequency], collapse = ", ") )
+ futile.logger::flog.info (factor_frequency_message, name="info")
+ futile.logger::flog.info (factor_frequency_message )
+ for (i in convert_factor_frequency) {
+   tryCatch({
+     return_df[[i]] <- as_numeric(as_factor_frequency(df[[i]]))
    },
    error = function(cond) {
      error_chr_convert <- paste0(i, "/", ncol(df), " ",

@@ -77,8 +77,17 @@ class_conversion_suggest <- function (x) {
     }
       ## Four unique values values
       if ( length (unique_values) == 4 ) {
+
+        voc <- vocabulary_items_get ( context_var = "factor_frequency" )
+        for ( i in 1:nrow(voc)) {
+          a <- sum ( unique_values %in% tolower(voc[['36']]))
+          b <- sum ( unique_values %in% tolower(voc[['12']]))
+          c <- sum ( unique_values %in% tolower(voc[['6']]))
+          d <- sum ( unique_values %in% tolower(voc[['3']]))
+          if ( (a+b+c+d) == 4 ) return(as.character("factor_frequency"))
+        }
+
         voc <- vocabulary_items_get ( context_var = "factor_4" )
-        unique_values %in% voc
         for ( i in 1:nrow(voc)) {
           a <- sum ( unique_values %in% tolower(voc$neutral[i]))
           b <- sum ( unique_values %in% tolower(voc$pos_1[i]))
