@@ -99,8 +99,7 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
                                                  name  ="error")
       }
       }
-    }
-  }
+    } #end of else
 
   ##Setup log file creation---
     if (create_log == TRUE) {
