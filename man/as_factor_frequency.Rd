@@ -7,14 +7,13 @@
 as_factor_frequency(x)
 }
 \arguments{
-\item{x}{An input vector to be converted to a
-four non-negative level variable}
+\item{x}{An input vector to be converted to time frequencies}
 }
 \description{
 Constructor for quasi-numeric frequency factors
 }
 \examples{
-as_factor_4( c("Not at all", "Low",
-               "Medium", "Strong", "DK"))
+as_factor_frequency( c("Less often", "Several times a month",
+               "Every 2-3 months", "Once a month", "DK"))
 
 }
