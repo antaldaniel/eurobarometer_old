@@ -188,9 +188,6 @@ analyze_gesis_file <- function ( analyze_file,
            yes = tolower(spss_metadata$gesis_name),
            no = spss_metadata$suggested_name )
 
-
-
-
   if (see_log)    futile.logger::flog.info("Getting unique labels")
   if (create_log) futile.logger::flog.info("Getting unique labels", name  ="info")
   spss_metadata$value_labels <- vapply ( read_df,
@@ -204,6 +201,7 @@ analyze_gesis_file <- function ( analyze_file,
   spss_metadata$suggested_conversion <- vapply ( read_df,
                                                  class_conversion_suggest,
                                                  character(1) )
+
 
   #explicit exceptions for keep_numeric_vars
   keep_numeric_vars <- c("duration_of_interview_minutes",
@@ -227,49 +225,25 @@ analyze_gesis_file <- function ( analyze_file,
   if (create_log) futile.logger::flog.info(suggest_message,
                                            name  ="info")
 
-  spss_metadata$suggested_name <- vapply ( spss_metadata$suggested_name,
-                                           var_name_suggest,
-                                           character(1) )
+  spss_metadata$suggested_name <- gesis_longname_harmonization(
+    spss_metadata$gesis_name
+  )
 
   ##Exceptions based on short spss name
   naming_exc_message <- paste0("Reviewing exceptions with get_naming_exceptions()")
   if (see_log)    futile.logger::flog.info( naming_exc_message )
   if (create_log) futile.logger::flog.info( naming_exc_message , name  ="info")
 
+  spss_metadata$suggested_name <- gesis_shortname_harmonization(
+    short_name = spss_metadata$spss_name,
+    long_name  = spss_metadata$suggested_name
+  )
+
   spss_metadata <- spss_metadata %>%
-    dplyr::mutate ( suggested_name = ifelse (
-      spss_name == "split",
-      yes = "split",
-      no = suggested_name)) %>%
-    dplyr::mutate ( suggested_name = ifelse (
-      spss_name == "uniqid",
-      yes = "uniqid",
-      no = suggested_name)) %>%
     dplyr::mutate ( suggested_name = ifelse (
       suggested_conversion == "multiple_choice",
       yes = paste0("mc_", suggested_name ),
-      no = suggested_name)) %>%
-    dplyr::mutate ( suggested_name = ifelse(
-      spss_name == "wex",
-      yes = "wex",
-      no = suggested_name )) %>%
-    dplyr::mutate ( suggested_name = ifelse(
-      spss_name == "wextra",
-      yes = "wex",
-      no = suggested_name )) %>%
-    dplyr::mutate ( suggested_name = ifelse (
-      tolower(spss_name) == "w1",
-      yes = "w1",
-      no = suggested_name ))
-
-  ##Explicit exceptions
-  naming_exceptions <- get_naming_exceptions()  #must not be factors
-  for (i in 1:length(naming_exceptions)) {
-    spss_metadata$suggested_name <- ifelse (
-      spss_metadata$gesis_name == naming_exceptions$exact[i],
-      naming_exceptions$new_name[i],
-      spss_metadata$suggested_name)
-  }
+      no = suggested_name))
 
   spss_metadata <- spss_metadata %>%
     dplyr::mutate (suggested_conversion  = ifelse ( stringr::str_sub(spss_metadata$suggested_name,1,7) == "region_",
@@ -400,7 +374,7 @@ analyze_gesis_file <- function ( analyze_file,
       n_factors <- summary_data$n[which(summary_data$suggested_conversion  == "factor")]
       conversion_rate_message <- paste0("\n",
         (100-(round(n_factors / nrow(return_metadata),2)*100)), "% of the variables are detected and can be converted automatically.\n",
-        (round(n_factors / nrow(return_metadata),2)*100), "% of the variables will be converted to factors."
+        (round(n_factors / nrow(return_metadata),2)*100), "% of the variables will be converted to factors without harmonizing their values."
       )
       summary_message <- paste0("\nSuggested conversion ", summary_data[1,1], ": ",
                                 summary_data[1,2], "\n")
