@@ -1,8 +1,34 @@
 library (eurobarometer)
-library(testthat)
+library (testthat)
 context("Correct class conversion to 3 non-negative levels")
+my_categories <- as_factor_3( c("Rural area or village",
+                                "Small or medium-sized town",
+                                "Inap.", "Large town/city",
+                                "DK", "Large town/city"))
 
-test_that("correct conversion takes place", {
+test_that("correct character conversion takes place", {
+  expect_equal(as_character(as_factor_3( c("Rural area or village",
+                              "Small or medium-sized town",
+                              "Inap.", "Large town/city",
+                              "DK", "Large town/city")))[4],
+               "large town/city"
+  )
+})
+
+test_that("correct character conversion takes place", {
+  expect_equal(levels(
+    as_factor(
+      as_factor_3(
+        c("Rural area or village",
+         "Small or medium-sized town",
+        "Inap.", "Large town/city",
+        "DK", "Large town/city")))[4]),
+        c("rural area or village","small or medium-sized town",
+          "large town/city" )
+  )
+})
+
+test_that("correct numeric conversion takes place", {
   expect_equal(as_factor_3( c("Rural area or village",
                               "Small or medium-sized town",
                               "Inap.", "Large town/city",
