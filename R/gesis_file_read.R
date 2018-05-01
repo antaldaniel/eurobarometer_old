@@ -119,10 +119,12 @@ gesis_file_read <- function ( zacat_id = "ZA5688",
    return_df <- convert_to_numeric(df = read_df, metadata = metadata)
  }
 
+ tmp <- return_df[,which ( grepl("country_code_iso_3166", names(return_df)))]
+
  ##Adding country code---
- if ( "country_code_iso_3166" %in% names (return_df)) {
+ if (length(tmp)>0) {
    tmp <- stringr::str_sub(
-       return_df$country_code_iso_3166, 1,2 )
+       as.character(tmp), 1,2 )
    tmp <- as.factor(tmp)
    return_df$country_code <- tmp
  } else {
@@ -141,7 +143,7 @@ gesis_file_read <- function ( zacat_id = "ZA5688",
     metadata_file <- gsub( ".rds", "_metadata.rds", rds_file)
     saveRDS(return_df, rds_file)
     saveRDS(metadata, metadata_file)
-    save_msg <- paste0("Saved data as\n", rds_file, "\n... and metadata as\n",
+    save_msg <- paste0("\nSaved data as ", rds_file, "\nSaved metadata as ",
                        metadata_file)
     if (see_log)    futile.logger::flog.info(save_msg)
     if (create_log) futile.logger::flog.info(save_msg,
