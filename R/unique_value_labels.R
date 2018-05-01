@@ -34,9 +34,9 @@ unique_value_labels <- function ( x, numeric_values = FALSE ) {
 
   unique_values <- unique(x)
   unique_values <- unique_values [!is.na(unique_values)]
+  unique_values <- sort(unique_values)
   x <- substr ( paste ( unique_values,
                         collapse = "|"), 1, 300)
 
-  return (x)
-
+  x
 }
