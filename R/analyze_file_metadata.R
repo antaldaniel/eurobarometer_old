@@ -53,7 +53,7 @@ analyze_file_metadata <- function (
         log_id = log_id,
         my_treshold = my_treshold )
 
-      if ( all(metadata$gesis_name == "")) { stop("Wrong analysis.")}
+      if ( all(metadata$gesis_name == "")) { stop("Empty metadata file.")}
     },
     error = function(cond) {
       if (see_log)    futile.logger::flog.error(cond)
