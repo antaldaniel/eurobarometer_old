@@ -4,12 +4,17 @@
 \alias{analyze_file_metadata}
 \title{Analyze the metadata of a file}
 \usage{
-analyze_file_metadata(read_df, metadata_dir = NULL, save_file = TRUE,
+analyze_file_metadata(read_df, metadata_dir, save_file = TRUE,
   see_log = TRUE, create_log = TRUE, log_prefix = NA, log_id = NA,
   my_treshold = futile.logger::INFO)
 }
 \arguments{
 \item{read_df}{A data frame read in by \code{\link{zacat_id_data}}}
+
+\item{metadata_dir}{The path of the directory of the metadata files, if omitted,
+will be \code{link{base::tempdir()}}.}
+
+\item{save_file}{Defaults to \code{TRUE} and saves a temporary metadata file.}
 
 \item{see_log}{\code{TRUE} which will print messages to the screen.}
 

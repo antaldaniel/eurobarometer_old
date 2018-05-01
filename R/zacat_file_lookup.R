@@ -14,7 +14,6 @@
 #' @examples
 #' \dontrun{
 #' ##use your own file path:
-#' ##The log parameters can be passed on optionally as ...
 #' zacat_file_lookup ( zacat_id = "ZA4744",
 #'                 data_dir = data_dir,
 #'                 see_log = see_log,

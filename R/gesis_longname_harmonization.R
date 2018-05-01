@@ -3,6 +3,7 @@
 #' Using the data in the short variable names (codes) to correctly assign a
 #' long variable name
 #' @param long_name  The updated metadata$suggested_name
+#' @importFrom dplyr left_join
 #' @examples
 #' \dontrun{
 #'  gesis_shortname_harmonization (long_name  = "Weight extrapolated 15+")
@@ -11,6 +12,8 @@
 
 
 gesis_longname_harmonization <- function (long_name) {
+  . <- NULL
+
   naming_exceptions <- get_naming_exceptions()
   patterns <- tolower(naming_exceptions$exact)
 

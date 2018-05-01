@@ -4,15 +4,18 @@
 \alias{zacat_id_data}
 \title{Read a data file by ZACAT ID.}
 \usage{
-zacat_id_data(zacat_id = "ZA4744", data_dir = data_dir,
-  metadata_dir = NULL, save_file = TRUE, see_log = TRUE,
-  create_log = TRUE, log_prefix = NA, log_id = NA,
+zacat_id_data(zacat_id = "ZA4744", metadata_dir = NULL, save_file = TRUE,
+  see_log = TRUE, create_log = TRUE, log_prefix = NA, log_id = NA,
   my_treshold = futile.logger::INFO)
 }
 \arguments{
 \item{zacat_id}{\code{"ZA4744"}}
 
-\item{data_dir}{\code{"data-raw/"}}
+\item{metadata_dir}{\code{"data-raw/"}}
+
+\item{save_file}{Defaults to \code{TRUE} and saves raw data conversion to
+labelled variables into a .lab file. This can be used as a temporary file to
+speed up operations.}
 
 \item{see_log}{\code{TRUE} which will print messages to the screen.}
 
@@ -40,7 +43,7 @@ the file and return it.
 ##use your own file path:
 ##The log parameters can be passed on optionally as ...
 zacat_id_data ( zacat_id = "ZA4744",
-                data_dir = data_dir,
+                metadata_dir = data_dir,
                 see_log = see_log,
                 create_log = creat_log,
                 my_treshold = my_treshold )

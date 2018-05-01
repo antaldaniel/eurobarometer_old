@@ -20,7 +20,6 @@
 #' @examples
 #' \dontrun{
 #' ##use your own file path:
-#' ##The log parameters can be passed on optionally as ...
 #' zacat_id_metadata( zacat_id = "ZA4744",
 #'                 data_dir = data_dir,
 #'                 see_log = see_log,
@@ -32,7 +31,6 @@
 zacat_id_metadata <- function (
   zacat_id = "ZA4744",
   metadata_dir = NULL,
-  save_file = TRUE,
   see_log = TRUE,
   create_log = TRUE,
   log_prefix = NA,

@@ -5,8 +5,8 @@
 \title{Read a mdata file by ZACAT ID.}
 \usage{
 zacat_id_metadata(zacat_id = "ZA4744", metadata_dir = NULL,
-  save_file = TRUE, see_log = TRUE, create_log = TRUE, log_prefix = NA,
-  log_id = NA, my_treshold = futile.logger::INFO)
+  see_log = TRUE, create_log = TRUE, log_prefix = NA, log_id = NA,
+  my_treshold = futile.logger::INFO)
 }
 \arguments{
 \item{zacat_id}{\code{"ZA4744"}}

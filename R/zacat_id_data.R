@@ -4,7 +4,10 @@
 #' or, if omitted, on the current \code{tempdir()}. Then it tries to read in
 #' the file and return it.
 #' @param zacat_id \code{"ZA4744"}
-#' @param data_dir \code{"data-raw/"}
+#' @param metadata_dir \code{"data-raw/"}
+#' @param save_file Defaults to \code{TRUE} and saves raw data conversion to
+#' labelled variables into a .lab file. This can be used as a temporary file to
+#' speed up operations.
 #' @param see_log  \code{TRUE} which will print messages to the screen.
 #' @param create_log  It will create log files in the sr_logs director.
 #' @param my_treshold  Can be \code{futile.logger::WARN},
@@ -21,9 +24,8 @@
 #' @examples
 #' \dontrun{
 #' ##use your own file path:
-#' ##The log parameters can be passed on optionally as ...
 #' zacat_id_data ( zacat_id = "ZA4744",
-#'                 data_dir = data_dir,
+#'                 metadata_dir = data_dir,
 #'                 see_log = see_log,
 #'                 create_log = creat_log,
 #'                 my_treshold = my_treshold )
@@ -32,7 +34,6 @@
 #'
 zacat_id_data <- function (
   zacat_id = "ZA4744",
-  data_dir = data_dir,
   metadata_dir = NULL,
   save_file = TRUE,
   see_log = TRUE,
@@ -40,9 +41,9 @@ zacat_id_data <- function (
   log_prefix = NA,
   log_id = NA,
   my_treshold = futile.logger::INFO) {
-  sav_file_name <- lab_file_name <- NULL
+  sav_file_name <- lab_file_name <- . <- NULL
 
-  zacat_file_name <- zacat_file_lookup(zacat_id, data_dir,
+  zacat_file_name <- zacat_file_lookup(zacat_id, metadata_dir,
                                      see_log = see_log,
                                      create_log = create_log,
                                      my_treshold = my_treshold
@@ -87,7 +88,7 @@ zacat_id_data <- function (
       if (see_log)    futile.logger::flog.info(read_message)
       if (create_log) futile.logger::flog.info(read_message,
                                                name  ="info")
-      saveRDS(read_df, lab_file_name)
+      if(save_file) saveRDS(read_df, lab_file_name)
     })
   }
   return(read_df)
