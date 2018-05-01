@@ -26,8 +26,8 @@ Imports: haven,
     labelled,
     futile.logger,
     sjlabelled,
-    testthat
 Suggests: covr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr
