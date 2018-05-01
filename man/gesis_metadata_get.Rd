@@ -8,7 +8,8 @@ gesis_metadata_get(zacat_id = "last_data_frame", data_dir = NULL)
 }
 \arguments{
 \item{zacat_id}{For example, \code{"ZA5688_v6-0-0"}, as analyzed and saved by
-\code{\link{analyze_gesis_file}}. Defaults to \code{"last_data_frame"}, which is
+\code{\link{analyze_gesis_file}}.
+Defaults to \code{"last_data_frame"}, which is
 the last file in the temporary directory of the current session.}
 
 \item{data_dir}{Defaults to \code{"NULL"}. In this case the \code{"tempdir()"}
