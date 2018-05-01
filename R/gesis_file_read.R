@@ -4,7 +4,7 @@
 #' the end result is always saved to the \code{tempdir()} which is deleted
 #' automatically at the end of each session.  You can retrieve the metadata
 #' from here, should you need it during an interactive session.
-#' @param zacat_id \code{"ZA4744"}
+#' @param zacat_id \code{"ZA5688"}
 #' @param data_dir \code{"data-raw/"}
 #' @param metadata_dir \code{NULL}
 #' @param new_names \code{NULL}
@@ -41,7 +41,7 @@
 #' }
 #' @export
 #'
-gesis_file_read <- function ( zacat_id = "ZA4744",
+gesis_file_read <- function ( zacat_id = "ZA5688",
                               data_dir = "data-raw/",
                               metadata_dir = NULL,
                               new_names = NULL,
@@ -52,54 +52,6 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
                               log_prefix = NA,
                               log_id = NA,
                               my_treshold = futile.logger::INFO) {
-
-  ##Determing the data file name----
-  if  ( is.null(data_dir )) {
-    data_dir <- tempdir()
-    }
-  data_dir_files <- dir ( data_dir )
-  data_dir_files <- data_dir_files[grepl(".sav", data_dir_files)]
-  selected_file  <- which (grepl(zacat_id, data_dir_files))
-  if ( length(selected_file) == 0 ) stop("No such file in the data directory.")
-  if ( length(selected_file) >  1 ) stop("Multiple files are matched by " ,
-                                         zacat_id, "\nPlease use a unique identifier.")
-  selected_file <- paste0(data_dir, data_dir_files [selected_file])
-
-
-
-  #Searching for metadata file----
-  if  ( is.null(metadata_dir)) {
-    metadata_dir <- tempdir()
-  }
-  metadata_dir_files <- dir ( metadata_dir)
-  metadata_dir_files <- metadata_dir_files[grepl("_metadata.rds",
-                                         metadata_dir_files)]
-  selected_metadata_file <- which (grepl(zacat_id, metadata_dir_files))
-
-
-
-  ##Trying to read in the metadata file -----
-  if ( length(selected_metadata_file) == 0) {
-    metadata <- NULL
-  } else {
-    if ( length(selected_metadata_file) >  1 ) stop("Multiple files are matched by " ,
-                                           zacat_id, "\nPlease use a unique identifier.")
-    if ( length(selected_metadata_file) == 1 ) {
-      selected_metadata_file <- paste0(metadata_dir, "\\",
-                                       metadata_dir_files [  selected_metadata_file])
-      if (see_log)    futile.logger::flog.info("Reading metadata from temp directory")
-      if (create_log) futile.logger::flog.info("Reading metadata data from temp directory",
-                                               name  ="info")
-      metadata <- readRDS(selected_metadata_file)
-
-      if ( is.null(metadata)) {
-        null_metadata_file_msg <- "The metadata file is empty or could not be read."
-        if (see_log)    futile.logger::flog.info(null_metadata_file_msg)
-        if (create_log) futile.logger::flog.info(null_metadata_file_msg,
-                                                 name  ="error")
-      }
-      }
-    } #end of else
 
   ##Setup log file creation---
     if (create_log == TRUE) {
@@ -130,85 +82,29 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
 
   }
 
-  ##Try to read in the file----
-  lab_file_name <- gsub(".sav", ".lab",
-                        gsub(data_dir, "", selected_file ))
+ read_df  <- zacat_id_data ( zacat_id, data_dir,
+                              see_log = see_log,
+                              create_log = create_log,
+                              log_id = log_id,
+                              my_treshold = my_treshold )
 
+ metadata <- zacat_id_metadata(zacat_id,data_dir,
+                                see_log = see_log,
+                                create_log = create_log,
+                                log_id = log_id,
+                                my_treshold = my_treshold )
 
-  if ( lab_file_name %in% dir (tempdir())) {
-    if (see_log)    futile.logger::flog.info("Reading labelled data from temp directory")
-    if (create_log) futile.logger::flog.info("Reading labelled data from temp directory",
-                                             name  ="info")
-    read_df <- readRDS( paste0(tempdir(), "\\", lab_file_name))
-  } else {
-    tryCatch({
-      read_message <- paste0("Reading in\n", selected_file)
-      if (see_log)    futile.logger::flog.info(read_message)
-      if (create_log) futile.logger::flog.info(read_message,
-                                               name  ="info")
-      read_df <- haven::read_spss(selected_file)
-    },
-    error = function(cond) {
-      if (see_log)    futile.logger::flog.error(cond)
-      if (create_log) futile.logger::flog.error(cond,
-                                                name  ="error")
-      stop("Failed to read in the file.")
-    },
-    warning = function(cond) {
-      if (see_log)    futile.logger::flog.info(cond)
-      if (create_log) futile.logger::flog.info(cond,
-                                               name  ="info")
-    },
-    finally = {
-      read_message <- paste0("Imported\n", selected_file, "\nwith ",
-                             nrow(read_df), " observations in ",
-                             ncol(read_df), " columns.\n")
-      if (see_log)    futile.logger::flog.info(read_message)
-      if (create_log) futile.logger::flog.info(read_message,
-                                               name  ="info")
-      saveRDS( read_df, paste0(tempdir(), "\\", lab_file_name))
-    })
-    }
 
  ###Analyze the  metadata file----
- if ( is.null(metadata) ) {
-   tryCatch({
-     metadata_read_message <- "Trying to analyze the file.\nThis may take a few minutes."
-     if (see_log)    futile.logger::flog.info(metadata_read_message)
-     if (create_log) futile.logger::flog.info(metadata_read_message,
-                                              name  ="info")
-     metadata <- analyze_gesis_file(
-        gesis_file = read_df,
-        see_log = see_log,
-        create_log = create_log,
-        log_prefix = log_prefix,
-        log_id = log_id,
-        my_treshold = my_treshold )
-
-     if ( all(metadata$gesis_name == "")) { stop("Wrong analysis.")}
-   },
-   error = function(cond) {
-     if (see_log)    futile.logger::flog.error(cond)
-     if (create_log) futile.logger::flog.error(cond,
-                                               name  ="error")
-     stop("Failed to analyze the file.")
-   },
-   warning = function(cond) {
-     if (see_log)    futile.logger::flog.info(cond)
-     if (create_log) futile.logger::flog.info(cond,
-                                              name  ="info")
-   },
-   finally = {
-     metadata_message <- "Finished with the analyzis."
-     if (see_log)    futile.logger::flog.info(metadata_message)
-     if (create_log) futile.logger::flog.info(metadata_message,
-                                              name  ="info")
-     metadata_backup <- gsub(".sav", "_metadata.rds",
-                             gsub(data_dir, "", selected_file))
-     saveRDS( metadata, paste0(tempdir(), "\\", metadata_backup ))
-   }
-   ) #end of tryCatch
-  } #end of is.null(metadata)
+  if ( is.null(metadata)) {
+    analyze_file_metadata (
+      read_df = read_df,
+      see_log = see_log,
+      create_log = create_log,
+      log_id = log_id,
+      my_treshold = my_treshold
+      )
+  }
 
 
  ###New names----
@@ -222,7 +118,6 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
  if ( conversion == "numeric") {
    return_df <- convert_to_numeric(df = read_df, metadata = metadata)
  }
-
 
  ##Adding country code---
  if ( "country_code_iso_3166" %in% names (return_df)) {
@@ -238,7 +133,11 @@ gesis_file_read <- function ( zacat_id = "ZA4744",
  }
 
  if ( save_file ) {
-    rds_file <- gsub(".sav", ".rds" , selected_file)
+    sav_file  <- zacat_file_lookup(zacat_id, data_dir,
+                                   see_log = see_log,
+                                   create_log = create_log,
+                                   my_treshold = my_treshold)
+    rds_file <- gsub(".sav", ".rds" , sav_file)
     metadata_file <- gsub( ".rds", "_metadata.rds", rds_file)
     saveRDS(return_df, rds_file)
     saveRDS(metadata, metadata_file)
