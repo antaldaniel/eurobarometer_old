@@ -13,3 +13,4 @@
 * 0.0.0.9009 Improved name suggestion, better conversions. 
 * 0.0.1.0001 Now uses a single vocabulary file. 
 * 0.0.1.0004 Adds frequency factors gesis_metadata_get(). Many new exceptions are handled.
+* 0.0.1.0005 Very long functions are simplified and separated to smaller units. Further naming exceptions are added. Naming exceptions are matched first exactly than partially.
