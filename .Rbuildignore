@@ -1,8 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^cran-comments\.md$
-^not_included/$
-^not_included$
+^CONDUCT\.md$
 ^\.travis\.yml$
-^sr_logs$
+^codecov\.yml$
+^data-raw/$
 ^data-raw$

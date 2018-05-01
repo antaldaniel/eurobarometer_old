@@ -41,7 +41,6 @@ the file and return it.
 \examples{
 \dontrun{
 ##use your own file path:
-##The log parameters can be passed on optionally as ...
 zacat_id_data ( zacat_id = "ZA4744",
                 metadata_dir = data_dir,
                 see_log = see_log,

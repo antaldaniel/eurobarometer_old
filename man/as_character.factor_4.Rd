@@ -16,9 +16,8 @@ of the method.}
 Convert to character from a factor_4 object
 }
 \examples{
+
 my_categories <- as_factor_4( c("Not at all", "Low",
                "Medium", "Strong", "DK"))
-
-as_character (my_categories)
 
 }

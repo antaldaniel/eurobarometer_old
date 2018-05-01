@@ -1,23 +1,33 @@
 Package: eurobarometer
-Title: Consistent Importing of Eurobarometer Archive Files from GESIS
-Version: 0.0.1.0005
-Authors@R: person("Daniel", "Antal", email = "daniel.antal@ceemid.eu", role = c("aut", "cre"))
-Description: Clean, rename, transform and integrate Eurobarometer and standardized survey conversions.
-Depends: R (>= 3.4.0)
+Type: Package
+Title: Eurobarometer Survey Harmonization
+Version: 0.1.0
+Author: Daniel Antal
+Maintainer: Daniel Antal <daniel.antal@ceemid.eu>
+Description: The package import and converts GESIS Eurobarometer SPSS files 
+    and converts them to programatically friendly data files. The
+    variable names, quesitons and questionnaire items are harmonized
+    with comprehensive numerical, factor and character representation.
+    This helps the creation of integrated data files from different
+    surveys.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: dplyr,
-    plyr,
-    stats,
-    utils,
-    haven,
-    futile.logger,
-    magrittr,
-    lubridate,
-    stringr,
-    sjlabelled,
-    labelled,
-    stringi
+Depends: R (>= 2.10.0)
 RoxygenNote: 6.0.1
-Suggests: testthat
+Imports: haven,
+    dplyr,
+    plyr,
+    magrittr,
+    stringi,
+    stringr,
+    lubridate,
+    utils,
+    labelled,
+    futile.logger,
+    sjlabelled,
+    testthat
+Suggests: covr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -38,7 +38,6 @@ Tries to analye the metadata of data frame read by \code{\link{zacat_id_data}}.
 \examples{
 \dontrun{
 ##use your own file path:
-##The log parameters can be passed on optionally as ...
 analyze_file_metadata(
      metadata = NULL,
      read_df = read_df,

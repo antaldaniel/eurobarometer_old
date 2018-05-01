@@ -4,8 +4,10 @@
 #' @param type Default to \code{NULL}. Not used in this instance
 #' of the method.
 #' @examples
-#' my_categories <- as_factor_pos_neg( c("Very good", "Rather Good",
-#'                   "Inap.", "Rather Bad", "DK", "Very bad"))
+#' my_categories <- as_factor_pos_neg(
+#'    c("Better", "DK", "Worse",
+#'      "Same", "The Same", "Inap. not")
+#'      )
 #'
 #' as_character (my_categories)
 #'

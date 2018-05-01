@@ -1,0 +1,179 @@
+---
+title: "Harmonizing Eurobarometer files"
+author: "Daniel Antal, CFA"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Harmonizing Eurobarometer files}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+##Import a GESIS SPSS File 
+
+###Convert SPSS files to a less structured file type
+SPSS structures survey information in a peculiar way that can be modelled in R with the `labelled` variable class. Each variable is described by a short variable name (code) and a long variable name (label). Furthermore, categorical variables have a numeric code and a label, for example, `3 = few`.
+
+The aim is to concert this data file without loss of information into a flat, less structured, tabular format. This is achieved with the creation of two files, a metadata file and a data file.  The data files is a flat and unambiguous translation of the SPSS file, while the metadata file contains all information to make the process reproducible (which variable was converted to what) and to provide information for other, unambiguous conversions.
+
+###Convert variable names to machine readable names
+
+When working in a programmatic data analysis, the problem of the SPSS variable names is that they are almost never useful in program code.  The short codes are often fully meaningless, and in the large files with 700-800 variables names keeping track of them is very difficult.  Sometimes the short codes, and the long names almost always contain special characters and regular expressions that cannot be used in programming.
+
+The function variable_name_suggest is suggesting a machine-readable name that is derived from the long SPSS variable name label. For example, the `ARCHIVE STUDY NUMBER – DISTRIBUTOR` is converted to archive_study_number_distributor.
+
+##Representation of data in R
+The SPSS structured filed are most faithfully represented by the `labelled` class created for this purpose in the [haven](http://haven.tidyverse.org/) package. Further statistical tools are available to work with them directly in the [labelled](https://cran.r-project.org/web/packages/labelled/vignettes/intro_labelled.html) package.
+The problem with the `labelled` class is that it is not a standard object class, and for using the wide arrange of R statistical packages, the data should be converted to base R atomic types.
+
+A faithful representation of the SPSS file is of course only a first step, because SPSS files can be best analyzed in SPSS. For taking advantage of R, they need to be converted into a data representation that can be directly used with base R and its package extensions.
+
+The package translates SPSS unlabeled, clear numerical variables into numeric, and unrecognized other variables into factor, which is a faithful representation of the SPSS data. However, it is not necessarily useful for harmonization.
+New, intermediary classes are introduced for typical variables, for example, categorical variables with 3 positive, 4 positive, or 1 negative, 1 neutral and 1 positive values. These classes contain the numeric, factor and character representation of the SPSS data.
+
+The numeric representation is usually very useful for data harmonization, because it contains no natural language issues such as spelling, casing, or character set problems.  It also allows the fast execution of many statistical operations. For harmonization currently only the numeric representation is used, but later this will be further developed for the more nuanced factor representation. 
+
+The numeric representation is prone to erroneous interpretation, because it makes mainly ordinal categorical variables appear to be nominal variables. I suggest to convert numerical representations with `as.factor()` in modelling [and not using the `as_factor ()` method described below.]
+
+Currently all intermediary questionnaire objects, which cover about 75% of the questions in the SPSS data files of the last decade have an as_numeric method that correctly, consistently converts the SPSS categorical values to a numeric format. For example, `yes`, `agree`, `approve` consistently gets an `1` value while  `no`, `disagree`, `not agree`, `disapprove`, `not approve`  a `0` value.   Beware that the native as.numeric conversion will represent the original raw data of the SPSS file without the labels, which an almost random number, so do not use it.
+
+```{r numericreprt, warning=FALSE, message=FALSE}
+require (eurobarometer)
+survey_answers <- eurobarometer::as_factor_pos_neg(
+    c("Better", "DK", "Worse",
+      "Same", "The Same", "Inap. not")
+      )
+
+as_numeric   (survey_answers)
+as_factor    (survey_answers)
+as_character (survey_answers)
+```
+
+
+The other two representations are a bit 'under the hood' explanations and are intented for future developers of the package, or future creators of harmonized files, such as trend files, and can be ignored by researchers.
+
+###Factor representation
+The factor representation is more adequate for the actual data analysis, and it is probably the only practical representation for descriptive statistics.  The problem with factors is that they need two levels of harmonization: harmonization of the ordering, and harmonization of the labels (levels in R). 
+Currently a comprehensive vocabulary is being built for this purpose with the package. Currently the vocabulary covers about 75% of or categorical questionnaire items from the last decade. For a detailed harmonization more use cases and discussions with GESIS and users would be preferred, because factor levels are not natural-language independent.
+
+The `as_factor ()` method convert the intermediary questionnaire item objects into a factor representation in R. As a method, it takes into consideration of 3, 4 or 5 level categorical variables, for example, i.e. it has offers different variations of the generic `as.factor` for different type of questions. At this stage, harmonization stops at the most frequently used categories, and the harmonization, if necessary, correction of the ordering.  About a quarter of rarely, or only once used questions are not harmonized.
+
+A current, dirty factor representation can be achieved with the combination of the native type conversion and the harmonized numeric method: `as.factor(as_numeric('foo'))`.  For example, this will make sure that all harmonized categories with values `yes`, `approve`, `agree`, `support` will get a label `1` and all `no`, `disapprove`, `not approve`, `disagree`, `not support` will get a label `0`. This is also a convenient way to integrate, for example, English and Slovak questionnaire items, where different character coding and multiple values would make integration rather difficult directly via factor levels (labels in SPSS). 
+
+###Character representation
+The character representation in R is a simplification of the factor representation. While it has little use in harmonizing, processing and analyzing the data, it is often very practical in documentation and visualization.   
+The `as_character ()` method provides an English character representation of the individual answers without special characters. Full harmonization at this level will be the last step when a comprehensive vocabulary is available. Currently harmonization partly avoids different abbreviations and special characters, but it is not consistent at the character string level. 
+
+###Representing missing values
+R has a special object for a missing value, `NA`, which explicitly states that a value is missing, and not just not read.  Missingness can have many sources, for example, the question was not asked from a person (such as certain questions in the Turkish Cypriot community in Eurobarometer surveys) or the persona declined to answer.
+
+GESIS usually uses some abbreviation of `Inappropriate` for the first one, and `Decline` or `DK` for the other. Recall the earlier output:
+
+```{r numericreport2, warning=FALSE, message=FALSE}
+require (eurobarometer)
+survey_answers <- eurobarometer::as_factor_pos_neg(
+    c("Better", "DK", "Worse", "Same", "The Same", "Inap. not")
+    )
+as_numeric   (survey_answers)
+as_factor    (survey_answers)
+as_character (survey_answers)
+
+summary(as_factor(survey_answers))
+summary(as_numeric(survey_answers))
+```
+
+* In the numerical representation all missingness should be converted to an `NA` value.  
+* In the character representation we do not change the original SPSS missingness label.  
+*  The correct representation with factors would be a harmonization of the missingness labels, i.e. `Decline` and `DK` are treated similarly, but dissimilarly to `Inap.` or `Inappropirate`. 
+
+The factor harmonization currently is not resoldved, and all missingness is represented by NA, so if you want to examine the reason of missingness, you can create dirty factors with `as.character(as_factor(var_name))`. 
+
+In my view, sometimes the `inap.` label has typos that should be corrected in the GESIS files. A comprehensive list will be provided when the vocabulary harmonization is more developed, with more users and consultations with GESIS.
+
+
+##Harmonizing variable names across files
+
+>"There are only two hard things in Computer Science: cache invalidation and naming things."
+>
+> ---------------- Phil Karlton
+
+When working with GESIS files, the webcat and the thoughtful labelling makes working with a single survey. The data can be analyzed with the help of the generic (English and French) survey questionnaire. However, when working with multiple files, it become apparent that the GESIS files are not coded consistently.
+
+###Short names are questionnaire IDs 
+Sometimes the short variable name is the questionnaire item. For example, the generic questionnaire identifies a question as `QA11`, which is the 11the question in the question block `A`.  Or `QB6_3` is the 3rd item of the 6th structured in the question block `B`.
+Furthermore, TNS uses some consistent questionnaire item IDs for repeating items, such a demography questions. However GESIS sometimes uses these IDs in the SPSS file, sometimes not, and sometime only in the demography block. 
+When possible,  `get_eb_questionnaire_item()` retrieves this information and records it in the metadata file. However, this information (and a programmatic connection between the questionnaire PDF files and the SPSS or flat files) is not possible because often the questionnaire ID is not present in the SPSS file.
+
+###Short names contain important metadata
+Sometimes there is a `split` in the data file, because certain questions were not asked, or differently asked outside of the EU, for example in the accession countries, or very often in the special territory of the Turkish community of Cyprus.  There is also a consistent naming of weights. Whenever possible, this information is taken into consideration in the creation of harmonized long variable names. 
+
+###Short names contain special characters or typos
+We do not deal with these issues, because the short variable names are not consistent and generally we only record them in the metadata file but do not use them.
+
+###Long names contain the questionnaire ID
+In some cases, the questionnaire ID is added to the long variable label, for example, `QA1  xx`.  This is clearly disturbing the variable name harmonization.  In this case a regex removes the questionnaire ID and records it in the metadata, similarly to such items if they are found in the short variable names. They are easier to detect in the long variable labels, and this conversion works very well.
+The harmonized variable name is derived from the rest of the label, after removing the questionnaire ID and the subsequent space or underscore.
+
+###Long names contain the special characters
+Because we want to create variable names that can be used programmatically, we remove all special characters.  In most of the cases this means the removal of a hypen.  The `%` sign is changed to `_pct`, the `+` sign to `_p` and the `-` sign to `_m`. For example, `AGED 15+` becomes `aged_15p`.
+
+You can review all current changes in the source code of the `var_name_suggest()` function. 
+
+###Long name contains whitespace
+Unnecessary whitespace, such as accidental double space is removed from the long variables labels before creating the new variable name.
+
+###Long name contains typos and other errors
+This is the most problematic part, and in my view, such errors should be corrected, whenever not fully archived, in the GESIS SPSS files. These errors can be detected with hard work and they almost always require human judgement, and often a lot of comparison across large SPSS files.  These are rare and easy-to-correct errors, and there is no programmatic solution offered to them. However, very soon almost all of them will be detected at least in the archive of since the Mannheim Trend Files.
+
+##Harmonizing identical questionnaire items
+
+###Identical questionnaire item has several long names
+Technically speaking this is as problematic as the previous problem, but only in the context of integrated multiple files or creating trend files.  These alternative naming will be collected and added as a data file to the R package. 
+Some often used name variations in weights and demography are already discovered and harmonized. 
+
+The current vocabulary can be found in the github repository of the package as `data-raw/Vocabulary.xlsx` which is converted into the vocabulary file by `data-raw/create_vocabulary_rda.R` The author welcomes all suggestions and improvements to the vocabulary file. You can access the vocabulary in R directly with `eurobarometer::vocabulary.R`. In the context of 4 non-negative categorical variables you can review the current vocabulary with `vocabulary_items_get( context = "factor_4")`.
+
+```{r vocabulary, echo=FALSE, results='asis'}
+knitr::kable(
+  head(eurobarometer::vocabulary_items_get( context = "factor_4"),6))
+```
+
+These factors have only postive values, or rather, meanings, which are coded as `0`, `1`, `2`, `3`. 
+
+```{r vocabulary2, echo=FALSE, results='asis'}
+knitr::kable(
+  head(eurobarometer::vocabulary_items_get( context = "factor_pos_neg"),6))
+```
+
+
+These factors are coded  as `-1`, `0`, `1`. This coding is meaningful with logical operations, for example. 
+
+##Creating a vocabulary of questionnaire items
+
+The next obstacle of integrating data files is that identical questionnaire answer options are coded differently. For example, women respondents are labeled as `woman` or `female`. The solution here is the creation of a vocabulary file that harmonizes identical answers across files.
+
+###Same answer options are abbreviated differently
+
+This is far the most common obstacle, and it can be resolved with the creation of the vocabulary file.  For example, in the `type of community` demography questions the answer option `Small or medium-sized town` is sometimes coded as is, and sometimes as `Small/middle town`.
+This variable can be converted into a character or a factor type. Character vectors have no ordinal values, i.e. they are not ordered, and factors are ordered.  Soon there will be a common factor and character representation for these variables, but currently a different route is taken, they are unambiguously converted to numbers.  Numerical conversion has several advantages. For example, it allows easy integration with non-GESIS data files that use different natural languages or character sets.  They can also facilitate the harmonization of character and factor values. 
+
+###Different answer options have the same meaning
+These issues require judgement, and eventually may lead to different interpretations.  The vocabulary in this respect was rather cautiously harmonized. 
+
+The current Eurobarometer questionnaires have two generic versions, English and French. It appears that sometimes the true master language is English, sometimes French, and in the translation of the questionnaire item synonyms are used interchangeably.  I believe that in the future the company making the surveys should try to avoid these divergences, but in many cases,  they are hardly problematic, because the generic questions are translated to other natural languages, anyway.
+
+*Consider the following categorical ranges*
+
+1. `Not at all informed`,	`Not very informed`,	`Fairly well informed`,	`Very well informed`
+
+2. `Not at all informed`,	`Not very well informed`,	`Fairly well informed`,	`Very well informed`
+
+In my view these items are identical, and they are most likely translated identically to other languages. What is important that 	`Not very informed` and `Not very well informed` are consistently placed in the ordering of 2nd (ascending) or 3rd (descending).  The package uses the ascending sorting, which is, if necessary, can be easily reverted programatically.  
+

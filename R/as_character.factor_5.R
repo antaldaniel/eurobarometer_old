@@ -12,7 +12,6 @@
 #' as_character (my_categories)
 #'
 #' @export
-#'
 
 as_character.factor_5 <- function(x, type = NULL) {
   if(!is.null(type)) type <- NULL

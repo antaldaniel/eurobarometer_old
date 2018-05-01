@@ -14,10 +14,3 @@ as_character(x, type = NULL)
 \description{
 Convert to character
 }
-\examples{
-my_binary <- as_factor_binary(c("mentioned", "mentioned",
- "not mentioned", "dk"))
-
-as_character (my_binary)
-
-}
