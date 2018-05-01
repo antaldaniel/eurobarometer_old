@@ -3,7 +3,8 @@
 #' Retrieve a metadata file with from your data directory or the temporary directory
 #' of your current R session.
 #' @param zacat_id For example, \code{"ZA5688_v6-0-0"}, as analyzed and saved by
-#' \code{\link{analyze_gesis_file}}. Defaults to \code{"last_data_frame"}, which is
+#' \code{\link{analyze_gesis_file}}.
+#' Defaults to \code{"last_data_frame"}, which is
 #' the last file in the temporary directory of the current session.
 #' @param data_dir Defaults to \code{"NULL"}. In this case the \code{"tempdir()"}
 #' of your current R session will be used.
