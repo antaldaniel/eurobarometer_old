@@ -11,6 +11,8 @@
 * 0.0.0.9007 Eurobarometer vocabulary now part of a large spreadsheet
 * 0.0.0.9008 Much improved type detection and error handling 
 * 0.0.0.9009 Improved name suggestion, better conversions. 
+
+# eurobarometer 0.0.1.0001 -
 * 0.0.1.0001 Now uses a single vocabulary file. 
 * 0.0.1.0004 Adds frequency factors gesis_metadata_get(). Many new exceptions are handled.
 * 0.0.1.0005 Very long functions are simplified and separated to smaller units. Further naming exceptions are added. Naming exceptions are matched first exactly than partially.
