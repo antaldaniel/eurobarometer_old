@@ -4,13 +4,13 @@
 \alias{gesis_file_read}
 \title{Read an convert a GESIS file}
 \usage{
-gesis_file_read(zacat_id = "ZA4744", data_dir = "data-raw/",
+gesis_file_read(zacat_id = "ZA5688", data_dir = "data-raw/",
   metadata_dir = NULL, new_names = NULL, conversion = "numeric",
   save_file = TRUE, see_log = TRUE, create_log = TRUE, log_prefix = NA,
   log_id = NA, my_treshold = futile.logger::INFO)
 }
 \arguments{
-\item{zacat_id}{\code{"ZA4744"}}
+\item{zacat_id}{\code{"ZA5688"}}
 
 \item{data_dir}{\code{"data-raw/"}}
 
