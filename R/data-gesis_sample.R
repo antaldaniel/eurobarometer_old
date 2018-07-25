@@ -19,6 +19,8 @@
 #'   \item{future_human_impact_fighting_climate_change}{Imported as factor variable.}
 #'   \item{future_human_impact_job_creation}{Imported as factor variable.}
 #'   \item{future_human_impact_protecting_personal_data}{Imported as factor variable.}
+#'   \item{region_nuts_level} Level of aggregation with region coding.
+#'   \item{region_nuts_codes} The name of the region.
 #'   \item{gender}{Original labelled variable converted to numeric, female = 1}
 #'   \item{age_exact}{Exact age as numeric}
 #'   \item{w1}{The w1 weighting variable from the original dataset}
