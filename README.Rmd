@@ -1,0 +1,86 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# eurobarometer
+
+The goal of eurobarometer is to ...
+
+## Installation
+
+You can install eurobarometer from github with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("antaldaniel/eurobarometer")
+```
+
+## Example
+
+You need to manually download and store data from ZACAT, because it is your liability to use the appropriate data license.  After downloading one or more spss files from [ZACAT](https://zacat.gesis.org/webview/) of [GESIS](https://www.gesis.org/home/), please add the location of your data directory to the converter function. This package was not developed by GESIS, but GESIS was consulted on how to release the package.
+
+The Eurobarometer package handles log files via flogger. Currently it is set to the highest level, “INFO”, that will give you a step-by-step summary of what happened with the raw data file. It may be a good tool to document your research work. 
+
+The following example is taken from the data file  [ZA5688: Eurobarometer 79.2 (April-May 2013): Internal market, cultural activities, non-urban road use, science and technology, and undeclared work and tax fraud](https://dbk.gesis.org/dbksearch/sdesc2.asp?no=5929). A part of the data file is included to the package for testing and demonstration purposes. 
+
+```{r example, eval=FALSE}
+## Not run here.
+##file:///C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/ZA5688_v6-0-0.sav
+require(eurobarometer)
+za5929 <-  gesis_file_read   ( zacat_id = "ZA5929",
+                              data_dir = "C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_data/data-raw/gesis/",
+                              log_id = "my_first_log",
+                              my_treshold = futile.logger::INFO)
+```
+
+In the end of the log file, you will see two messages:
+
+* Saved data as .../data-raw/gesis/ZA5688_v6-0-0.rds.  This contains the labelled R representation of the SPSS file, with easy to use header. The variable names are as much standardized as possible to help pooling data from multiple files. When possible, automatic data class concerstions take place.
+
+* Saved metadata as .../data-raw/gesis/ZA5688_v6-0-0_metadata.rds contains an analysis of the file, suggesting possible data processing steps with the data.
+
+The data naming and variable labelling is not fully consistent among the many years of Eurobarometer. The of the eurobarometer package is to help creating consistency for the years after the Mannheim trend file years. 
+
+A small subset of this data file is attached to the package as `gesis_sample`. 
+You can verify the data import easily using the tabulation view on  `https://zacat.gesis.org/webview/`. In this case, the SPSS labelled variables are represented as R factor variables.
+
+```{r example}
+summary( gesis_sample$future_human_impact_fighting_climate_change )
+```
+
+
+If you want to merge two data files, the GESIS English data file will have the unique values in the question above 
+
+> c(‘A positive impact’, ‘No impact’, ‘A negative impact’, ‘DK’).  
+
+If you have a similar survey run in a national language, for example, in Czech, the answer options are 
+
+>c(‘Pozitivní vliv’, ‘Žádný vliv’, ‘Negativní vliv’, ‘Neví, bez
+odpovědi’)
+
+Especially when working with foreign character sets and accross several languages, a one-to-one matching for "A positive impact" with "Pozitivní vliv" is an error-prone and labor intensive task.
+
+The package 'eurobarometer' handles this issue with the use of a standard (and ever expanding) vocabulary that is based on all several thousand Eurobarometer questoins, and eventually will cover all Eurobarometer questions ever asked. 
+
+Whenever possible, characteristic variables are transformed to a numeric value.  The SPSS file, of course, contains both labels (“A positive impact”) and a numeric representation, which is perfect for analyzing the file in question.  But sometimes “A positive impact” is labelled as “Positive impact”, and the number representation may not be consistent either among SPSS files created in different years.  Furthermore, the missingness is not consistently abbreviated. s 
+
+```{r numexample}
+summary( labelled_to_numeric (
+  gesis_sample$future_human_impact_fighting_climate_change,
+  c("A positive impact", "No impact", "A negative impact"), 
+  c(1,0,-1)))
+```
+
+In some cases, the numeric representation is desirable for calculations, such as calculating the mean value of a binary gender variable.  In most cases, the variables are not nominally but ordinally scaled, so using functions such as mean should be used carefully. But numeric variables can be consistently further transformed to other language or consistent labelling.  So instead of mapping “A positive view” and “Pozitivní vliv” to the German standard version “Positive Auswirkungen”
+
+You can review the full vocabulary of such transitions.  

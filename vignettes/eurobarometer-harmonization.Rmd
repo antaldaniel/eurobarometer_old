@@ -165,6 +165,7 @@ This is far the most common obstacle, and it can be resolved with the creation o
 This variable can be converted into a character or a factor type. Character vectors have no ordinal values, i.e. they are not ordered, and factors are ordered.  Soon there will be a common factor and character representation for these variables, but currently a different route is taken, they are unambiguously converted to numbers.  Numerical conversion has several advantages. For example, it allows easy integration with non-GESIS data files that use different natural languages or character sets.  They can also facilitate the harmonization of character and factor values. 
 
 ###Different answer options have the same meaning
+
 These issues require judgement, and eventually may lead to different interpretations.  The vocabulary in this respect was rather cautiously harmonized. 
 
 The current Eurobarometer questionnaires have two generic versions, English and French. It appears that sometimes the true master language is English, sometimes French, and in the translation of the questionnaire item synonyms are used interchangeably.  I believe that in the future the company making the surveys should try to avoid these divergences, but in many cases,  they are hardly problematic, because the generic questions are translated to other natural languages, anyway.
@@ -175,5 +176,47 @@ The current Eurobarometer questionnaires have two generic versions, English and 
 
 2. `Not at all informed`,	`Not very well informed`,	`Fairly well informed`,	`Very well informed`
 
-In my view these items are identical, and they are most likely translated identically to other languages. What is important that 	`Not very informed` and `Not very well informed` are consistently placed in the ordering of 2nd (ascending) or 3rd (descending).  The package uses the ascending sorting, which is, if necessary, can be easily reverted programatically.  
+In my view these items are identical, and they are most likely translated identically to other languages. What is important that 	`Not very informed` and `Not very well informed` are consistently placed in the ordering of 2nd (ascending) or 3rd (descending).  The package uses the ascending sorting, which is, if necessary, can be easily reverted programatically.
+
+##Creating trend files
+
+The ultimate aim of the package is to create panel data or trend files, i.e. files that contain the same survey parts for all countries in different points of time. With some questions, this is already possible with the package, and some trend files will be published soon. 
+
+Considerable judgement is needed until when two questions are identical, given the two original source languages and the more than 20 language versions. The package can help this in two ways:
+
+1. Creation of combined metadata files and highlighting the repeating questions, which are obvious in the case of questions created for trending purposes and demography, but not obvious in other repeated questions. The metadata files created by `gesis_file_read()`and `analyze_file_metadata()` with its helper functions solve this problem. While question identification can be further developed, it also raises the question of variable name harmonization, where the inputs of GESIS and other users would be helpful to create an optimal solution.
+
+2. Creation of the comprehensive vocabulary of answer items. `class_conversion_suggest()` in fact helps the creation fo the vocabulary because it analyzes the content of variables in individual SPSS files to classify them to a common type, for example, the `factor_binomial` class, which contains all the repeating binary questionnaire items, such as agree-disagree, female-male, for-against. Finding new patterns and aligning them with the current classes `factor_3`, `factor_4`, `factor_5`, `factor_pos_neg`, `factor_pos_neg_4`, `factor_frequency`, and the almost numerical and date formats help the development of the vocabulary. 
+
+3. Easy-to-join, harmonized, flat data files, which are after or what this package creates. I believe that in this respect the package already contributes a lot research efforts, because it appears to be working with few problems, and at the moment no recognizable errors. But the first two problems would require consultations with other users and GESIS. 
+
+Currently the package correctly harmonizes about 75% of the last decades questions, but still struggles with identifying identical questions. The best approach is to realize the current version of the package, and allow other researchers to contribute to the vocabulary, and to discuss naming conventions. 
+
+The vocabulary should be centralized, and frequently redistributed in new versions of the package, so any suggestions are welcome. I created an Excel version of the vocabulary so that it is easy to make suggestions.  This part of the package is very easy to maintain, so in the first year the vocabulary file can be updated in every few weeks.
+
+Variable naming would need a consensus of users, and some consultation with GESIS.  The metadata files created by this package can greatly facilitate the correction of small errors, and the adoption of more comprehensive practices that will eventually lead to easier to use SPSS and STATA files, too. 
+
+###Longitudinal integration issues
+
+The programmatic longitudinal integration of the data should be based on the date of interview variable. This is an important metadata, because the time difference between repeated questions can be measured by the typical response days. Another problem that in rare occasions certain country survey waves for whatever practical reason are held in a different month than the bulk of the Eurobarometer survey.
+
+As far as I see, some SPSS files do not have a date variable at all (or they are coded very differently from most files.) In my view, this may be a file conversion error that happened in the stage of creating the GESIS archive files, and, if the data is available, must be corrected in all cases. 
+
+
+###Comparison of languages
+My original motivation is to integrate Eurobarometer surveys via standardized questions with national surveys.  International comparison just raises issues with comparability a step further than researchers of the Eurobarometer archives.  Some questions had been similar, but slightly altered over the five decades of surveying, and translations offered other deviations. 
+
+I am very much interested in any contribution to this issue, in the creation of multi -language vocabularies and question data banks.
+
+One serious problem now is although all national language questionnaires are available, they are raw pdf files, and any compilation programmatically appears to be a very great task.  But eventually the creation of a standardized translation vocabulary would help the creation of new comparable surveys, data products and analytical work.   I have experience with using the standardized questions of the European Cultural Access and Participation surveys, and I will include some examples in a separate vignette. 
+
+###Sub-national aggregation
+While the Eurobarometer surveys have a very well developed and useful demography that allows international comparisons, the sub-national level of information varies country-by-country, partly following local standards, and partly due to the different sizes of countries.
+
+Technically it possible to create integration via urbanization, or at sub-national level with some limits, similarly to the alternative demographical organization of cohorts, that allow meaningful time-wise comparisons.
+
+It would be very interesting to find collaborators in this field, because the creation of sub-national statistics is not extremely challenging from a programmatic point of view, but requires a thorough understanding of the statistical regions and administrative systems of various countries.
+
+An interesting applicaton could be the creation of trend files for larger urban areas, such as London, Paris, Berlin or Budapest that are significantly big to have large subsamples in the national samples. 
+
 
