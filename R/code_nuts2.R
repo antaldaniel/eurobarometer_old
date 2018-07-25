@@ -37,14 +37,16 @@ code_nuts2 <- function ( region_nuts_codes,
 
  nuts2 <- vector ( mode = "character", length = length(region_nuts_codes))
 
-  df <- data.frame ( region_nuts_codes, nuts2,
+  df <- data.frame ( region_nuts_codes,
                     stringsAsFactors = FALSE)
-  df$region_nuts_codes <- as.character(df$region_nuts_codes)
-  nuts2 <- dplyr::left_join ( df, eurobarometer::vocabulary_nuts2,
-                               by = "region_nuts_codes")
 
+  df$row <- 1:nrow(df)
 
- if (nuts_code == "code2010") return ( nuts2$code2010 )
- if (nuts_code == "code2013") return ( nuts2$code2013 )
+  nuts2_df <- dplyr::left_join ( df, eurobarometer::vocabulary_nuts2,
+                               by = "region_nuts_codes") %>%
+    add_count( row ) #check there are not duplicates
+
+ if (nuts_code == "code2010") return (  nuts2_df$code2010 )
+ if (nuts_code == "code2013") return (  nuts2_df$code2013 )
 
 }

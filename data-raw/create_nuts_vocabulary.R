@@ -64,3 +64,8 @@ nuts2_imputation <- readxl::read_excel("data-raw/NUTS2_2010_imputation.xlsx") %>
   filter ( !is.na(nuts2)) %>%
   select ( country_code, region_nuts_codes, code2010, code2013)
 devtools::use_data(nuts2_imputation, overwrite = TRUE)
+
+test_error <- readRDS("data-raw/test_cap_error.rds")
+region_nuts_codes <- test_error$region_nuts_codes
+length( region_nuts_codes )
+nrow( test_error)
