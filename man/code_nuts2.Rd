@@ -24,6 +24,12 @@ boundary changes may effect some regions. See
 Small countries where Eurobarometer has NUT3 level data are aggregated
 to NUTS2 (Croatia, Ireland, Latvia, Lithuania, Slovenia). Malta, Cyprus
 and Luxembourg receive an auxilliary code MT00, CY00, LU00.
+In the United Kingdom, NUTS2 level data is available only for Northern
+Ireland. The country code of the United Kingdom in the GESIS files is
+GB, but in the NUTS2 vocubulary it is UK.
+In Germany, France, Italy and the United Kingdom only NUTS1 level data
+is available.
+The region codes of Greece (GR) start with EL.
 }
 \examples{
 code_nuts2  (region_nuts_codes = c("Tirol", "Praha", NA))

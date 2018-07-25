@@ -7,6 +7,12 @@
 #' Small countries where Eurobarometer has NUT3 level data are aggregated
 #' to NUTS2 (Croatia, Ireland, Latvia, Lithuania, Slovenia). Malta, Cyprus
 #' and Luxembourg receive an auxilliary code MT00, CY00, LU00.
+#' In the United Kingdom, NUTS2 level data is available only for Northern
+#' Ireland. The country code of the United Kingdom in the GESIS files is
+#' GB, but in the NUTS2 vocubulary it is UK.
+#' In Germany, France, Italy and the United Kingdom only NUTS1 level data
+#' is available.
+#' The region codes of Greece (GR) start with EL.
 #' @param region_nuts_codes A region_nuts_codes column from a GESIS file.
 #' @param country_code Default is \code{NULL}, if provided, small countries,
 #' which have no NUT2 regions due to their size,  will be projected as
@@ -33,8 +39,8 @@ code_nuts2 <- function ( region_nuts_codes,
 
   df <- data.frame ( region_nuts_codes, nuts2,
                     stringsAsFactors = FALSE)
-   df$region_nuts_codes <- as.character(df$region_nuts_codes)
-   nuts2 <- dplyr::left_join ( df, vocabulary_nuts2,
+  df$region_nuts_codes <- as.character(df$region_nuts_codes)
+  nuts2 <- dplyr::left_join ( df, eurobarometer::vocabulary_nuts2,
                                by = "region_nuts_codes")
 
 
