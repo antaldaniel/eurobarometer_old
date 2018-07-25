@@ -4,28 +4,30 @@
 \alias{code_nuts2}
 \title{Add standard NUTS2 codes.}
 \usage{
-code_nuts2(region_nuts_codes, country_code = NULL, nuts_code = "code2010")
+code_nuts2(region_nuts_codes, nuts_code = "code2010")
 }
 \arguments{
 \item{region_nuts_codes}{A region_nuts_codes column from a GESIS file.}
 
+\item{nuts_code}{Currently only \code{code2010} and \code{code2013}
+is supported.}
+
 \item{country_code}{Default is \code{NULL}, if provided, small countries,
 which have no NUT2 regions due to their size,  will be projected as
  NUTS2 regions, for example, Luxembourg with code LU00.}
-
-\item{nuts_code}{Currently only \code{code2010} and \code{code2013}
-is supported.}
 }
 \description{
 Currently works only with NUTS2010 (for years 2012-2014) and NUTS2013
 (for years 2015-2017). In the case of earlier and later data sets
 boundary changes may effect some regions. See
-[Eurostat History of NUTS](http://ec.europa.eu/eurostat/web/nuts/history)
+[Eurostat History of NUTS](http://ec.europa.eu/eurostat/web/nuts/history).
+Small countries where Eurobarometer has NUT3 level data are aggregated
+to NUTS2 (Croatia, Ireland, Latvia, Lithuania, Slovenia). Malta, Cyprus
+and Luxembourg receive an auxilliary code MT00, CY00, LU00.
 }
 \examples{
-code_nuts2  (region_nuts_codes = c("Tirol", "Praha", NA),
-            country_code = c("AT", "CZ", "CY"))
-
 code_nuts2  (region_nuts_codes = c("Tirol", "Praha", NA))
+
+code_nuts2  (region_nuts_codes = c("Tirol", "Praha", "MALTA"))
 
 }
