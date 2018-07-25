@@ -25,6 +25,7 @@ labelled_to_numeric ( c("A positive view", "No impact", "A negative view"),
                       c(0,1))
 
 
+library(dplyr)
 
 nuts_2_matching <- function (x) {
   x <- tolower (x)
@@ -75,7 +76,7 @@ regions <- za5929 %>%
   filter ( country_code %in% c("UK", "GB"))
 write.csv(regions, "regions.csv", row.names = F)
 
-
+library(dplyr)
 vocabulary_nuts2 <- readxl::read_excel("data-raw/code_regions.xlsx",
                                        sheet = "NUTS2") %>%
   select ( country_code, region_nuts_codes, code2010 ) %>%
@@ -89,3 +90,21 @@ vocabulary_nuts2 <- readxl::read_excel("data-raw/code_regions.xlsx",
                                         "Northern Ireland", region_nuts_codes))
 
 devtools::use_data(vocabulary_nuts2, overwrite = TRUE)
+
+
+imputation <- readxl::read_excel("data-raw/NUTS2_2010_imputation.xlsx") %>%
+  purrr::set_names(.,c("country_code", "row", "code2010", "code2013", "region_nuts_codes",
+                       "nuts1", "nuts2", "nuts3", "change", "nuts_level",
+                       "countries", "sorting_order_2010", "sorting_order_2013"
+  ) ) %>%
+  filter ( !is.na(nuts2))
+
+nuts2_imputation <- readxl::read_excel("data-raw/NUTS2_2010_imputation.xlsx") %>%
+  purrr::set_names(.,c("country_code", "row", "code2010", "code2013",
+                       "region_nuts_codes",
+                       "nuts1", "nuts2", "nuts3", "change", "nuts_level",
+                       "countries", "sorting_order_2010", "sorting_order_2013"
+  ) ) %>%
+  filter ( !is.na(nuts2)) %>%
+  select ( country_code, region_nuts_codes, code2010, code2013)
+devtools::use_data(nuts2_imputation, overwrite = TRUE)
