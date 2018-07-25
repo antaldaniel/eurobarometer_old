@@ -53,7 +53,7 @@ gesis_file_read <- function ( zacat_id = "ZA5688",
                               log_id = NA,
                               my_treshold = futile.logger::INFO) {
 
-  ##Setup log file creation---
+ ##Setup log file creation---
     if (create_log == TRUE) {
     directory_message <- NA
     if (! file.exists("sr_logs")) {
