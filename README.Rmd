@@ -14,7 +14,12 @@ knitr::opts_chunk$set(
 
 # eurobarometer
 
-The goal of eurobarometer is to ...
+The goal of eurobarometer is to provide pre-processing tools with working the internationally standardized Eurobarometer survey data. 
+
+*	Allow the data pooling of several archive files with consistent names, R classes and other pre-processing steps that allow programmatic and reproducible scientific research.
+*	Help the pooling of standard question data across different language surveys.
+*	Help multi-language presentation and visualization.
+
 
 ## Installation
 
