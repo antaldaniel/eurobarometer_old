@@ -60,8 +60,11 @@ nuts1013 <- read.csv("C:/Users/Daniel Antal/OneDrive - Visegrad Investments/_pac
 
 
 regions <- za5929 %>%
-  select ( country_code, starts_with("region")) %>%
-  distinct ( country_code, region_nuts_codes, region_nuts_level ) %>%
+  select (starts_with ("country_code"),
+          starts_with("region")
+           ) %>%
+  distinct ( country_code, country_code_iso_3166,
+             region_nuts_codes, region_nuts_level ) %>%
   filter ( region_nuts_level == "NUTS level 2") %>%
   mutate ( nuts_2_name =  nuts_2_matching(region_nuts_codes )) %>%
   full_join (.,  nuts1013 , by  = c("country_code", "nuts_2_name"))
@@ -69,7 +72,7 @@ regions <- za5929 %>%
 regions <- za5929 %>%
   select ( country_code, starts_with("region")) %>%
   distinct ( country_code, region_nuts_codes, region_nuts_level ) %>%
-  filter ( country_code %in% c("MT", "LU", "CY"))
+  filter ( country_code %in% c("UK", "GB"))
 write.csv(regions, "regions.csv", row.names = F)
 
 
@@ -80,6 +83,9 @@ vocabulary_nuts2 <- readxl::read_excel("data-raw/code_regions.xlsx",
   left_join ( nuts1013, by = c("code2010", "country_code")) %>%
   select ( country_code, region_nuts_codes, code2010, code2013) %>%
   mutate ( code2013 = as.character(code2013)) %>%
-  filter ( !is.na(country_code))
+  filter ( !is.na(country_code)) %>%
+  mutate ( code2013 = ifelse ( code2010 == "UKN0", code2010, code2013)) %>%
+  mutate ( region_nuts_codes = ifelse ( code2010 == "UKN0",
+                                        "Northern Ireland", region_nuts_codes))
 
 devtools::use_data(vocabulary_nuts2, overwrite = TRUE)
