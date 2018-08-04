@@ -44,7 +44,6 @@ impute_nuts2_mean <- function (df,
       dplyr::filter ( country_code %in% impute_countries ) %>%
       dplyr::select ( country_code, code2010, region_nuts_codes)     %>%
       dplyr::mutate ( region_nuts_codes = tolower(as.character(region_nuts_codes))) %>%
-
       dplyr::left_join ( summary, by = c("country_code", "region_nuts_codes") ) %>%
       dplyr::select ( -country_code )
   }
