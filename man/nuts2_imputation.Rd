@@ -6,11 +6,10 @@
 \title{A NUTS1 and NUTS2 region code table}
 \format{A data frame with 106 rows and 4 variables:
 \describe{
-  \item{country_code} Country code.
-  \item{region_nuts_codes}{GESIS name for the NUTS1 or country level geographical
-  unit}
-  \item{code2010} Level of aggregation with region coding.
-  \item{code2013} The name of the region.
+  \item{country_code} {Country code}
+  \item{region_nuts_codes}{GESIS name for the NUTS1 or country level unit}
+  \item{code2010} {Level of aggregation with region coding}
+  \item{code2013} {The name of the region}
 }}
 \source{
 \url{http://ec.europa.eu/eurostat/documents/345175/629341/NUTS+2010+-+NUTS+2013.xls}
