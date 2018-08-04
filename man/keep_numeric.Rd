@@ -4,8 +4,9 @@
 \alias{keep_numeric}
 \title{Keep numeric elements in a string}
 \usage{
-keep_numeric(column, na_labels = NULL, max_value = NULL, min_value = NULL,
-  more_label = NULL, less_label = NULL, comma = FALSE)
+keep_numeric(column, na_labels = NULL, max_value = NULL,
+  min_value = NULL, more_label = NULL, less_label = NULL,
+  comma = FALSE)
 }
 \arguments{
 \item{column}{column from a survey data frame where numbers are included with
