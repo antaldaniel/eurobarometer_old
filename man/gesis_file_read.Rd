@@ -6,8 +6,8 @@
 \usage{
 gesis_file_read(zacat_id = "ZA5688", data_dir = "data-raw/",
   metadata_dir = NULL, new_names = NULL, conversion = "numeric",
-  save_file = TRUE, see_log = TRUE, create_log = TRUE, log_prefix = NA,
-  log_id = NA, my_treshold = futile.logger::INFO)
+  save_file = TRUE, see_log = TRUE, create_log = TRUE,
+  log_prefix = NA, log_id = NA, my_treshold = futile.logger::INFO)
 }
 \arguments{
 \item{zacat_id}{\code{"ZA5688"}}
