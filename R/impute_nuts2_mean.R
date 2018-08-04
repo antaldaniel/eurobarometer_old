@@ -36,12 +36,15 @@ impute_nuts2_mean <- function (df,
     dplyr::summarize_if ( is.numeric, mean, na.rm =TRUE) %>%
     dplyr::ungroup() %>%
     dplyr::mutate ( country_code = as.character(country_code)) %>%
-    dplyr::mutate ( region_nuts_codes = as.character( region_nuts_codes))
+    dplyr::mutate ( region_nuts_codes = tolower(
+      as.character( region_nuts_codes)))
 
   if (nuts_code == "code2010" ) {
     imputed <- eurobarometer::nuts2_imputation %>%
       dplyr::filter ( country_code %in% impute_countries ) %>%
-      dplyr::select ( country_code, code2010, region_nuts_codes) %>%
+      dplyr::select ( country_code, code2010, region_nuts_codes)     %>%
+      dplyr::mutate ( region_nuts_codes = tolower(as.character(region_nuts_codes))) %>%
+
       dplyr::left_join ( summary, by = c("country_code", "region_nuts_codes") ) %>%
       dplyr::select ( -country_code )
   }
@@ -50,6 +53,7 @@ impute_nuts2_mean <- function (df,
     imputed <- eurobarometer::nuts2_imputation %>%
       dplyr::filter ( country_code %in% impute_countries ) %>%
       dplyr::select ( country_code, code2013, region_nuts_codes) %>%
+      dplyr::mutate ( region_nuts_codes = tolower(as.character(region_nuts_codes))) %>%
       dplyr::left_join ( summary, by = c("country_code", "region_nuts_codes") ) %>%
       dplyr::select ( -country_code )
   }
