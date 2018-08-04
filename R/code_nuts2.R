@@ -14,9 +14,8 @@
 #' is available.
 #' The region codes of Greece (GR) start with EL.
 #' @param region_nuts_codes A region_nuts_codes column from a GESIS file.
-#' @param country_code Default is \code{NULL}, if provided, small countries,
-#' which have no NUT2 regions due to their size,  will be projected as
-#'  NUTS2 regions, for example, Luxembourg with code LU00.
+#' @param country_code To avoid ambigouity with NUTS name coding, provide country
+#' codes, if applicable. There are a few ambigous names in Europe.
 #' @param nuts_code Currently only \code{code2010} and \code{code2013}
 #' is supported.
 #' @importFrom dplyr left_join mutate_all
@@ -27,7 +26,8 @@
 #'
 #' @export
 
-code_nuts2 <- function ( region_nuts_codes,
+code_nuts2 <- function ( country_code = NULL,
+                         region_nuts_codes,
                          nuts_code = "code2010")  {
 
   if (! nuts_code %in% c("code2010", "code2013")) {
@@ -37,14 +37,33 @@ code_nuts2 <- function ( region_nuts_codes,
 
  nuts2 <- vector ( mode = "character", length = length(region_nuts_codes))
 
-  df <- data.frame ( region_nuts_codes,
-                    stringsAsFactors = FALSE)
+ if ( is.null(country_code) ) {
+   vocabulary <- eurobarometer::vocabulary_nuts2 %>%
+     mutate (region_nuts_codes = tolower(as.character(region_nuts_codes)))
+   df <- data.frame ( region_nuts_codes = tolower(as.character(region_nuts_codes)),
+                      stringsAsFactors = FALSE)
+   df$row <- 1:nrow(df)
+   nuts2_df <- dplyr::left_join ( df, vocabulary,
+                                  by = "region_nuts_codes") %>%
+     add_count( row ) #check there are not duplicates
+ } else {
+   vocabulary <- eurobarometer::vocabulary_nuts2 %>%
+     mutate ( country_code = tolower(as.character(country_code)),
+              region_nuts_codes = tolower(as.character(region_nuts_codes)))
+   df <- data.frame ( country_code = tolower(country_code),
+                      region_nuts_codes = tolower(as.character(region_nuts_codes)),
+                      stringsAsFactors = FALSE)
+   df$row <- 1:nrow(df)
+   nuts2_df <- dplyr::left_join ( df, vocabulary,
+                                  by = c("country_code",
+                                         "region_nuts_codes")
+                                  ) %>%
+     add_count( row ) #check there are not duplicates
 
-  df$row <- 1:nrow(df)
-
-  nuts2_df <- dplyr::left_join ( df, eurobarometer::vocabulary_nuts2,
-                               by = "region_nuts_codes") %>%
-    add_count( row ) #check there are not duplicates
+ }
+ if ( any(nuts2_df$n > 1) ) {
+   warning("Duplicate region names found!")
+ }
 
  if (nuts_code == "code2010") return (  nuts2_df$code2010 )
  if (nuts_code == "code2013") return (  nuts2_df$code2013 )
