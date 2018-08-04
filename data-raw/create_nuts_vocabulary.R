@@ -38,12 +38,18 @@ vocabulary_nuts2 <- readxl::read_excel("data-raw/code_regions.xlsx",
   select ( country_code, region_nuts_codes, code2010 ) %>%
   mutate_all ( as.character ) %>%
   left_join ( nuts1013, by = c("code2010", "country_code")) %>%
-  select ( country_code, region_nuts_codes, code2010, code2013) %>%
+  select ( country_code, region_nuts_codes, code2010) %>%
   mutate ( code2013 = as.character(code2013)) %>%
   filter ( !is.na(country_code)) %>%
   mutate ( code2013 = ifelse ( code2010 == "UKN0", code2010, code2013)) %>%
   mutate ( region_nuts_codes = ifelse ( code2010 == "UKN0",
                                         "Northern Ireland", region_nuts_codes))
+
+vocabulary_nuts1 <- readxl::read_excel("data-raw/code_regions.xlsx",
+                                       sheet = "NUTS1") %>%
+  select ( country_code, region_nuts_codes, code2010, code2013 ) %>%
+  mutate_all ( as.character )
+devtools::use_data(vocabulary_nuts1, overwrite = TRUE)
 
 devtools::use_data(vocabulary_nuts2, overwrite = TRUE)
 
@@ -65,7 +71,3 @@ nuts2_imputation <- readxl::read_excel("data-raw/NUTS2_2010_imputation.xlsx") %>
   select ( country_code, region_nuts_codes, code2010, code2013)
 devtools::use_data(nuts2_imputation, overwrite = TRUE)
 
-test_error <- readRDS("data-raw/test_cap_error.rds")
-region_nuts_codes <- test_error$region_nuts_codes
-length( region_nuts_codes )
-nrow( test_error)
