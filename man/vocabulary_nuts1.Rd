@@ -4,7 +4,7 @@
 \name{vocabulary_nuts1}
 \alias{vocabulary_nuts1}
 \title{A vocabulary file for NUTS1 region coding}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 44 rows and 4 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 49 rows and 4 columns.}
 \source{
 \url{http://ec.europa.eu/eurostat/documents/345175/629341/NUTS+2010+-+NUTS+2013.xls}
 }
