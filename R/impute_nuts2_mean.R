@@ -30,6 +30,7 @@ impute_nuts2_mean <- function (df,
   } else {
     weights <- rep(1, nrow(df) )
   }
+
   summary <- df %>%
     dplyr::mutate_if ( is.numeric, funs(weights*.) )%>%
     dplyr::group_by ( country_code,  region_nuts_codes ) %>%
