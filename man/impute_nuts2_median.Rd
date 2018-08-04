@@ -4,7 +4,7 @@
 \alias{impute_nuts2_median}
 \title{Impute NUTS2 regional mean}
 \usage{
-impute_nuts2_median(df, impute_countries = c("DE", "IT", "UK"),
+impute_nuts2_median(df, impute_countries = c("DE", "IT", "GB"),
   weight_var = NULL, nuts_code = "code2010")
 }
 \arguments{
